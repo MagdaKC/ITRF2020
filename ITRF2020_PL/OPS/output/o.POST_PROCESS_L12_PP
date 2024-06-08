@@ -1,0 +1,693 @@
+/nobackup/mkuzmicz/scripts/ITRF2020/OPS/POST_PROCESS[4]: #set: not found [No such file or directory]
+SCR_NAME=POST_PROCESS
++ SCR_NAME=POST_PROCESS
+SCR_PARM=12
++ SCR_PARM=12
+SCR_LIST="CASE PROJ SAT STEP SUBSFX solN vM BGN END MID INST WT"
++ SCR_LIST='CASE PROJ SAT STEP SUBSFX solN vM BGN END MID INST WT'
+SCR_VERS=230127.0
+
+
++ SCR_VERS=230127.0
+if [ `expr $#` -gt $SCR_PARM ]; then
+   echo "Usage: $SCR_NAME ${SCR_LIST}\007"
+   exit 101
+fi
+
+expr $#
++ expr 11
++ [ 11 -gt 12 ]
+DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ DateTime='DATE: 02/09/23  TIME: 10:44:50'
+echo " # "
++ echo ' # '
+ # 
+echo " #  $SCR_NAME $* "
++ echo ' #  POST_PROCESS L12__OPS230204 ILRS GISLV WEEKLY L12 1 415 230129 230205 230201120000 jcet '
+ #  POST_PROCESS L12__OPS230204 ILRS GISLV WEEKLY L12 1 415 230129 230205 230201120000 jcet 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Version $SCR_VERS "
++ echo ' #  Version 230127.0 '
+ #  Version 230127.0 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date DATE: 02/09/23  TIME: 10:44:50 '
+ #  Run Date DATE: 02/09/23  TIME: 10:44:50 
+echo " # "
+
++ echo ' # '
+ # 
+#MAIN_PATH=/space/users/epavlis
+#SCRIPTS=$MAIN_PATH/scripts/OPS/POST
+#DISK=space/REPRO
+#SERVICE=ILRS
+#
+#export MAIN_PATH SCRIPTS DISK SERVICE
+
+CASE=$1
++ CASE=L12__OPS230204
+PROJ=${2:-ILRS}
++ PROJ=ILRS
+SAT=${3:-GISLV}
++ SAT=GISLV
+STEP=${4:-WEEKLY}
++ STEP=WEEKLY
+SUBSFX=${5:-L12}
++ SUBSFX=L12
+solN=${6:-A}
++ solN=1
+vM=${7:-1}
++ vM=415
+BGN=${8:-930103}
++ BGN=230129
+END=${9:-040103}
++ END=230205
+MID=${10:-980704}
++ MID=230201120000
+INST=${11:-jcet}
++ INST=jcet
+WT=${12:-}
+
++ WT=''
+SOL=${PROJ}_${CASE}   
+
++ SOL=ILRS_L12__OPS230204
+SNX=${INST}.pos+eop.${SNX_DATE}.v${vM}.snx
+
++ SNX=jcet.pos+eop.230204.v415.snx
+SP3=${INST}.orb.CDDIS_SAT.${SNX_DATE}.v${vM}.sp3
+
+
++ SP3=jcet.orb.CDDIS_SAT.230204.v415.sp3
+echo $SOL $SNX > $MAIN_PATH/INFILES/${PROJ}_${CASE}_fnames.snx
++ echo ILRS_L12__OPS230204 jcet.pos+eop.230204.v415.snx
++ 1> /nobackup/mkuzmicz/INFILES/ILRS_L12__OPS230204_fnames.snx
+chmod 664 $MAIN_PATH/INFILES/${PROJ}_${CASE}_fnames.snx
+
++ chmod 664 /nobackup/mkuzmicz/INFILES/ILRS_L12__OPS230204_fnames.snx
+echo $SP3 > $MAIN_PATH/INFILES/${PROJ}_${CASE}_fnames.sp3
++ echo jcet.orb.CDDIS_SAT.230204.v415.sp3
++ 1> /nobackup/mkuzmicz/INFILES/ILRS_L12__OPS230204_fnames.sp3
+chmod 664 $MAIN_PATH/INFILES/${PROJ}_${CASE}_fnames.sp3
+
++ chmod 664 /nobackup/mkuzmicz/INFILES/ILRS_L12__OPS230204_fnames.sp3
+export STEP CASE SOL SAT PROJ SNX  SP3 BGN
+
+
++ export STEP CASE SOL SAT PROJ SNX SP3 BGN
+gzip -S .Z -f /nobackup/mkuzmicz/MISSIONS/$SAT/pgscov/$STEP/$SUBDIR/v${SNX_VER}/${SOL}_${WT}cov
+
++ gzip -S .Z -f /nobackup/mkuzmicz/MISSIONS/GISLV/pgscov/WEEKLY/OPS/v415/ILRS_L12__OPS230204_cov
+gzip: /nobackup/mkuzmicz/MISSIONS/GISLV/pgscov/WEEKLY/OPS/v415/ILRS_L12__OPS230204_cov: No such file or directory
+gzip -S .Z -f /nobackup/mkuzmicz/MISSIONS/$SAT/punchdout/$STEP/$SUBDIR/v${SNX_VER}/${SOL}_${WT}pnc
+
+
+
++ gzip -S .Z -f /nobackup/mkuzmicz/MISSIONS/GISLV/punchdout/WEEKLY/OPS/v415/ILRS_L12__OPS230204_pnc
+gzip: /nobackup/mkuzmicz/MISSIONS/GISLV/punchdout/WEEKLY/OPS/v415/ILRS_L12__OPS230204_pnc: No such file or directory
+# Generate BIAS BLOCK:
+
+$SCRIPTS/MAKE_BIAS_LIST $SOL $SAT ${STEP} OPS 4051 we $WT > o.MAKE_BIAS_LIST_4051.$SOL 2>&1
+
++ /nobackup/mkuzmicz/scripts/ITRF2020/OPS/MAKE_BIAS_LIST ILRS_L12__OPS230204 GISLV WEEKLY OPS 4051 we
++ 1> o.MAKE_BIAS_LIST_4051.ILRS_L12__OPS230204 2>& 1
+$SCRIPTS/MAKE_BIAS_LIST $SOL $SAT ${STEP} OPS 4500 we $WT > o.MAKE_BIAS_LIST_4500.$SOL 2>&1
+
++ /nobackup/mkuzmicz/scripts/ITRF2020/OPS/MAKE_BIAS_LIST ILRS_L12__OPS230204 GISLV WEEKLY OPS 4500 we
++ 1> o.MAKE_BIAS_LIST_4500.ILRS_L12__OPS230204 2>& 1
+# Combine all BIAS BLOCKS into one:
+
+MBS=$MAIN_PATH/INFILES/INF_OPS_ITRF2020/MBIAS_BLK_$PROJ/$STEP
+
++ MBS=/nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/MBIAS_BLK_ILRS/WEEKLY
+cat $MBS/$SUBDIR/v${SNX_VER}/${SOL}.4051 $MBS/$SUBDIR/v${SNX_VER}/${SOL}.4500 > $MBS/v${SNX_VER}/${SOL}
+
+
+
++ cat /nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/MBIAS_BLK_ILRS/WEEKLY/OPS/v415/ILRS_L12__OPS230204.4051 /nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/MBIAS_BLK_ILRS/WEEKLY/OPS/v415/ILRS_L12__OPS230204.4500
++ 1> /nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/MBIAS_BLK_ILRS/WEEKLY/v415/ILRS_L12__OPS230204
+#UN4=$MAIN_PATH/INFILES/INF_OPS_PP_BIAS/unit4_$PROJ/$STEP/v${SNX_VER}
+
+UN4=$MAIN_PATH/INFILES/INF_OPS_ITRF2020/unit4_$PROJ/$STEP/v${SNX_VER}
+
++ UN4=/nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/unit4_ILRS/WEEKLY/v415
+# Create appropriate template:
+
+if [ "$SUBSFX" = "L12" -o "$SUBSFX" = "LE12" ]; then
+
+SUBSFX0=${SUBSFX}
+# /usr/xpg4/bin/grep -v -e "^MADRNG       41" -e "^MADRNG       45" -e "^MADRNG       49" -e "^MADRNG      13" $UN4/unit4.IERS_templt > eee000
+
+           /bin/grep -v -e "^MADRNG       41"                       -e "^MADRNG       49" -e "^MADRNG      13" $UN4/unit4.ILRS_templt > eee000
+  sed -e "s/CCCCC/SE   /g" -e "s/TTTTTT/$SUBSFX0/g" eee000 > eee111
+
+elif [ "$SUBSFX" = "L12NEOS" -o "$SUBSFX" = "LE12NEOS" ]; then
+
+SUBSFX0=${SUBSFX}
+# /usr/xpg4/bin/grep -v -e "^MADRNG      11" -e "^MADRNG      13" $UN4/unit4.IERS_templt > eee000
+
+           /bin/grep -v -e "^MADRNG      11" -e "^MADRNG      13" $UN4/unit4.ILRS_templt > eee000
+  sed -e "s/SXVR/${vM}/g" -e "s/CCCCC/E    /g" -e "s/TTTTTT/$SUBSFX0/g" eee000 > eee111
+
+fi
+
++ [ L12 '=' L12 -o L12 '=' LE12 ]
++ SUBSFX0=L12
++ /bin/grep -v -e '^MADRNG       41' -e '^MADRNG       49' -e '^MADRNG      13' /nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/unit4_ILRS/WEEKLY/v415/unit4.ILRS_templt
++ 1> eee000
++ sed -e 's/CCCCC/SE   /g' -e s/TTTTTT/L12/g eee000
++ 1> eee111
+#sed -e "s/DDDDDD/$MID/g" -e "s/BBBBBB/$BGN/g" -e "s/EEEEEE/$SNX_DATE/g" eee111 > $UN4/unit4.${SOL}
+sed -e "s/SXVR/${vM}/g" -e "s/DDDDDD/$MID/g" -e "s/BBBBBB/$BGN/g" -e "s/EEEEEE/$SNX_DATE/g" eee111 > $UN4/unit4.${SOL}
+
+
+
++ sed -e s/SXVR/415/g -e s/DDDDDD/230201120000/g -e s/BBBBBB/230129/g -e s/EEEEEE/230204/g eee111
++ 1> /nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/unit4_ILRS/WEEKLY/v415/unit4.ILRS_L12__OPS230204
+REF=$MAIN_PATH/INFILES/fileref_$PROJ/$STEP
+
++ REF=/nobackup/mkuzmicz/INFILES/fileref_ILRS/WEEKLY
+if [ "$SUBSFX" = "L12" -o "$SUBSFX" = "L12NEOS" ]; then
+
+SUBSFX0=${SUBSFX}
+sed -e "s/IIII/$INST/g" -e "s/PPPP/$PROJ/g" -e "s/NNNN/$solN/g" -e "s/MMMM/$vM/g" -e "s/BBBBBB/$BGN/g" -e "s/EEEEEE/$SNX_DATE/g" -e "s/DDDDDD/$MID/g" -e "s/YYMMDD/$BGN/g" $REF/${vM}.fileref.${PROJ}_LAGEOS_templt > $REF/${vM}.fileref.${SOL}
+
+elif [ "$SUBSFX" = "LE12" -o "$SUBSFX" = "LE12NEOS" ]; then
+
+SUBSFX=${SUBSFX}
+sed -e "s/IIII/$INST/g" -e "s/PPPP/$PROJ/g" -e "s/NNNN/$solN/g" -e "s/MMMM/$vM/g" -e "s/BBBBBB/$BGN/g" -e "s/EEEEEE/$SNX_DATE/g" -e "s/DDDDDD/$MID/g" -e "s/YYMMDD/$BGN/g" $REF/${vM}.fileref.${PROJ}_LAGEOS+ETALON_templt > $REF/${vM}.fileref.${SOL}
+
+fi
+
+
+
+
++ [ L12 '=' L12 -o L12 '=' L12NEOS ]
++ SUBSFX0=L12
++ sed -e s/IIII/jcet/g -e s/PPPP/ILRS/g -e s/NNNN/1/g -e s/MMMM/415/g -e s/BBBBBB/230129/g -e s/EEEEEE/230204/g -e s/DDDDDD/230201120000/g -e s/YYMMDD/230129/g /nobackup/mkuzmicz/INFILES/fileref_ILRS/WEEKLY/415.fileref.ILRS_LAGEOS_templt
++ 1> /nobackup/mkuzmicz/INFILES/fileref_ILRS/WEEKLY/415.fileref.ILRS_L12__OPS230204
+$SCRIPTS/CULL_SITES ${SOL} $SAT $STEP OPS 
+
++ /nobackup/mkuzmicz/scripts/ITRF2020/OPS/CULL_SITES ILRS_L12__OPS230204 GISLV WEEKLY OPS
+/nobackup/mkuzmicz/scripts/ITRF2020/OPS/CULL_SITES[4]: #set: not found [No such file or directory]
+SCR_NAME=CULL_SITES
++ SCR_NAME=CULL_SITES
+SCR_PARM=4
++ SCR_PARM=4
+SCR_LIST="SOL SAT STAGE CASE"
++ SCR_LIST='SOL SAT STAGE CASE'
+SCR_VERS=040219.0
+
+
++ SCR_VERS=040219.0
+if [ `expr $#` -lt $SCR_PARM ]; then
+   echo "Usage: $SCR_NAME ${SCR_LIST}\007"
+   exit 101
+fi
+
+expr $#
++ expr 4
++ [ 4 -lt 4 ]
+DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ DateTime='DATE: 02/09/23  TIME: 10:44:50'
+echo " # "
++ echo ' # '
+ # 
+echo " #  $SCR_NAME $* "
++ echo ' #  CULL_SITES ILRS_L12__OPS230204 GISLV WEEKLY OPS '
+ #  CULL_SITES ILRS_L12__OPS230204 GISLV WEEKLY OPS 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Version $SCR_VERS "
++ echo ' #  Version 040219.0 '
+ #  Version 040219.0 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date DATE: 02/09/23  TIME: 10:44:50 '
+ #  Run Date DATE: 02/09/23  TIME: 10:44:50 
+echo " # "
+
+
++ echo ' # '
+ # 
+#  ORIGINALLY: getZEROadjSITEsI1 
+
+
+SOL=$1
++ SOL=ILRS_L12__OPS230204
+SAT=$2
++ SAT=GISLV
+STAGE=$3
++ STAGE=WEEKLY
+CASE=$4
+
++ CASE=OPS
+where=/$DISK/$SAT/punchdout/$STAGE/$CASE/v${SNX_VER}
+
++ where=/nobackup/mkuzmicz/MISSIONS/GISLV/punchdout/WEEKLY/OPS/v415
+#cd $where
+
+zcat $where/${SOL}_pnc.Z > ttt0
++ zcat /nobackup/mkuzmicz/MISSIONS/GISLV/punchdout/WEEKLY/OPS/v415/ILRS_L12__OPS230204_pnc.Z
++ 1> ttt0
+#cp SLV.$SOL ttt0
+
+#
+#/bin/grep "PARMSM   1........................................0.000000000000000E+00" ttt0 > ttt2
+/bin/grep "PARMSM   1.........................................0.00000000000000E+00" ttt0 > ttt2
+
+
++ /bin/grep 'PARMSM   1.........................................0.00000000000000E+00' ttt0
++ 1> ttt2
+cut -c10-25 ttt2 > ttt1
+
+
++ cut -c10-25 ttt2
++ 1> ttt1
+/bin/grep "11........3...1." ttt1 > a
++ /bin/grep 11........3...1. ttt1
++ 1> a
+/bin/grep "13............1." ttt1 >> a
++ /bin/grep 13............1. ttt1
++ 1>> a
+/bin/grep "11........3...3." ttt1 > b
++ /bin/grep 11........3...3. ttt1
++ 1> b
+/bin/grep "13............3." ttt1 >> b
+
++ /bin/grep 13............3. ttt1
++ 1>> b
+paste -d" " a b > c
+
++ paste '-d ' a b
++ 1> c
+sed "s/^/MATSUP      /g" c > MATSUP.${SOL}
+
++ sed 's/^/MATSUP      /g' c
++ 1> MATSUP.ILRS_L12__OPS230204
+\rm ttt0 ttt1 ttt2 a b c
++ rm ttt0 ttt1 ttt2 a b c
+exit 0
++ exit 0
+cp $UN4/unit4.${SOL} xxx000
+
++ cp /nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/unit4_ILRS/WEEKLY/v415/unit4.ILRS_L12__OPS230204 xxx000
+while read label lab1 lab2
+do
+
+  /bin/grep -v -e $lab1 -e $lab2   xxx000 > xxx111
+
+  mv xxx111 xxx000
+
+done < MATSUP.${SOL}
+
++ 0< MATSUP.ILRS_L12__OPS230204
++ read label lab1 lab2
++ /bin/grep -v -e 111824000030021. -e 111824000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 111868000030021. -e 111868000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 111873000030021. -e 111873000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 111874000030021. -e 111874000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 111879000030021. -e 111879000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 111884000030021. -e 111884000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 111886000030021. -e 111886000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 111887000030021. -e 111887000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 111888000030021. -e 111888000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 111889000030021. -e 111889000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 111890000030021. -e 111890000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 111891000030021. -e 111891000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117105000030021. -e 117105000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117119000030021. -e 117119000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117249000030021. -e 117249000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117394000030021. -e 117394000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117395000030021. -e 117395000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117396000030021. -e 117396000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117403000030021. -e 117403000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117407000030021. -e 117407000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117501000030021. -e 117501000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117503000030021. -e 117503000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117701000030021. -e 117701000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117810000030021. -e 117810000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117811000030021. -e 117811000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117819000030021. -e 117819000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117824000030021. -e 117824000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117845000030021. -e 117845000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117865000030021. -e 117865000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
++ /bin/grep -v -e 117941000030021. -e 117941000030023. xxx000
++ 1> xxx111
++ mv xxx111 xxx000
++ read label lab1 lab2
+mv MATSUP.${SOL} $MAIN_PATH/INFILES/INF_OPS_ITRF2020/MATSUP_${PROJ}/$STEP/v${SNX_VER}/MATSUP.${SOL}
++ mv MATSUP.ILRS_L12__OPS230204 /nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/MATSUP_ILRS/WEEKLY/v415/MATSUP.ILRS_L12__OPS230204
+mv xxx000 $UN4/unit4.${SOL}
+
+
++ mv xxx000 /nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/unit4_ILRS/WEEKLY/v415/unit4.ILRS_L12__OPS230204
+$SCRIPTS/PUNCH_PREP ${CASE} ${SAT} ${PROJ} $STEP OPS 
+
+
+
++ /nobackup/mkuzmicz/scripts/ITRF2020/OPS/PUNCH_PREP L12__OPS230204 GISLV ILRS WEEKLY OPS
+/nobackup/mkuzmicz/scripts/ITRF2020/OPS/PUNCH_PREP[5]: #set: not found [No such file or directory]
+SCR_NAME=PUNCH_PREP
++ SCR_NAME=PUNCH_PREP
+SCR_PARM=5
++ SCR_PARM=5
+SCR_LIST="sol sat PROJ STEP CASE"
++ SCR_LIST='sol sat PROJ STEP CASE'
+SCR_VERS=040219.0
+
+
++ SCR_VERS=040219.0
+if [ `expr $#` -lt $SCR_PARM ]; then
+   echo "Usage: $SCR_NAME ${SCR_LIST}\007"
+   exit 101
+fi
+
+expr $#
++ expr 5
++ [ 5 -lt 5 ]
+DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ DateTime='DATE: 02/09/23  TIME: 10:44:51'
+echo " # "
++ echo ' # '
+ # 
+echo " #  $SCR_NAME $* "
++ echo ' #  PUNCH_PREP L12__OPS230204 GISLV ILRS WEEKLY OPS '
+ #  PUNCH_PREP L12__OPS230204 GISLV ILRS WEEKLY OPS 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Version $SCR_VERS "
++ echo ' #  Version 040219.0 '
+ #  Version 040219.0 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date DATE: 02/09/23  TIME: 10:44:51 '
+ #  Run Date DATE: 02/09/23  TIME: 10:44:51 
+echo " # "
+
+
++ echo ' # '
+ # 
+#  PUNCH_PREP makes a PARMSM file with TITLE/RMS included
+
+#  ORIGINALLY: mkPARMVLfI
+
+sol=$1
++ sol=L12__OPS230204
+sat=${2:-GISLV}
++ sat=GISLV
+PROJ=${3:-ILRS}
++ PROJ=ILRS
+STEP=${4:-WEEKLY}
++ STEP=WEEKLY
+CASE=${5:-OPS}
+
++ CASE=OPS
+infile=SLV.${PROJ}_${sol}
++ infile=SLV.ILRS_L12__OPS230204
+punch=${PROJ}_${sol}_pnc
+
++ punch=ILRS_L12__OPS230204_pnc
+where=/$DISK/$sat
+
++ where=/nobackup/mkuzmicz/MISSIONS/GISLV
+OUT=$where/output/${STEP}/$CASE
+
++ OUT=/nobackup/mkuzmicz/MISSIONS/GISLV/output/WEEKLY/OPS
+/bin/grep "RMS for updated solution: " $OUT/v${SNX_VER}/$infile > rms
+
++ /bin/grep 'RMS for updated solution: ' /nobackup/mkuzmicz/MISSIONS/GISLV/output/WEEKLY/OPS/v415/SLV.ILRS_L12__OPS230204
++ 1> rms
+sed "s/RMS for updated solution:      //g" rms > rmsV
+
++ sed 's/RMS for updated solution:      //g' rms
++ 1> rmsV
+read rmsd < rmsV
+
++ read rmsd
++ 0< rmsV
+rmsV=`printf %0.2E $rmsd` 
+
+printf %0.2E $rmsd
++ printf %0.2E 0.3053726981405314E-01
++ rmsV=3.05E-02
+echo "RMSrrrrrrrr" > rmsF
+
++ echo RMSrrrrrrrr
++ 1> rmsF
+sed "s/rrrrrrrr/$rmsV/g" rmsF > rmsf
+
++ sed s/rrrrrrrr/3.05E-02/g rmsF
++ 1> rmsf
+/bin/grep "1 TITLE " $OUT/v${SNX_VER}/$infile > tit
+
++ /bin/grep '1 TITLE ' /nobackup/mkuzmicz/MISSIONS/GISLV/output/WEEKLY/OPS/v415/SLV.ILRS_L12__OPS230204
++ 1> tit
+sed "s/           1 TITLE  ...//g" tit > tit1
+
++ sed 's/           1 TITLE  ...//g' tit
++ 1> tit1
+pr  -m -t -w138 tit1 rmsf > title
+
++ pr -m -t -w138 tit1 rmsf
++ 1> title
+gzip -S .Z -f title
+
++ gzip -S .Z -f title
+zcat title $where/punchdout/${STEP}/$CASE/v${SNX_VER}/$punch > $where/parmvl/${STEP}/$CASE/v${SNX_VER}/$punch
+
++ zcat title /nobackup/mkuzmicz/MISSIONS/GISLV/punchdout/WEEKLY/OPS/v415/ILRS_L12__OPS230204_pnc
++ 1> /nobackup/mkuzmicz/MISSIONS/GISLV/parmvl/WEEKLY/OPS/v415/ILRS_L12__OPS230204_pnc
+gzip -9 -f $where/parmvl/${STEP}/$CASE/v${SNX_VER}/$punch
+
++ gzip -9 -f /nobackup/mkuzmicz/MISSIONS/GISLV/parmvl/WEEKLY/OPS/v415/ILRS_L12__OPS230204_pnc
+#      ---------1---------2---------3---------4---------5---------6---------7---------8
+#titmp="tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttRMSrrrrrrrr"
+#titmp="                                                                     RMSrrrrrrrr"
+#       tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt RMSrrrrrrrr
+
+
+exit 0
++ exit 0
+$SCRIPTS/GET_SOL_STATS ${SOL} ${SAT} $STEP OPS
+
+
++ /nobackup/mkuzmicz/scripts/ITRF2020/OPS/GET_SOL_STATS ILRS_L12__OPS230204 GISLV WEEKLY OPS
+/nobackup/mkuzmicz/scripts/ITRF2020/OPS/GET_SOL_STATS[4]: #set: not found [No such file or directory]
+SCR_NAME=GET_SOL_STATS
++ SCR_NAME=GET_SOL_STATS
+SCR_PARM=4
++ SCR_PARM=4
+SCR_LIST="infile SAT STEP CASE"
++ SCR_LIST='infile SAT STEP CASE'
+SCR_VERS=040219.0
+
+
++ SCR_VERS=040219.0
+if [ `expr $#` -lt $SCR_PARM ]; then
+   echo "Usage: $SCR_NAME ${SCR_LIST}\007"
+   exit 101
+fi
+
+expr $#
++ expr 4
++ [ 4 -lt 4 ]
+DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ DateTime='DATE: 02/09/23  TIME: 10:44:51'
+echo " # "
++ echo ' # '
+ # 
+echo " #  $SCR_NAME $* "
++ echo ' #  GET_SOL_STATS ILRS_L12__OPS230204 GISLV WEEKLY OPS '
+ #  GET_SOL_STATS ILRS_L12__OPS230204 GISLV WEEKLY OPS 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Version $SCR_VERS "
++ echo ' #  Version 040219.0 '
+ #  Version 040219.0 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date DATE: 02/09/23  TIME: 10:44:51 '
+ #  Run Date DATE: 02/09/23  TIME: 10:44:51 
+echo " # "
+
+
++ echo ' # '
+ # 
+#  ORIGINALLY:  getSOLstatsI
+
+
+infile=$1
++ infile=ILRS_L12__OPS230204
+SAT=$2
++ SAT=GISLV
+STEP=${3:-WEEKLY}
++ STEP=WEEKLY
+CASE=${4:-OPS}
+
++ CASE=OPS
+disk=/$DISK/$SAT/output/$STEP/$CASE
+
+
++ disk=/nobackup/mkuzmicz/MISSIONS/GISLV/output/WEEKLY/OPS
+file=$disk/v${SNX_VER}/SLV.$infile
++ file=/nobackup/mkuzmicz/MISSIONS/GISLV/output/WEEKLY/OPS/v415/SLV.ILRS_L12__OPS230204
+/bin/grep "   CARTESIAN    " $file > xxxxxx
++ /bin/grep '   CARTESIAN    ' /nobackup/mkuzmicz/MISSIONS/GISLV/output/WEEKLY/OPS/v415/SLV.ILRS_L12__OPS230204
++ 1> xxxxxx
+sort -u -k 4,4 xxxxxx -o xxxxxx1
++ sort -u -k 4,4 xxxxxx -o xxxxxx1
+/bin/grep '1 TITLE' $file > yyyyyy
++ /bin/grep '1 TITLE' /nobackup/mkuzmicz/MISSIONS/GISLV/output/WEEKLY/OPS/v415/SLV.ILRS_L12__OPS230204
++ 1> yyyyyy
+/bin/grep 'COMBINED MATRIX:' $file >> yyyyyy
++ /bin/grep 'COMBINED MATRIX:' /nobackup/mkuzmicz/MISSIONS/GISLV/output/WEEKLY/OPS/v415/SLV.ILRS_L12__OPS230204
++ 1>> yyyyyy
+/bin/grep 'WSOS for updated solution:' $file >> yyyyyy
++ /bin/grep 'WSOS for updated solution:' /nobackup/mkuzmicz/MISSIONS/GISLV/output/WEEKLY/OPS/v415/SLV.ILRS_L12__OPS230204
++ 1>> yyyyyy
+/bin/grep 'Total number of observations accumulated:' $file >> yyyyyy
++ /bin/grep 'Total number of observations accumulated:' /nobackup/mkuzmicz/MISSIONS/GISLV/output/WEEKLY/OPS/v415/SLV.ILRS_L12__OPS230204
++ 1>> yyyyyy
+/bin/grep 'RMS for updated solution:' $file >> yyyyyy
++ /bin/grep 'RMS for updated solution:' /nobackup/mkuzmicz/MISSIONS/GISLV/output/WEEKLY/OPS/v415/SLV.ILRS_L12__OPS230204
++ 1>> yyyyyy
+/bin/grep 'RMS for updated solution:' $file >> zzzzzz
++ /bin/grep 'RMS for updated solution:' /nobackup/mkuzmicz/MISSIONS/GISLV/output/WEEKLY/OPS/v415/SLV.ILRS_L12__OPS230204
++ 1>> zzzzzz
+sed "1,\$s/1 TITLE/TITLE/g" yyyyyy > yyyyyy1
++ sed '1,$s/1 TITLE/TITLE/g' yyyyyy
++ 1> yyyyyy1
+sed "1,\$s/                RMS for updated solution://g" zzzzzz > zzzzzz1
+
++ sed '1,$s/                RMS for updated solution://g' zzzzzz
++ 1> zzzzzz1
+read VAR < zzzzzz1
++ read VAR
++ 0< zzzzzz1
+COV=xxxxxx1
+
++ COV=xxxxxx1
+#export VAR COV
+
+#~/scripts/scale_cov $infile
+
+mv yyyyyy1 $MAIN_PATH/INFILES/INF_OPS_ITRF2020/STATS_${SERVICE}/$STEP/v${SNX_VER}/STATS.$infile
+
++ mv yyyyyy1 /nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/STATS_ILRS/WEEKLY/v415/STATS.ILRS_L12__OPS230204
+exit 0
++ exit 0
+exit 0
++ exit 0

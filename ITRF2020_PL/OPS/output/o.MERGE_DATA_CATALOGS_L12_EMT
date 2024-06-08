@@ -1,0 +1,77 @@
+/nobackup/mkuzmicz/scripts/ITRF2020/OPS/MERGE_DATA_CATALOGS[3]: #set: not found [No such file or directory]
+SCR_NAME=MERGE_DATA_CATALOGS
++ SCR_NAME=MERGE_DATA_CATALOGS
+SCR_PARM=8
++ SCR_PARM=8
+SCR_LIST="ARC STAGE CASE sat1 sat2 sat3 VER disk"
++ SCR_LIST='ARC STAGE CASE sat1 sat2 sat3 VER disk'
+SCR_VERS=040218.0
+
+
++ SCR_VERS=040218.0
+if [ `expr $#` -lt $SCR_PARM ]; then
+   echo "Usage: $SCR_NAME ${SCR_LIST}\007"
+   exit 101
+fi
+
+expr $#
++ expr 8
++ [ 8 -lt 8 ]
+DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ DateTime='DATE: 02/09/23  TIME: 08:29:40'
+echo " # "
++ echo ' # '
+ # 
+echo " #  $SCR_NAME $* "
++ echo ' #  MERGE_DATA_CATALOGS w30129 WEEKLY EMT GISL1 GISL2 GISLV wv415e nobackup/mkuzmicz/MISSIONS '
+ #  MERGE_DATA_CATALOGS w30129 WEEKLY EMT GISL1 GISL2 GISLV wv415e nobackup/mkuzmicz/MISSIONS 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Version $SCR_VERS "
++ echo ' #  Version 040218.0 '
+ #  Version 040218.0 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date DATE: 02/09/23  TIME: 08:29:40 '
+ #  Run Date DATE: 02/09/23  TIME: 08:29:40 
+echo " # "
+
+
++ echo ' # '
+ # 
+ARC=$1
++ ARC=w30129
+STAGE=${2:-WEEKLY}
++ STAGE=WEEKLY
+CASE=${3:-EMT}
++ CASE=EMT
+sat1=${4:-GISL1}
++ sat1=GISL1
+sat2=${5:-GISL2}
++ sat2=GISL2
+sat3=${6:-GISLV}
++ sat3=GISLV
+VER=${7:-w1}
++ VER=wv415e
+disk=${8:-raid2/REPRO}
+
++ disk=nobackup/mkuzmicz/MISSIONS
+if [ ! -d /${disk}/$sat3/output/DATACATS/$STAGE/$CASE ]; then
+      mkdir -p /${disk}/$sat3/output/DATACATS/$STAGE/$CASE/v${SNX_VER}
+fi
+
+
++ [ ! -d /nobackup/mkuzmicz/MISSIONS/GISLV/output/DATACATS/WEEKLY/EMT ]
+cat /$disk/$sat1/output/DATACATS/$STAGE/$CASE/v${SNX_VER}/${ARC}.$VER /$disk/$sat2/output/DATACATS/$STAGE/$CASE/v${SNX_VER}/${ARC}.$VER > /$disk/$sat3/output/DATACATS/$STAGE/$CASE/v${SNX_VER}/${ARC}.$VER
+
+
++ cat /nobackup/mkuzmicz/MISSIONS/GISL1/output/DATACATS/WEEKLY/EMT/v415/w30129.wv415e /nobackup/mkuzmicz/MISSIONS/GISL2/output/DATACATS/WEEKLY/EMT/v415/w30129.wv415e
++ 1> /nobackup/mkuzmicz/MISSIONS/GISLV/output/DATACATS/WEEKLY/EMT/v415/w30129.wv415e
+exit 0
++ exit 0

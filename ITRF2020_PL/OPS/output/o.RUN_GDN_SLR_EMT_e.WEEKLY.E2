@@ -1,0 +1,2142 @@
+/nobackup/mkuzmicz/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023[11]: #set: not found [No such file or directory]
+#  if [ `expr $#` -lt 1 ]; then
+#     echo "Usage: RUN_GDN_SLR_2023 ARC [LABEL] [SAT] [YR] [CASE] [SUBSOL]\007"
+#     exit 100
+#  fi
+
+#
+#echo "  #  "
+#echo "  #    Begin  'RUN_GDN_SLR_2023'    "
+#echo "  #  "
+
+SCR_NAME=RUN_GDN_SLR_2023
++ SCR_NAME=RUN_GDN_SLR_2023
+SCR_PARM=6
++ SCR_PARM=6
+SCR_LIST="ARC LABEL SAT YR CASE SUBSOL"
++ SCR_LIST='ARC LABEL SAT YR CASE SUBSOL'
+SCR_VERS=230208.0
+
+
++ SCR_VERS=230208.0
+if [ `expr $#` -lt $SCR_PARM ]; then
+   echo "Usage: $SCR_NAME ${SCR_LIST}\007"
+   exit 101
+fi
+
+expr $#
++ expr 6
++ [ 6 -lt 6 ]
+DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ DateTime='DATE: 02/09/23  TIME: 11:36:03'
+echo " # "
++ echo ' # '
+ # 
+echo " #  $SCR_NAME $* "
++ echo ' #  RUN_GDN_SLR_2023 w30129 wv415e ETA2 23 EMTWC . '
+ #  RUN_GDN_SLR_2023 w30129 wv415e ETA2 23 EMTWC . 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Version $SCR_VERS "
++ echo ' #  Version 230208.0 '
+ #  Version 230208.0 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date DATE: 02/09/23  TIME: 11:36:03 '
+ #  Run Date DATE: 02/09/23  TIME: 11:36:03 
+echo " # "
+
+
++ echo ' # '
+ # 
+ARC=$1
++ ARC=w30129
+LABEL=${2:-1}
++ LABEL=wv415e
+SAT=${3:-GISL1}
++ SAT=ETA2
+YR=${4:-99}
++ YR=23
+CASE=${5:-DRW}
++ CASE=EMTWC
+SUBSOL=${6:-A}
++ SUBSOL=.
+NP=$7
+
++ NP=''
+SITEFILE=NONE
+
+
+
+
++ SITEFILE=NONE
+if [ "${CASE}" = "DRW" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL
+  TCASE=DR
+
+elif [ "${CASE}" = "DRWcpp" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_IERS
+  TCASE=DR
+  SITEFILE=$ARC
+
+elif [ "${CASE}" = "DRWC" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_SLRF2020_2023
+  TCASE=DR
+elif [ "${CASE}" = "DRWC_TEST" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_SLRF2020_2023
+  TCASE=DR
+#elif [ "${CASE}" = "DRWC_PB_2017" ]; then
+elif [ "${CASE}" = "DRWC_TEST_F" ]; then
+
+  CASEDIR=FORTNTLY
+   PROG=GEODYN_II_ALL_SLRF2020_RESXTND_2017MP_2220509
+  TCASE=DR
+    elif [ "${CASE}" = "DRWC_PB" ]; then
+
+  CASEDIR=WEEKLY
+#  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017_PB_$NP
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017_P2_PB
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_2019
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_220807
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_230102_EOP20C04
+  TCASE=DR
+
+
+
+elif [ "${CASE}" = "DRWC_JEMadj" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_IERS
+  PROG=GEODYN_II_ALL_IERS2010_RESXTND_JEMadj
+  TCASE=DR
+
+elif [ "${CASE}" = "DRWC_JEMadj_Gf" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_IERS
+  PROG=GEODYN_II_ALL_IERS2010_RESXTND_JEMadj_Gfix
+  TCASE=DR
+elif [ "${CASE}" = "DRWbs" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_BAKSUB
+  TCASE=DR
+  export GRVTIM=$SUBSOL
+  export SUBSOL=.
+
+elif [ "${CASE}" = "DRWx" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_IIx
+  TCASE=DR
+
+elif [ "${CASE}" = "DRWy" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_IIy
+  TCASE=DR
+
+elif [ "${CASE}" = "DRWM" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_MM
+  TCASE=DR
+
+elif [ "${CASE}" = "DRWN" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_NMF
+  TCASE=DR
+
+elif [ "$CASE" = "DRM" ]; then
+
+  CASEDIR=MONTHLY
+  PROG=GEODYN_II_ALL
+  TCASE=DR
+
+elif [ "$CASE" = "DRFC" ]; then
+
+  CASEDIR=FORTNTLY
+  PROG=GEODYN_II_ALL_IERS_pre93_15D
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_2019
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_210114
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_220807
+PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_230102_EOP20C04
+  TCASE=DR
+
+elif [ "$CASE" = "DRMC" ]; then
+
+  CASEDIR=MONTHLY
+  PROG=GEODYN_II_ALL_IERS_pre93
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_2019
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_220807
+
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_230102_EOP20C04
+  TCASE=DR
+
+elif [ "$CASE" = "DRQC" ]; then
+
+  CASEDIR=QUARTERLY
+  PROG=GEODYN_II_ALL_IERS_pre93
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_2019
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_220807
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_230102_EOP20C04
+  TCASE=DR
+
+elif [ "$CASE" = "EMTW" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_SLRF2020_2023
+  TCASE=EMT
+
+elif [ "$CASE" = "EMTWC" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_SLRF2020_2023
+  TCASE=EMT
+elif [ "$CASE" = "EMTWC_TEST" ]; then
+
+  CASEDIR=WEEKLY
+ PROG=GEODYN_II_ALL_SLRF2020_RESXTND_2017MP_2220509
+  TCASE=EMT
+elif [ "$CASE" = "EMTW_midC_TEST" ]; then
+
+  CASEDIR=WEEKLY
+ PROG=GEODYN_II_ALL_SLRF2020_RESXTND_2017MP_2220509
+  TCASE=EMT
+  elif [ "$CASE" = "EMTWC_TEST_F" ]; then
+
+    CASEDIR=FORTNTLY
+   PROG=GEODYN_II_ALL_SLRF2020_RESXTND_2017MP_2220509
+    TCASE=EMT
+  elif [ "$CASE" = "EMTW_midC_TEST_F" ]; then
+
+    CASEDIR=FORTNTLY
+   PROG=GEODYN_II_ALL_SLRF2020_RESXTND_2017MP_2220509
+    TCASE=EMT
+  TCASE=EMT
+
+elif [ "$CASE" = "EMTWC_v271" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_IERS
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017_v271
+  TCASE=EMT
+elif [ "$CASE" = "EMTWC_v272" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_IERS
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017_v272
+  TCASE=EMT
+
+elif [ "$CASE" = "EMTWC_site" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_IERS
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_by_SITE
+  TCASE=EMT
+elif [ "${CASE}" = "EMTWC_JEMadj" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_IERS
+  PROG=GEODYN_II_ALL_IERS2010_RESXTND_JEMadj
+  TCASE=EMT
+elif [ "$CASE" = "EMTM" ]; then
+
+  CASEDIR=MONTHLY
+  PROG=GEODYN_II_ALL
+  TCASE=EMT
+
+elif [ "$CASE" = "EMTW_mid" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_SLRF2020_2023
+  TCASE=EMT
+  SITEFILE=$ARC
+
+elif [ "$CASE" = "EMTW_midC" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_SLRF2020_2023
+
+#  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_091919
+  TCASE=EMT
+  SITEFILE=$ARC
+elif [ "$CASE" = "EMTW_midC_v271" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_IERS
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017_v271
+  TCASE=EMT
+  SITEFILE=$ARC
+elif [ "$CASE" = "EMTW_midC_v272" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_IERS
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND
+  PROG=GEODYN_II_ALL_IERS2014_RESXTND_2017_v272
+  TCASE=EMT
+  SITEFILE=$ARC
+
+elif [ "$CASE" = "ORBWC" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=GEODYN_II_ALL_IERS
+  PROG=GEODYN_II_ALL_IERS2010_ORB
+  TCASE=ORB
+
+elif [ "$CASE" = "EMTM_mid" ]; then
+
+  CASEDIR=MONTHLY
+  PROG=GEODYN_II_ALL_SLRF2020_2023
+  TCASE=EMT
+  SITEFILE=$ARC
+
+elif [ "$CASE" = "EMTFC" ]; then
+
+  CASEDIR=FORTNTLY
+  PROG=GEODYN_II_ALL_SLRF2020_2023
+  TCASE=EMT
+
+elif [ "$CASE" = "EMTQC" ]; then
+
+  CASEDIR=QUARTERLY
+  PROG=GEODYN_II_ALL_SLRF2020_2023
+  TCASE=EMT
+
+elif [ "$CASE" = "EMTMC" ]; then
+
+  CASEDIR=MONTHLY
+  PROG=GEODYN_II_ALL_SLRF2020_2023
+  TCASE=EMT
+
+elif [ "$CASE" = "EMTF_midC" ]; then
+
+  CASEDIR=FORTNTLY
+  PROG=GEODYN_II_ALL_SLRF2020_2023
+  TCASE=EMT
+  SITEFILE=$ARC
+
+elif [ "$CASE" = "EMTM_midC" ]; then
+
+  CASEDIR=MONTHLY
+  PROG=GEODYN_II_ALL_SLRF2020_2023
+  TCASE=EMT
+  SITEFILE=$ARC
+
+elif [ "$CASE" = "EMTQ_midC" ]; then
+
+  CASEDIR=QUARTERLY
+  PROG=GEODYN_II_ALL_SLRF2020_2023
+  TCASE=EMT
+  SITEFILE=$ARC
+
+elif [ "$CASE" = "drG" ]; then
+
+  CASEDIR=WEEKLY
+  PROG=HP2HP_LT_SLR_GFZ
+  TCASE=DR
+
+elif [ "$CASE" = "PP6A" ]; then
+
+  CASEDIR=MONTHLY/PP6
+  PROG=HP2HP_LT_SLR_PP
+  TCASE=EMT
+  TCASE=DR
+
+elif [ "$CASE" = "PP6B" ]; then
+
+  CASEDIR=MONTHLY/PP6
+  PROG=HP2HP_LT_SLR_PP
+  TCASE=EMT
+  TCASE=DR
+
+elif [ "$CASE" = "PP6Ae" ]; then
+
+  CASEDIR=MONTHLY/PP6
+  PROG=HP2HP_LT_SLR_PP
+  TCASE=DR
+  TCASE=EMT
+
+elif [ "$CASE" = "PP6Be" ]; then
+
+  CASEDIR=MONTHLY/PP6
+  PROG=HP2HP_LT_SLR_PP
+  TCASE=DR
+  TCASE=EMT
+
+elif [ "$CASE" = "PP6d" ]; then
+
+  CASEDIR=MONTHLY/PP6
+  PROG=HP2HP_LT_SLR_PP
+  TCASE=DR
+
+elif [ "$CASE" = "PP6e" ]; then
+
+  CASEDIR=MONTHLY/PP6
+  PROG=HP2HP_LT_SLR_PP
+  TCASE=EMT
+
+elif [ "$CASE" = "PP6o" ]; then
+
+  CASEDIR=ORBIT/PP6
+  PROG=HP2HP_LT_SLR_PP
+  TCASE=DR
+
+elif [ "$CASE" = "" ]; then
+
+  CASEDIR=.
+  PROG=GEODYN_II_ALL
+  TCASE=DR
+
+elif [ "$CASE" = "og" ]; then
+
+  CASEDIR=.
+  PROG=HP2HP_LT_og
+
+fi
+
++ [ EMTWC '=' DRW ]
++ [ EMTWC '=' DRWcpp ]
++ [ EMTWC '=' DRWC ]
++ [ EMTWC '=' DRWC_TEST ]
++ [ EMTWC '=' DRWC_TEST_F ]
++ [ EMTWC '=' DRWC_PB ]
++ [ EMTWC '=' DRWC_JEMadj ]
++ [ EMTWC '=' DRWC_JEMadj_Gf ]
++ [ EMTWC '=' DRWbs ]
++ [ EMTWC '=' DRWx ]
++ [ EMTWC '=' DRWy ]
++ [ EMTWC '=' DRWM ]
++ [ EMTWC '=' DRWN ]
++ [ EMTWC '=' DRM ]
++ [ EMTWC '=' DRFC ]
++ [ EMTWC '=' DRMC ]
++ [ EMTWC '=' DRQC ]
++ [ EMTWC '=' EMTW ]
++ [ EMTWC '=' EMTWC ]
++ CASEDIR=WEEKLY
++ PROG=GEODYN_II_ALL_SLRF2020_2023
++ TCASE=EMT
+STAGE=$CASEDIR
+
++ STAGE=WEEKLY
+export CASEDIR STAGE
+
+
++ export CASEDIR STAGE
+if [ "$SAT" = "GISL1" ];then
+   LOCALDSK=tmp
+   SV=L1
+   HPENGN=gravity
+
+elif [ "$SAT" = "GISL2" ];then
+   LOCALDSK=tmp
+   SV=L2
+   HPENGN=gravity
+elif [ "$SAT" = "LARES" ];then
+   LOCALDSK=tmp
+   SV=LARES
+   HPENGN=gravity
+
+elif [ "$SAT" = "CHAMP" ];then
+  CASEDIR=WEEKLY
+  PROG=HP2HP_LT_dr_4CH
+   LOCALDSK=tmp
+   SV=CH
+   HPENGN=gravity
+
+elif [ "$SAT" = "STARL" ];then
+   LOCALDSK=tmp
+   SV=STR
+   HPENGN=gravity
+
+elif [ "$SAT" = "GFZ" ];then
+   LOCALDSK=tmp
+   SV=GFZ
+   HPENGN=gravity
+
+elif [ "$SAT" = "AJISI" ];then
+   LOCALDSK=tmp
+   SV=AJI
+   HPENGN=gravity
+
+elif [ "$SAT" = "ERS1" ];then
+   LOCALDSK=tmp
+   SV=ERS
+   HPENGN=gravity
+
+elif [ "$SAT" = "TP" ];then
+   LOCALDSK=tmp
+   SV=TOP
+   HPENGN=gravity
+
+elif [ "$SAT" = "ETA1" ];then
+   LOCALDSK=tmp
+   SV=E1
+   HPENGN=gravity
+
+elif [ "$SAT" = "ETA2" ];then
+   LOCALDSK=tmp
+   SV=E2
+   HPENGN=gravity
+
+   fi
+
+
++ [ ETA2 '=' GISL1 ]
++ [ ETA2 '=' GISL2 ]
++ [ ETA2 '=' LARES ]
++ [ ETA2 '=' CHAMP ]
++ [ ETA2 '=' STARL ]
++ [ ETA2 '=' GFZ ]
++ [ ETA2 '=' AJISI ]
++ [ ETA2 '=' ERS1 ]
++ [ ETA2 '=' TP ]
++ [ ETA2 '=' ETA1 ]
++ [ ETA2 '=' ETA2 ]
++ LOCALDSK=tmp
++ SV=E2
++ HPENGN=gravity
+mkdir /$LOCALDSK/gdyn$$
++ mkdir /tmp/gdyn98924
+chmod 700 /$LOCALDSK/gdyn$$
++ chmod 700 /tmp/gdyn98924
+cd /$LOCALDSK/gdyn$$
+
++ cd /tmp/gdyn98924
+#  ATTENTION:  Why are you doing these tests? What is so special for 2014?
+
+#DATA=${SV}_${YR}.tdf.Z
+#if [ "${YR}" = "14" ];then
+#DATA=${SV}_${YR}_NQ.tdf.Z
+#else
+DATA=${SV}_${YR}.tdf.Z
++ DATA=E2_23.tdf.Z
+#fi
+#DATA=${SV}_13.tdf.Z
+if [ "${ARC}" = "o21230" ];then
+DATA=${SV}_13.tdf.Z
+#NEW TDF with 8834 and 7827 wit pressure corrections
+#ARTER 2012
+#   DATA=NEW_TDF_190712/${SV}_13.tdf.Z
+
+else
+DATA=${SV}_${YR}.tdf.Z
+#NEW TDF with 8834 and 7827 wit pressure corrections
+#ARTER 2012
+#   DATA=NEW_TDF_190712/${SV}_${YR}.tdf.Z
+
+fi
++ [ w30129 '=' o21230 ]
++ DATA=E2_23.tdf.Z
+ if [ "${NYEAR}" -lt "1993"  ];then
+      DATA=L1y7693.v931104.tdf.Z
+       fi
+
+
++ [ 2023 -lt 1993 ]
+#if [ "${SV}" = "AJI" -o "${SV}"="STR" ];then
+if [ "${NYEAR}" = "2012" ];then
+if [ "${Date_NEW_ARC}" = "120101" -o "${Date_NEW_ARC}" = "120108" -o "${Date_NEW_ARC}" = "120115" -o "${Date_NEW_ARC}" = "120122" -o "${Date_NEW_ARC}" = "120129" -o "${Date_NEW_ARC}" = "120205" -o "${Date_NEW_ARC}" = "120212" -o "${Date_NEW_ARC}" = "120219" -o "${Date_NEW_ARC}" = "120226" -o "${Date_NEW_ARC}" = "120304" -o "${Date_NEW_ARC}" = "120311" -o "${Date_NEW_ARC}" = "120318" -o "${Date_NEW_ARC}" = "120325" -o "${Date_NEW_ARC}" = "120401" -o "${Date_NEW_ARC}" = "120408" -o "${Date_NEW_ARC}" = "120415" -o "${Date_NEW_ARC}" = "120422" ];then
+DATA=${SV}_12_QL.tdf.Z
+elif [ "${Date_NEW_ARC}" = "121216" -o "${Date_NEW_ARC}" = "121223" ];then 
+    DATA=${SV}_13.tdf.Z
+else
+DATA=${SV}_12_CRD.tdf.Z
+fi
+if [ "${Date_NEW_ARC}" = "121230" ];then
+DATA=${SV}_13.tdf.Z
+fi
+fi
++ [ 2023 '=' 2012 ]
+#fi
+
+if [ "$CASE" = "PP6d" ];then
+
+   DATA=qldata.1999.020306.GISL1_99.tdf.Z
+   DATA=qldata.991010-991106.lageos1_sp_99.tdf.Z
+   DATA=DEP.tdf.Z
+
+elif [ "$CASE" = "PP6e" ];then
+
+   DATA=qldata.1999.020306.GISL1_99.tdf.Z
+   DATA=qldata.991010-991106.lageos1_sp_99.tdf.Z
+   DATA=DEP.tdf.Z
+
+elif [ "$CASE" = "PP6o" ];then
+
+   DATA=qldata.1999.020306.GISL1_99.tdf.Z
+   DATA=qldata.991010-991106.lageos1_sp_99.tdf.Z
+   DATA=DEP.tdf.Z
+
+elif [ "$CASE" = "PP6A" -o "$CASE" = "PP6Ae" ];then
+
+   DATA=${SV}_${YR}_PP6A.tdf.Z
+
+elif [ "$CASE" = "PP6B" -o "$CASE" = "PP6Be" ];then
+
+   DATA=L2tst2001_01.tdf.Z
+
+   DATA=${SV}_${YR}.tdf.Z
+#NEW TDF with 8834 and 7827 wit pressure corrections
+   DATA=NEW_TDF_190712/${SV}_${YR}.tdf.Z
+
+fi
+
++ [ EMTWC '=' PP6d ]
++ [ EMTWC '=' PP6e ]
++ [ EMTWC '=' PP6o ]
++ [ EMTWC '=' PP6A -o EMTWC '=' PP6Ae ]
++ [ EMTWC '=' PP6B -o EMTWC '=' PP6Be ]
+CASE=$TCASE
+
++ CASE=EMT
+export SV YR CASE DATA LOCALDSK HPENGN  SUBSOL SITEFILE
+
++ export SV YR CASE DATA LOCALDSK HPENGN SUBSOL SITEFILE
+echo " SV YR CASE STAGE DATA         LOCALDSK HPENGN " 
++ echo ' SV YR CASE STAGE DATA         LOCALDSK HPENGN '
+ SV YR CASE STAGE DATA         LOCALDSK HPENGN 
+echo " $SV $YR $CASE $STAGE $DATA $LOCALDSK $HPENGN "
+
++ echo ' E2 23 EMT WEEKLY E2_23.tdf.Z tmp gravity '
+ E2 23 EMT WEEKLY E2_23.tdf.Z tmp gravity 
+nohup time sh $SCRIPTS/$PROG $ARC $LABEL $SAT $DATA $$ 
+
++ nohup time sh /nobackup/mkuzmicz/scripts/ITRF2020/OPS/GEODYN_II_ALL_SLRF2020_2023 w30129 wv415e ETA2 E2_23.tdf.Z 98924
+nohup: ignoring input
+/nobackup/mkuzmicz/scripts/ITRF2020/OPS/GEODYN_II_ALL_SLRF2020_2023: line 3: #set: command not found
+
+#  GEODYN_II_ALL_IERS2014_RESXTND_2017MP_220807
+#
+# Imports are: CASEDIR CASE STAGE SV YR DATA LOCALDSK 
+#
+
+#if [ `expr $#` -lt 5 ]; then
+#   echo "Usage: GEODYN_II_ALL_IERS2014_RESXTND_2017MP_220807 ARC LABEL SAT DATA tdir\007"
+#   exit 101
+#fi
+
+#echo " # "
+#echo " #  GEODYN_II_ALL_IERS2014_RESXTND_2017MP_220807 $* "
+#echo " # "
+
+# date '+DATE: %m/%d/%y%nTIME: %H:%M:%S'
+
+SCR_NAME=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_220807
++ SCR_NAME=GEODYN_II_ALL_IERS2014_RESXTND_2017MP_220807
+SCR_PARM=5
++ SCR_PARM=5
+SCR_LIST="ARC LABEL SAT DATA tdir"
++ SCR_LIST='ARC LABEL SAT DATA tdir'
+SCR_VERS=220807.0
++ SCR_VERS=220807.0
+
+
+if [ `expr $#` -lt $SCR_PARM ]; then
+   echo "Usage: $SCR_NAME ${SCR_LIST}\007"
+   exit 101
+fi
+expr $#
+++ expr 5
++ '[' 5 -lt 5 ']'
+
+DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
+++ date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ DateTime='DATE: 02/09/23  TIME: 11:36:03'
+
+echo " # "
++ echo ' # '
+ # 
+echo " #  $SCR_NAME $* "
++ echo ' #  GEODYN_II_ALL_IERS2014_RESXTND_2017MP_220807 w30129 wv415e ETA2 E2_23.tdf.Z 98924 '
+ #  GEODYN_II_ALL_IERS2014_RESXTND_2017MP_220807 w30129 wv415e ETA2 E2_23.tdf.Z 98924 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Version $SCR_VERS "
++ echo ' #  Version 220807.0 '
+ #  Version 220807.0 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date DATE: 02/09/23  TIME: 11:36:03 '
+ #  Run Date DATE: 02/09/23  TIME: 11:36:03 
+echo " # "
++ echo ' # '
+ # 
+
+
+
+ARC=$1
++ ARC=w30129
+LABEL=$2
++ LABEL=wv415e
+SAT=$3
++ SAT=ETA2
+DATA=$4
++ DATA=E2_23.tdf.Z
+tdir=$5
++ tdir=98924
+
+TMP=$LOCALDSK
++ TMP=tmp
+
+# Defaults :
+
+  disk=$DISK
++ disk=nobackup/mkuzmicz/MISSIONS
+# diskC=space/SSEM
+# usr=$USER
+
+
+gdir=/${TMP}/gdyn$tdir
++ gdir=/tmp/gdyn98924
+cd $gdir
++ cd /tmp/gdyn98924
+
+####################################################
+#              Global Setup                        #
+####################################################
+#
+#
+# General cards
+#
+#if [ "${SAT}" = "LARES"  ] && [ "${ARC}" = "o40720"  ]; then
+#cat /${disk}/$SAT/d_base/comn/${SV}glb${CASE}.gen.2014.IERS10_2017MP_2019_${ARC}  > ftn05
+#else
+cat /${disk}/$SAT/d_base/comn/${SV}glb${CASE}.gen.2014.IERS10_2017MP_2019  > ftn05
++ cat /nobackup/mkuzmicz/MISSIONS/ETA2/d_base/comn/E2glbEMT.gen.2014.IERS10_2017MP_2019
+#fi
+
+#
+# FLUX @ 1 A.U. card
+#
+
+grep "D${Date_NEW_ARC}" $MAIN_PATH/INFILES/FLUX_X-ext_com_42_65_1702_SI_7d.170310  >> ftn05
++ grep D230129 /nobackup/mkuzmicz/INFILES/FLUX_X-ext_com_42_65_1702_SI_7d.170310
+
+#
+# Lense-Thirring card
+#
+
+if [ "${CASE}" = "DR" ]; then
+ cat /${disk}/$SAT/d_base/comn/LNSTHR.1.${SV} >> ftn05
+
+ fi
++ '[' EMT = DR ']'
+#
+# poleut cards
+#
+
+if [ "${CASE}" = "EMT" ]; then
+
+zcat /${disk_n}/MISSIONS/d_base/padj/${STAGE}/${ARC}.Z    >> ftn05
+
+fi
++ '[' EMT = EMT ']'
++ zcat /nobackup/mkuzmicz/MISSIONS/d_base/padj/WEEKLY/w30129.Z
+
+#
+# earth model 
+#
+
+if [ "${CASE}" = "DR" ]; then
+
+# C(2,0), C(2,1) & S(2,1) in mid-arc epoch:
+
+# zgrep "G${Date_NEW_ARC}" /${disk}/d_base/grav/${GRAV_TOP}.fxd.Z          >> ftn05
+#zgrep "G${Date_NEW_ARC}" /${disk}/d_base/grav/${GRAV_TOP}.fxd.gz         >> ftn05
+#20210415
+#zgrep "G${Date_NEW_ARC}" /${disk_s}/d_base/grav//DISTRIBUTION_2021/GRAVTOP/${GRAV_TOP}.fxd.gz         >> ftn05
+
+ zgrep "G${Date_NEW_ARC}" /${disk_s}/d_base/grav/${GRAV_TOP}.fxd.gz          >> ftn05
+
+# the rest of the model from (2,0) to Max.:
+
+ zcat /${disk_s}/d_base/grav/${GRAVITY_MDL}.fxd.gz         >> ftn05
+
+
+# TVG cards:
+
+# zcat /${disk}/d_base/grav/GRVTIM/${GRVTIM}/G${Date_NEW_ARC}.fxd.gz         >> ftn05
+
+#zcat /${disk}/d_base/grav/${GRVTIM}.${SV}.fxd.Z         >> ftn05
+
+#20210415
+# zcat /${disk_s}/d_base/grav/DISTRIBUTION_2021/GRVTIM/${GRVTIM}/G${Date_NEW_ARC}.fxd.gz         >> ftn05
+
+ zcat /nobackup/mkuzmicz/MISSIONS/d_base/grav/GRVTIM/CURRENT/${GRVTIM}.${SV}.fxd.gz         >> ftn05
+
+elif [ "${CASE}" = "EMT" ]; then
+
+# C(2,0), C(2,1) & S(2,1) in mid-arc epoch:
+
+# zgrep "G${Date_NEW_ARC}" /${disk}/d_base/grav/${GRAV_TOP}.adj.Z          >> ftn05
+
+#zgrep "G${Date_NEW_ARC}" /${disk}/d_base/grav/${GRAV_TOP}.adj.gz         >> ftn05
+#20210415
+# zgrep "G${Date_NEW_ARC}" /${disk_s}/d_base/grav//DISTRIBUTION_2021/GRAVTOP/${GRAV_TOP}.adj.gz         >> ftn05
+
+   zgrep "G${Date_NEW_ARC}" /${disk_s}/d_base/grav/${GRAV_TOP}.adj.gz          >> ftn05
+
+# the rest of the model from (2,0) to Max.:
+
+ zcat /${disk_s}/d_base/grav/${GRAVITY_MDL}.adj.gz             >> ftn05   # Use for standard analyses
+
+# TVG cards:
+
+# zcat /${disk}/d_base/grav/GRVTIM/${GRVTIM}/G${Date_NEW_ARC}.adj.gz         >> ftn05
+
+#zcat /${disk}/d_base/grav/${GRVTIM}.${SV}.adj.Z         >> ftn05
+#20210415
+# zcat /${disk_s}/d_base/grav/DISTRIBUTION_2021/GRVTIM/${GRVTIM}/G${Date_NEW_ARC}.adj.gz         >> ftn05
+
+ zcat /nobackup/mkuzmicz/MISSIONS/d_base/grav/GRVTIM/CURRENT/${GRVTIM}.${SV}.adj.gz         >> ftn05
+
+fi
++ '[' EMT = DR ']'
++ '[' EMT = EMT ']'
++ zgrep G230129 /nobackup/mkuzmicz/MISSIONS/d_base/grav/GRAVTOP_JCET@2010.0_G210101-G300108.adj.gz
++ zcat /nobackup/mkuzmicz/MISSIONS/d_base/grav/GGM05C_30x30.adj.gz
++ zcat /nobackup/mkuzmicz/MISSIONS/d_base/grav/GRVTIM/CURRENT/JCET_CURRENT_GSM+GAC_20x20.E2.adj.gz
+
+#
+# tide cards
+#
+
+if [ "${CASE}" = "DR" ]; then
+
+#zcat /${disk}/d_base/tide/ETIDES/${ETIDE_MDL}.fxd.gz     >> ftn05
+#zcat /${disk}/d_base/tide/OTIDES/${OTIDE_MDL}.fxd.gz     >> ftn05
+
+zcat /${disk}/d_base/tide/ETIDES/${ETIDE_MDL}.fxd.gz     >> ftn05
+zcat /${disk}/d_base/tide/OTIDES/${OTIDE_MDL}.fxd.gz     >> ftn05
+
+
+elif [ "${CASE}" = "EMT" ]; then
+
+#zcat /${disk}/d_base/tide/ETIDES/${ETIDE_MDL}.adj.gz     >> ftn05
+#zcat /${disk}/d_base/tide/OTIDES/${OTIDE_MDL}.adj.gz     >> ftn05
+
+zcat /${disk}/d_base/tide/ETIDES/${ETIDE_MDL}.adj.gz     >> ftn05
+zcat /${disk}/d_base/tide/OTIDES/${OTIDE_MDL}.adj.gz     >> ftn05
+
+fi
++ '[' EMT = DR ']'
++ '[' EMT = EMT ']'
++ zcat /nobackup/mkuzmicz/MISSIONS/d_base/tide/ETIDES/TIDES+etides_RAY_2018.adj.gz
++ zcat /nobackup/mkuzmicz/MISSIONS/d_base/tide/OTIDES/GOT4.10/20otides_got4p10c+Air_Tides_got4.7.adj.gz
+
+#
+# tidal diurnal & semidiurnal COM and EOP cards
+#
+
+if [ "${CASE}" = "DR" ]; then
+
+
+zcat /${disk}/d_base/comn/${HFCOM_MDL}.fxd.gz >> ftn05   # Use for standard analyses
+zcat /${disk}/d_base/comn/${HFEOP_MDL}.fxd.gz >> ftn05
+
+fi
++ '[' EMT = DR ']'
+
+if [ "${CASE}" = "EMT" ]; then
+
+zcat /${disk}/d_base/comn/${HFCOM_MDL}.adj.gz >> ftn05   # Use for standard analyses
+zcat /${disk}/d_base/comn/${HFEOP_MDL}.adj.gz >> ftn05
+
+fi
++ '[' EMT = EMT ']'
++ zcat /nobackup/mkuzmicz/MISSIONS/d_base/comn/HFCOM/HFCOM_GOT4.10c.adj.gz
++ zcat /nobackup/mkuzmicz/MISSIONS/d_base/comn/HFEOP/HFEOP_DESAIwLib.adj.gz
+
+#
+#
+# oload cards
+#
+
+#
+
+# zcat /${disk}/d_base/comn/${OLOAD_MDL}.Z  >> ftn05
+
+ zcat /${disk_s}/d_base/comn/${OLOAD_MDL}.gz  >> ftn05
++ zcat /nobackup/mkuzmicz/MISSIONS/d_base/comn/SLR_OLOAD_180118_207NSTA_GOT4.10c.gdyn.gz
+
+#
+
+# reference frame cards
+#
+
+if [ "$YR" -gt "50" -a "$YR" -le "99" ];then
+
+ arc_yy=`expr $YR + 1900`
+
+elif [ "$YR" -ge "00" -a "$YR" -le "50" ];then
+
+ arc_yy=`expr $YR + 2000`
+
+fi
++ '[' 23 -gt 50 -a 23 -le 99 ']'
++ '[' 23 -ge 00 -a 23 -le 50 ']'
+expr $YR + 2000
+++ expr 23 + 2000
++ arc_yy=2023
+
+arc_mmdd=`echo ${ARC}|cut -c3-6`
+echo ${ARC}|cut -c3-6
+++ echo w30129
+++ cut -c3-6
++ arc_mmdd=0129
+
+arc_date=$arc_yy$arc_mmdd
++ arc_date=20230129
+
+if [ "${CASE}" = "DR" ]; then
+
+  suffix=fxd
+
+elif [ "${CASE}" = "EMT" ]; then
+
+  suffix=adj
+
+fi
++ '[' EMT = DR ']'
++ '[' EMT = EMT ']'
++ suffix=adj
+
+
+if [ "${STAGE}" = "WEEKLY" -o "${STAGE}" = "FORTNTLY" -o "${STAGE}" = "MONTHLY" -o "${STAGE}" = "QUARTERLY" -o "${STAGE}" = "DAILY" ]; then
+#if [ "${STAGE}" = "WEEKLY" -o "${STAGE}" = "FORTNTLY" -o "${STAGE}" = "MONTHLY" -o "${STAGE}" = "QUARTERLY" ]; then
+#if [ "${STAGE}" = "WEEKLY" ]; then
+
+  if [ "$SITEFILE" = "NONE" ]; then
+
+  cat /${disk_s}/d_base/site/${STAGE}/STAPOS.${suffix}     >> ftn05
+
+   if [ "$suffix" = "fxd" ];then
+
+     ITRF_APRIORI=SLRF2008
+     ITRF_APRIORI=SLRF2014
+     ITRF_APRIORI=SLRF2020
+
+     zgrep -v -e SIGVEL  /${disk_s}/d_base/site/DAILY/$ITRF_APRIORI/EPOCH_2015.0/${ARC}.adj.Z  > tftn05
+     zgrep -v -e CONSTADJ tftn05   > cftn05
+     zgrep -v -e CONSTEND cftn05   >> ftn05
+    
+   elif [ "$suffix" = "adj" ];then
+
+
+   ITRF_APRIORI=SLRF2014P_1510
+   ITRF_APRIORI=SLRF2008       
+   ITRF_APRIORI=SLRF2014       
+   ITRF_APRIORI=SLRF2020       
+
+   zcat /${disk_s}/d_base/site/DAILY/$ITRF_APRIORI/EPOCH_2015.0/${ARC}.adj.Z   >> ftn05
+
+   fi
+
+   cat /${disk_s}/d_base/site/${STAGE}/STAPOS.end     >> ftn05
+
+ else
+
+#  this is the case of stations referenced to mid-arc epoch:
+
+     cat /${disk_s}/d_base/site/${STAGE}/STAPOS.adj     >> ftn05
+
+zgrep -v -e SIGVEL /${disk_s}/d_base/site/DAILY/$ITRF_APRIORI/MID-ARC_EPOCH/${ARC}.adj.Z >> ftn05
+
+     cat /${disk_s}/d_base/site/${STAGE}/STAPOS.end     >> ftn05
+
+  fi
+
+elif [ "${STAGE}" = "MONTHLY/PP6" ]; then
+  
+  if [ "${CASE}" = "DR" ]; then
+
+  zcat /${disk_s}/$SAT/d_base/site/MONTHLY/PP6/${ARC}.fxd.Z   >> ftn05
+  
+  elif [ "${CASE}" = "EMT" ]; then
+  
+  zcat /${disk_s}/$SAT/d_base/site/MONTHLY/PP6/${ARC}.adj.Z   >> ftn05
+  
+  fi
+
+elif [ "${STAGE}" = "ORBIT/PP6" ]; then
+
+#   PP6 positions:
+
+ zcat /${disk_s}/$SAT/d_base/site/ORBIT/PP6/${ARC}.Z   >> ftn05
+
+fi
++ '[' WEEKLY = WEEKLY -o WEEKLY = FORTNTLY -o WEEKLY = MONTHLY -o WEEKLY = QUARTERLY -o WEEKLY = DAILY ']'
++ '[' NONE = NONE ']'
++ cat /nobackup/mkuzmicz/MISSIONS/d_base/site/WEEKLY/STAPOS.adj
++ '[' adj = fxd ']'
++ '[' adj = adj ']'
++ ITRF_APRIORI=SLRF2014P_1510
++ ITRF_APRIORI=SLRF2008
++ ITRF_APRIORI=SLRF2014
++ ITRF_APRIORI=SLRF2020
++ zcat /nobackup/mkuzmicz/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/w30129.adj.Z
++ cat /nobackup/mkuzmicz/MISSIONS/d_base/site/WEEKLY/STAPOS.end
+
+#
+# endglbl card
+#
+
+if [ "${CASE}" = "EMT" ]; then
+
+ cat /${disk}/d_base/comn/endglb11 >> ftn05
+
+elif [ "${CASE}" = "DR" ]; then
+
+ cat /${disk}/d_base/comn/endglb33 >> ftn05   # Use for standard analyses
+
+fi
++ '[' EMT = EMT ']'
++ cat /nobackup/mkuzmicz/MISSIONS/d_base/comn/endglb11
+
+#
+#
+####exit 20180717 #test to check files
+
+####################################################
+#          Iterated Arc Setup                      #
+####################################################
+#
+#
+# Satellite arc setup cards
+#
+
+# ATTENTION: enter the correct path to the new arc setups!
+
+if [ "${LABEL}" = "wv${SNX_VER}0" ]; then
+cat /${disk}/$SAT/d_base/trnd/DR/${STAGE}/$PCASE/v${SNX_VER}/${ARC} >> ftn05
+fi
++ '[' wv415e = wv4150 ']'
+sed "s/EDIT                     ......................................................./EDIT                     3.5000000000000D+00 0.50000000D+00 0.000000D+00 0.0D+00/g"  ftn05 > ftn051
++ sed 's/EDIT                     ......................................................./EDIT                     3.5000000000000D+00 0.50000000D+00 0.000000D+00 0.0D+00/g' ftn05
+
+cp ftn051 ftn05
++ cp ftn051 ftn05
+
+if  [ "${LABEL}" = "wv${SNX_VER}1"   ] ; then
+cat /${disk}/$SAT/d_base/trnd/${CASE}/${STAGE}/$PCASE/v${SNX_VER}/${ARC} >> ftn05
+fi
++ '[' wv415e = wv4151 ']'
+
+## for EMT case
+
+if [ "${LABEL}" = "wv${SNX_VER}x" -o "${LABEL}" = "wv${SNX_VER}e" ]; then
+cat /${disk}/$SAT/d_base/trnd/${CASE}/${STAGE}/$PCASE/v${SNX_VER}/${ARC} >> ftn05
+#fi
+
+fi
++ '[' wv415e = wv415x -o wv415e = wv415e ']'
++ cat /nobackup/mkuzmicz/MISSIONS/ETA2/d_base/trnd/EMT/WEEKLY//v415/w30129
+
+
+#
+#   Check for ORBFIL
+#
+
+grep ORBFIL ftn05 > ORBFIL
++ grep ORBFIL ftn05
+
+#
+#--------------------------------------------------
+#
+#   Ancillary data sets
+#
+#--------------------------------------------------
+#
+# Get the laser tracking data
+#
+
+zcat /${disk_s}/$SAT/d_base/data/TDF/${DATA} > ftn40
++ zcat /nobackup/mkuzmicz/MISSIONS/ETA2/d_base/data/TDF/E2_23.tdf.Z
+
+#
+# Get the Geodyn IERS Tables
+#
+
+ln -s /nobackup/mkuzmicz/MISSIONS/d_base/tabs/EOP20C04/EOP20C04_iers5722.ntab2212 ftn02
++ ln -s /nobackup/mkuzmicz/MISSIONS/d_base/tabs/EOP20C04/EOP20C04_iers5722.ntab2212 ftn02
+
+
+#ln -s /nobackup/mkuzmicz/MISSIONS/d_base/tabs/iers.current ftn02
+
+#
+# Get the Planetary Ephemeris
+#
+# ln -s /nobackup/mkuzmicz/SSEM/d_base/ephm/ephem1403.ext.data.intel_native ftn01
+
+#ln -s /nobackup/mkuzmicz/MISSIONS/d_base/ephm/ephem1421.ext.data_RM=8.130725 ftn01
+if [ "${NYEAR}" -lt "2000" ];then
+#### after 20130725 valid to 210407
+ln -s /${disk_s}/d_base/ephm/ephem1421.ext.data_RM=8.130725  ftn01
+else
+#valid after 210408
+ln -s /${disk}/d_base/ephm/DE430/ephem1430.data2025.bin.i64_RM=8.210409  ftn01
+fi
++ '[' 2023 -lt 2000 ']'
++ ln -s /nobackup/mkuzmicz/MISSIONS/d_base/ephm/DE430/ephem1430.data2025.bin.i64_RM=8.210409 ftn01
+
+
+#
+# Get a Gravity Model to satisfy ftn12 on HP
+#
+
+zcat /${disk}/d_base/grav/pgs7337b.Z > ftn12
++ zcat /nobackup/mkuzmicz/MISSIONS/d_base/grav/pgs7337b.Z
+
+#
+# Get the Atmospheric Loading file
+#
+
+cat /${disk}/d_base/data/APLO_GSFC/${CURRENT_APLO}/${ARC} > ftn24
++ cat /nobackup/mkuzmicz/MISSIONS/d_base/data/APLO_GSFC/050210/w30129
+cat: /nobackup/mkuzmicz/MISSIONS/d_base/data/APLO_GSFC/050210/w30129: No such file or directory
+
+#
+# Get the Atmospheric Gravity file
+#
+
+#cat /${disk}/ATMOS/ATGRAV/MERGED/ATGRAV.TEST_50x50 > fort.18
+#cat /${disk}/ATMOS/ATGRAV/MERGED/ATGRAV.TEST_4x4 > fort.18
+#cat /${disk}/ATMOS/ATGRAV/MERGED/ATGRAV.TEST > ftn18
+#zcat /${disk}/d_base/data/ATGRAV/MERGED/${ARC}.Z > ftn24
+
+#cp ftn05 $ARC.SAVEITu05
+#cp $ARC.SAVEITu05 /${disk}/$SAT/d_base/trnd/${CASE}/${STAGE}/$PCASE/v${SNX_VER}/.
+#cp ftn01 FTN01
+#cp ftn02 FTN02
+#cp ftn12 FTN12
+#cp ftn40 FTN40
+
+#cp ftn05 /${disk}/$SAT/unitX/iisset.$ARC.$LABEL
+#compress -f /${disk}/$SAT/unitX/iisset.$ARC.$LABEL
+#exit 99
+
+###
+#exit 20180717 #test to check files
+
+#######################################################################
+#                                                                     #
+#                         RUN IIS                                     #
+#                                                                     #
+#######################################################################
+echo " # "
++ echo ' # '
+ # 
+echo " #		Run IIS"
++ echo ' #		Run IIS'
+ #		Run IIS
+echo " # "
++ echo ' # '
+ # 
+
+#
+#...Execute the IIs
+#
+
+ls -la $MAIN_PATH_OLD/EXECUTABLES/${GDN_2S}
++ ls -la /nobackup/mkuzmicz/EXECUTABLES/gs1810p3_i64+1.x
+lrwxrwxrwx 1 mkuzmicz s0860 43 Sep 28  2021 /nobackup/mkuzmicz/EXECUTABLES/gs1810p3_i64+1.x -> /home5/epavlis/EXECUTABLES/gs1810p3_i64+1.x
+
+# $MAIN_PATH_OLD/EXECUTABLES/${GDN_2S} > iisout 2> iisout_err
+/home5/epavlis/EXECUTABLES/${GDN_2S} > iisout 2> iisout_err
++ /home5/epavlis/EXECUTABLES/gs1810p3_i64+1.x
+
+
+ls -la ftn*
++ ls -la ftn01 ftn02 ftn05 ftn051 ftn11 ftn12 ftn15 ftn16 ftn24 ftn40 ftn41 ftn42 ftn50
+lrwxrwxrwx 1 mkuzmicz s0860      84 Feb  9 11:36 ftn01 -> /nobackup/mkuzmicz/MISSIONS/d_base/ephm/DE430/ephem1430.data2025.bin.i64_RM=8.210409
+lrwxrwxrwx 1 mkuzmicz s0860      75 Feb  9 11:36 ftn02 -> /nobackup/mkuzmicz/MISSIONS/d_base/tabs/EOP20C04/EOP20C04_iers5722.ntab2212
+-rw-rw-r-- 1 mkuzmicz s0860 2492033 Feb  9 11:36 ftn05
+-rw-rw-r-- 1 mkuzmicz s0860 2236643 Feb  9 11:36 ftn051
+-rw-rw-r-- 1 mkuzmicz s0860 9476752 Feb  9 11:36 ftn11
+-rw-rw-r-- 1 mkuzmicz s0860  226827 Feb  9 11:36 ftn12
+-rw-rw-r-- 1 mkuzmicz s0860       0 Feb  9 11:36 ftn15
+-rw-rw-r-- 1 mkuzmicz s0860       0 Feb  9 11:36 ftn16
+-rw-rw-r-- 1 mkuzmicz s0860       0 Feb  9 11:36 ftn24
+-rw-rw-r-- 1 mkuzmicz s0860  192192 Feb  9 11:36 ftn40
+-rw-rw-r-- 1 mkuzmicz s0860   37920 Feb  9 11:36 ftn41
+-rw-rw-r-- 1 mkuzmicz s0860   21600 Feb  9 11:36 ftn42
+-rw-rw-r-- 1 mkuzmicz s0860 2207235 Feb  9 11:36 ftn50
+
+#exit 99
+
+#
+cat iisout_err iisout > iis
++ cat iisout_err iisout
+rm iisout_err iisout
++ rm iisout_err iisout
+
+grep "ABNORMAL TERMINATION" iis > err2S
++ grep 'ABNORMAL TERMINATION' iis
+sum err2S > out.err2S
++ sum err2S
+read lerr2S b c < out.err2S
++ read lerr2S b c
+
+if [ "$lerr2S" = "0" ]; then
+
+   \rm err2S out.err2S
+
+else
+
+   echo "  "
+
+   echo " ** 2S ** ABNORMAL TERMINATION  " > 2mail
+   echo "  "
+
+   cat out.err2S >> 2mail
+   echo "  "
+
+   echo " $SAT $ARC $LABEL " >> 2mail
+
+   echo "  "
+
+#   mail -m URGENT_from_2S -t epavlis@umbc.edu < 2mail
+
+   \rm 2mail
+
+fi
++ '[' 00000 = 0 ']'
++ echo '  '
+  
++ echo ' ** 2S ** ABNORMAL TERMINATION  '
++ echo '  '
+  
++ cat out.err2S
++ echo '  '
+  
++ echo ' ETA2 w30129 wv415e '
++ echo '  '
+  
++ rm 2mail
+
+\rm err2S out.err2S   
++ rm err2S out.err2S
+
+
+rm ftn12
++ rm ftn12
+
+mv ftn11 g2e.11
++ mv ftn11 g2e.11
+mv ftn41 g2e.12
++ mv ftn41 g2e.12
+
+rm ftn*
++ rm ftn01 ftn02 ftn05 ftn051 ftn15 ftn16 ftn24 ftn40 ftn42 ftn50
+rm EXAT*
++ rm 'EXAT*'
+rm: cannot remove 'EXAT*': No such file or directory
+
+mv g2e.11 ftn11
++ mv g2e.11 ftn11
+mv g2e.12 ftn12
++ mv g2e.12 ftn12
+
+#exit 99
+echo " # "
++ echo ' # '
+ # 
+echo " #		End of IIS"
++ echo ' #		End of IIS'
+ #		End of IIS
+echo " # "
++ echo ' # '
+ # 
+#
+echo " #"
++ echo ' #'
+ #
+echo " #		Run IIE"
++ echo ' #		Run IIE'
+ #		Run IIE
+echo " #"
++ echo ' #'
+ #
+     
+ls -la $MAIN_PATH_OLD/EXECUTABLES/${GDN_2E}
++ ls -la /nobackup/mkuzmicz/EXECUTABLES/ge1810p09_i64_PLD.x
+lrwxrwxrwx 1 mkuzmicz s0860 46 Sep 28  2021 /nobackup/mkuzmicz/EXECUTABLES/ge1810p09_i64_PLD.x -> /home5/epavlis/EXECUTABLES/ge1810p09_i64_PLD.x
+
+
+#. /usr/share/modules/init/ksh
+#module load math-libs/2016Q4
+ . /usr/share/modules/init/ksh
++ . /usr/share/modules/init/ksh
+
+module() { eval `/usr/bin/modulecmd ksh $*`; }
+
+MODULESHOME=/usr/share/Modules
+++ MODULESHOME=/usr/share/Modules
+export MODULESHOME
+++ export MODULESHOME
+
+if [ "${LOADEDMODULES:-}" = "" ]; then
+  LOADEDMODULES=
+  export LOADEDMODULES
+fi
+++ '[' '' = '' ']'
+++ LOADEDMODULES=
+++ export LOADEDMODULES
+
+if [ "${MODULEPATH:-}" = "" ]; then
+  MODULEPATH=`sed -n 's/[ 	#].*$//; /./H; $ { x; s/^\n//; s/\n/:/g; p; }' ${MODULESHOME}/init/.modulespath`
+  export MODULEPATH
+fi
+++ '[' /usr/share/modules/modulefiles:/nasa/modulefiles/toss3:/nasa/modulefiles/spack/gcc-4.8:/nasa/modulefiles/pkgsrc/toss3 = '' ']'
+  module use -a /nasa/modulefiles/pkgsrc/sles12
++ module use -a /nasa/modulefiles/pkgsrc/sles12
+/usr/bin/modulecmd ksh $*
+++ /usr/bin/modulecmd ksh use -a /nasa/modulefiles/pkgsrc/sles12
++ eval MODULEPATH=/usr/share/modules/modulefiles:/nasa/modulefiles/toss3:/nasa/modulefiles/spack/gcc-4.8:/nasa/modulefiles/pkgsrc/toss3:/nasa/modulefiles/pkgsrc/sles12 ';export' 'MODULEPATH;'
+MODULEPATH=/usr/share/modules/modulefiles:/nasa/modulefiles/toss3:/nasa/modulefiles/spack/gcc-4.8:/nasa/modulefiles/pkgsrc/toss3:/nasa/modulefiles/pkgsrc/sles12 ;export MODULEPATH;
+++ MODULEPATH=/usr/share/modules/modulefiles:/nasa/modulefiles/toss3:/nasa/modulefiles/spack/gcc-4.8:/nasa/modulefiles/pkgsrc/toss3:/nasa/modulefiles/pkgsrc/sles12
+++ export MODULEPATH
+   module avail math-libs/2016Q4
++ module avail math-libs/2016Q4
+/usr/bin/modulecmd ksh $*
+++ /usr/bin/modulecmd ksh avail math-libs/2016Q4
+
+----------------------- /nasa/modulefiles/pkgsrc/sles12 ------------------------
+math-libs/2016Q4
++ eval
+    module load math-libs/2016Q4
++ module load math-libs/2016Q4
+/usr/bin/modulecmd ksh $*
+++ /usr/bin/modulecmd ksh load math-libs/2016Q4
++ eval INCLUDE=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/include ';export' 'INCLUDE;INFOPATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/info' ';export' 'INFOPATH;LD_LIBRARY_PATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/lib' ';export' 'LD_LIBRARY_PATH;LIBRARY_PATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/lib' ';export' 'LIBRARY_PATH;LOADEDMODULES=math-libs/2016Q4' ';export' 'LOADEDMODULES;MANPATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/man:::/opt/c3/man:/opt/sgi/share/man' ';export' 'MANPATH;PATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/X11R6/bin:/PBS/bin:/usr/sbin:/sbin:/opt/c3/bin:/opt/sgi/sbin:/opt/sgi/bin' ';export' 'PATH;PKG_CONFIG_PATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/lib/pkgconfig' ';export' 'PKG_CONFIG_PATH;_LMFILES_=/nasa/modulefiles/pkgsrc/sles12/math-libs/2016Q4' ';export' '_LMFILES_;'
+INCLUDE=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/include ;export INCLUDE;INFOPATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/info ;export INFOPATH;LD_LIBRARY_PATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/lib ;export LD_LIBRARY_PATH;LIBRARY_PATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/lib ;export LIBRARY_PATH;LOADEDMODULES=math-libs/2016Q4 ;export LOADEDMODULES;MANPATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/man:::/opt/c3/man:/opt/sgi/share/man ;export MANPATH;PATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/X11R6/bin:/PBS/bin:/usr/sbin:/sbin:/opt/c3/bin:/opt/sgi/sbin:/opt/sgi/bin ;export PATH;PKG_CONFIG_PATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/lib/pkgconfig ;export PKG_CONFIG_PATH;_LMFILES_=/nasa/modulefiles/pkgsrc/sles12/math-libs/2016Q4 ;export _LMFILES_;
+++ INCLUDE=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/include
+++ export INCLUDE
+++ INFOPATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/info
+++ export INFOPATH
+++ LD_LIBRARY_PATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/lib
+++ export LD_LIBRARY_PATH
+++ LIBRARY_PATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/lib
+++ export LIBRARY_PATH
+++ LOADEDMODULES=math-libs/2016Q4
+++ export LOADEDMODULES
+++ MANPATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/man:::/opt/c3/man:/opt/sgi/share/man
+++ export MANPATH
+++ PATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/X11R6/bin:/PBS/bin:/usr/sbin:/sbin:/opt/c3/bin:/opt/sgi/sbin:/opt/sgi/bin
+++ export PATH
+++ PKG_CONFIG_PATH=/nasa/pkgsrc/sles12/2016Q4/views/math-libs/lib/pkgconfig
+++ export PKG_CONFIG_PATH
+++ _LMFILES_=/nasa/modulefiles/pkgsrc/sles12/math-libs/2016Q4
+++ export _LMFILES_
+# $MAIN_PATH_OLD/EXECUTABLES/${GDN_2E}  > iie 2> iieerr
+ /home5/epavlis/EXECUTABLES/${GDN_2E} > iie 2> iieerr
++ /home5/epavlis/EXECUTABLES/ge1810p09_i64_PLD.x
+
+
+
+#exit 99
+
+
+
+cat iis iie iieerr > gdnout
++ cat iis iie iieerr
+
+$SCRIPTS/STATUS gdnout "0NORMAL.END.OF.GEODYN.II-E.EXECUTION." $PROC_STEP > o.STATUS_gdnout 2>&1
++ /nobackup/mkuzmicz/scripts/ITRF2020/OPS/STATUS gdnout 0NORMAL.END.OF.GEODYN.II-E.EXECUTION. E2_EMTe
+
+#
+mv gdnout  /${disk}/$SAT/output/${CASE}/${STAGE}/v${SNX_VER}/$ARC.$LABEL
++ mv gdnout /nobackup/mkuzmicz/MISSIONS/ETA2/output/EMT/WEEKLY/v415/w30129.wv415e
+mv fort.71 /${disk}/$SAT/emat/${STAGE}/v${SNX_VER}/$ARC.$LABEL
++ mv fort.71 /nobackup/mkuzmicz/MISSIONS/ETA2/emat/WEEKLY/v415/w30129.wv415e
+mv ftn07 /${disk}/$SAT/punchdout/${CASE}/${STAGE}/v${SNX_VER}/$ARC.$LABEL
++ mv ftn07 /nobackup/mkuzmicz/MISSIONS/ETA2/punchdout/EMT/WEEKLY/v415/w30129.wv415e
+mv fort.8 /${disk}/$SAT/orbtvu/car/v${SNX_VER}/$ARC.$LABEL
++ mv fort.8 /nobackup/mkuzmicz/MISSIONS/ETA2/orbtvu/car/v415/w30129.wv415e
+mv fort.9 /${disk}/$SAT/summaries/${CASE}/${STAGE}/v${SNX_VER}/$ARC.$LABEL
++ mv fort.9 /nobackup/mkuzmicz/MISSIONS/ETA2/summaries/EMT/WEEKLY/v415/w30129.wv415e
+mv fort.10 /${disk}/$SAT/orbtvu/kep/v${SNX_VER}/$ARC.$LABEL
++ mv fort.10 /nobackup/mkuzmicz/MISSIONS/ETA2/orbtvu/kep/v415/w30129.wv415e
+mv fort.16 /${disk}/$SAT/corrections/${CASE}/${STAGE}/v${SNX_VER}/$ARC.$LABEL
++ mv fort.16 /nobackup/mkuzmicz/MISSIONS/ETA2/corrections/EMT/WEEKLY/v415/w30129.wv415e
+mv fort.20 /${disk}/$SAT/simdat/$ARC.$LABEL
++ mv fort.20 /nobackup/mkuzmicz/MISSIONS/ETA2/simdat/w30129.wv415e
+mv: cannot stat 'fort.20': No such file or directory
+mv ftn37 /${disk}/$SAT/biaschk/$ARC.$LABEL
++ mv ftn37 /nobackup/mkuzmicz/MISSIONS/ETA2/biaschk/w30129.wv415e
+mv: cannot move 'ftn37' to '/nobackup/mkuzmicz/MISSIONS/ETA2/biaschk/w30129.wv415e': No such file or directory
+mv fort.94 /${disk}/$SAT/products/arc/${STAGE}/v${SNX_VER}/$ARC.$LABEL
++ mv fort.94 /nobackup/mkuzmicz/MISSIONS/ETA2/products/arc/WEEKLY/v415/w30129.wv415e
+mv fort.95 /${disk}/$SAT/products/glb/${STAGE}/v${SNX_VER}/$ARC.$LABEL
++ mv fort.95 /nobackup/mkuzmicz/MISSIONS/ETA2/products/glb/WEEKLY/v415/w30129.wv415e
+mv: cannot stat 'fort.95': No such file or directory
+mv ftn97 /${disk}/$SAT/telem/$ARC.$LABEL
++ mv ftn97 /nobackup/mkuzmicz/MISSIONS/ETA2/telem/w30129.wv415e
+#
+
+#
+#######################################################################
+#                                                                     #
+#               Create DATACAT Files                                  #
+#                                                                     #
+#######################################################################
+#
+
+#if [ "${CASE}" = "EMT" ]; then
+
+  $SCRIPTS/MAKE_DATA_CATALOG $ARC.$LABEL $SAT ${CASE} $STAGE
++ /nobackup/mkuzmicz/scripts/ITRF2020/OPS/MAKE_DATA_CATALOG w30129.wv415e ETA2 EMT WEEKLY
+/nobackup/mkuzmicz/scripts/ITRF2020/OPS/MAKE_DATA_CATALOG[4]: #set: not found [No such file or directory]
+#    MAKE_DATA_CATALOG  
+
+SCR_NAME=MAKE_DATA_CATALOG
++ SCR_NAME=MAKE_DATA_CATALOG
+SCR_PARM=4
++ SCR_PARM=4
+SCR_LIST="infile SAT CASE STAGE"
++ SCR_LIST='infile SAT CASE STAGE'
+SCR_VERS=051110.0
+
+
++ SCR_VERS=051110.0
+if [ `expr $#` -lt $SCR_PARM ]; then
+   echo "Usage: $SCR_NAME ${SCR_LIST}\007"
+   exit 101
+fi
+
+expr $#
++ expr 4
++ [ 4 -lt 4 ]
+DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ DateTime='DATE: 02/09/23  TIME: 11:36:22'
+echo " # "
++ echo ' # '
+ # 
+echo " #  $SCR_NAME $* "
++ echo ' #  MAKE_DATA_CATALOG w30129.wv415e ETA2 EMT WEEKLY '
+ #  MAKE_DATA_CATALOG w30129.wv415e ETA2 EMT WEEKLY 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Version $SCR_VERS "
++ echo ' #  Version 051110.0 '
+ #  Version 051110.0 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date DATE: 02/09/23  TIME: 11:36:22 '
+ #  Run Date DATE: 02/09/23  TIME: 11:36:22 
+echo " # "
+
+
++ echo ' # '
+ # 
+infile=$1
++ infile=w30129.wv415e
+SAT=$2
++ SAT=ETA2
+CASE=${3:-EMT}
++ CASE=EMT
+STAGE=${4:-WEEKLY}
+
++ STAGE=WEEKLY
+dsk=nobackup/mkuzmicz/MISSIONS
+
+
++ dsk=nobackup/mkuzmicz/MISSIONS
+if [ ! -d /nobackup/mkuzmicz/MISSIONS/$SAT/output/DATACATS/$STAGE/$CASE ]; then
+      mkdir -p /nobackup/mkuzmicz/MISSIONS/$SAT/output/DATACATS/$STAGE/${CASE}/v${SNX_VER}
+fi
+
++ [ ! -d /nobackup/mkuzmicz/MISSIONS/ETA2/output/DATACATS/WEEKLY/EMT ]
+disk=/$dsk/$SAT/output/$CASE/$STAGE/v${SNX_VER}
+
++ disk=/nobackup/mkuzmicz/MISSIONS/ETA2/output/EMT/WEEKLY/v415
+whrto=/$dsk/$SAT/output/DATACATS/$STAGE/$CASE/v${SNX_VER}
++ whrto=/nobackup/mkuzmicz/MISSIONS/ETA2/output/DATACATS/WEEKLY/EMT/v415
+mkdir /nobackup/mkuzmicz/tmp/magda/DATACATS$$
++ mkdir /nobackup/mkuzmicz/tmp/magda/DATACATS99803
+cd /nobackup/mkuzmicz/tmp/magda/DATACATS$$
++ cd /nobackup/mkuzmicz/tmp/magda/DATACATS99803
+#cd $disk
+
+
+
+cat /$disk/$infile > t0
+
++ cat //nobackup/mkuzmicz/MISSIONS/ETA2/output/EMT/WEEKLY/v415/w30129.wv415e
++ 1> t0
+arcline=`sed -n "/^ OUTPUT        START              STOP         MEAS.                  STATION/=" t0 `
+sed -n "/^ OUTPUT        START              STOP         MEAS.                  STATION/=" t0 
++ sed -n '/^ OUTPUT        START              STOP         MEAS.                  STATION/=' t0
++ arcline=35082
+#arcline=`sed -n "/^    MEMORY ALLOCATION NUMBER 1/=" t0 `
+
+frstline=`expr $arcline + 3`
+expr $arcline + 3
++ expr 35082 + 3
++ frstline=35085
+#frstline=`expr $arcline + 6`
+
+arcline=`sed -n "/^ NUM. PHYSICAL BLOCKS   /=" t0 `
+
+sed -n "/^ NUM. PHYSICAL BLOCKS   /=" t0 
++ sed -n '/^ NUM. PHYSICAL BLOCKS   /=' t0
++ arcline=35131
+lastline=`expr $arcline - 6`
+
+expr $arcline - 6
++ expr 35131 - 6
++ lastline=35125
+sed -n "${frstline},${lastline}p" t0 > t1
+
++ sed -n 35085,35125p t0
++ 1> t1
+/nobackup/mkuzmicz/scripts/crush t1 > t2
+
++ /nobackup/mkuzmicz/scripts/crush t1
++ 1> t2
+/bin/grep -v -e BINARY -e '[A-z]' -e RUN -e "IS NOT INCLUDED IN THE TRACKING COMPLEMENT" t2 > t3a
++ /bin/grep -v -e BINARY -e '[A-z]' -e RUN -e 'IS NOT INCLUDED IN THE TRACKING COMPLEMENT' t2
++ 1> t3a
+/bin/grep -v -e '[A-z]' -e "\*" t3a > t3
+
++ /bin/grep -v -e '[A-z]' -e '\*' t3a
++ 1> t3
+sed -e "s/: /:0/g" t3 > t4
+
++ sed -e 's/: /:0/g' t3
++ 1> t4
+sort -k 7,7 -k 2,2 -k 3,3 t4 -o t5
+
++ sort -k 7,7 -k 2,2 -k 3,3 t4 -o t5
+mv t5 $whrto/${infile}
+
++ mv t5 /nobackup/mkuzmicz/MISSIONS/ETA2/output/DATACATS/WEEKLY/EMT/v415/w30129.wv415e
+\rm t0 t1 t2 t3 t4
++ rm t0 t1 t2 t3 t4
+cd ..
++ cd ..
+\rm -rf /nobackup/mkuzmicz/tmp/magda/DATACATS$$
+
++ rm -rf /nobackup/mkuzmicz/tmp/magda/DATACATS99803
+exit 0
+
++ exit 0
+
+#fi
+
+#
+#######################################################################
+#                                                                     #
+#               Process Corrections File                              #
+#                                                                     #
+#######################################################################
+#
+if [ -s /${disk}/$SAT/corrections/${CASE}/${STAGE}/$ARC.$LABEL ]; then
+
+  $SCRIPTS/MAKE_COR_FILE $ARC $LABEL $SAT ${disk} $CASE $STAGE
+
+fi
++ '[' -s /nobackup/mkuzmicz/MISSIONS/ETA2/corrections/EMT/WEEKLY/w30129.wv415e ']'
+
+#mv ftn80 ftn10
+
+#  /space/users/epavlis/EXECUTABLES/read_vmat.x > /${disk}/$SAT/output/${CASE}/${STAGE}/R_V.$ARC.$LABEL
+
+#mv ftn11 /${disk}/$SAT/vmat/$ARC.$LABEL.P182
+
+gzip -f /${disk}/$SAT/output/${CASE}/${STAGE}/v${SNX_VER}/$ARC.$LABEL
++ gzip -f /nobackup/mkuzmicz/MISSIONS/ETA2/output/EMT/WEEKLY/v415/w30129.wv415e
+gzip -f /${disk}/$SAT/punchdout/${CASE}/${STAGE}/v${SNX_VER}/$ARC.$LABEL
++ gzip -f /nobackup/mkuzmicz/MISSIONS/ETA2/punchdout/EMT/WEEKLY/v415/w30129.wv415e
+gzip -f /${disk}/$SAT/orbtvu/car/v${SNX_VER}/$ARC.$LABEL
++ gzip -f /nobackup/mkuzmicz/MISSIONS/ETA2/orbtvu/car/v415/w30129.wv415e
+gzip -f /${disk}/$SAT/summaries/${CASE}/${STAGE}/v${SNX_VER}/$ARC.$LABEL
++ gzip -f /nobackup/mkuzmicz/MISSIONS/ETA2/summaries/EMT/WEEKLY/v415/w30129.wv415e
+gzip -f /${disk}/$SAT/orbtvu/kep/v${SNX_VER}/$ARC.$LABEL
++ gzip -f /nobackup/mkuzmicz/MISSIONS/ETA2/orbtvu/kep/v415/w30129.wv415e
+gzip -f /${disk}/$SAT/corrections/${CASE}/${STAGE}/v${SNX_VER}/$ARC.$LABEL
++ gzip -f /nobackup/mkuzmicz/MISSIONS/ETA2/corrections/EMT/WEEKLY/v415/w30129.wv415e
+gzip -f /${disk}/$SAT/biaschk/$ARC.$LABEL
++ gzip -f /nobackup/mkuzmicz/MISSIONS/ETA2/biaschk/w30129.wv415e
+gzip: /nobackup/mkuzmicz/MISSIONS/ETA2/biaschk/w30129.wv415e: No such file or directory
+gzip -f /${disk}/$SAT/simdat/$ARC.$LABEL
++ gzip -f /nobackup/mkuzmicz/MISSIONS/ETA2/simdat/w30129.wv415e
+gzip: /nobackup/mkuzmicz/MISSIONS/ETA2/simdat/w30129.wv415e: No such file or directory
+gzip -f /${disk}/$SAT/telem/$ARC.$LABEL
++ gzip -f /nobackup/mkuzmicz/MISSIONS/ETA2/telem/w30129.wv415e
+#gzip -f /${disk}/$SAT/emat/${STAGE}/${PCASE}/$ARC.$LABEL 
+#gzip -f /${disk}/$SAT/vmat/$ARC.$LABEL 
+#
+#--------------------------------------------------
+
+#   If this is an EMT case, then convert and save orbits, otherwise NOT !
+
+if [ "${CASE}" = "EMT" ]; then
+
+
+#--------------------------------------------------
+ls -al
+#
+cp fort.30 /${disk}/$SAT/traj/${ARC}.${LABEL}.orbfil
+gzip -f /${disk}/$SAT/traj/${ARC}.${LABEL}.orbfil
+#
+#--------------------------------------------------
+#
+#######################################################################
+#                                                                     #
+#               Run Trajectory Conversion Program                     #
+#                                                                     #
+#######################################################################
+#
+#
+
+  if [ -s ORBFIL ]; then
+
+  \rm ftn05
+
+  #
+  ln -s /nobackup/mkuzmicz/MISSIONS/d_base/tabs/EOP20C04/EOP20C04_iers5722.omst2212 gdntable.mst
+  #ln -s /nobackup/mkuzmicz/MISSIONS/d_base/tabs/mstr.current gdntable.mst
+
+  #/umbc/research/epavlis/EXECUTABLES/tj2rvg.x > out6
+  /${disk_n}/EXECUTABLES/tj2rvg.x > out6
+
+  #
+  cat out6
+  mv fort.40 /${disk}/$SAT/traj/${STAGE}/RVG/${ARC}.${LABEL}.rvg   
+
+  echo $ARC.$LABEL > $MAIN_PATH/INFILES/rv2sp13_INFILE.$SAT
+  echo $ARC.$LABEL > $MAIN_PATH/INFILES/INF_OPS_D/rv2sp13_INFILE.$SAT
+
+  fi
+
+fi
++ '[' EMT = EMT ']'
++ ls -al
+total 23320
+drwx------     2 mkuzmicz s0860    4096 Feb  9 11:36 .
+drwxrwxrwt 10156 root     root  1855488 Feb  9 11:36 ..
+-rw-rw-r--     1 mkuzmicz s0860      81 Feb  9 11:36 ORBFIL
+-rw-rw-r--     1 mkuzmicz s0860       4 Feb  9 11:36 SATG
+-rw-rw-r--     1 mkuzmicz s0860 2659616 Feb  9 11:36 fort.19
+-rw-rw-r--     1 mkuzmicz s0860 2427200 Feb  9 11:36 fort.30
+-rw-rw-r--     1 mkuzmicz s0860    4904 Feb  9 11:36 fort.52
+-rw-rw-r--     1 mkuzmicz s0860   18808 Feb  9 11:36 fort.53
+-rw-rw-r--     1 mkuzmicz s0860     337 Feb  9 11:36 fort.60
+-rw-rw-r--     1 mkuzmicz s0860    2555 Feb  9 11:36 fort.88
+-rw-rw-r--     1 mkuzmicz s0860     152 Feb  9 11:36 fort.89
+-rw-rw-r--     1 mkuzmicz s0860 1831493 Feb  9 11:36 fort.90
+-rw-rw-r--     1 mkuzmicz s0860    2625 Feb  9 11:36 fort.91
+-rw-rw-r--     1 mkuzmicz s0860 9476752 Feb  9 11:36 ftn11
+-rw-rw-r--     1 mkuzmicz s0860   37920 Feb  9 11:36 ftn12
+-rw-rw-r--     1 mkuzmicz s0860   37888 Feb  9 11:36 ftn13
+-rw-rw-r--     1 mkuzmicz s0860 2207250 Feb  9 11:36 ftn14
+-rw-rw-r--     1 mkuzmicz s0860       0 Feb  9 11:36 ftn37
+-rw-rw-r--     1 mkuzmicz s0860  231838 Feb  9 11:36 iie
+-rw-rw-r--     1 mkuzmicz s0860       0 Feb  9 11:36 iieerr
+-rw-rw-r--     1 mkuzmicz s0860 2989998 Feb  9 11:36 iis
+-rw-rw-r--     1 mkuzmicz s0860     153 Feb  9 11:36 o.STATUS_gdnout
++ cp fort.30 /nobackup/mkuzmicz/MISSIONS/ETA2/traj/w30129.wv415e.orbfil
++ gzip -f /nobackup/mkuzmicz/MISSIONS/ETA2/traj/w30129.wv415e.orbfil
++ '[' -s ORBFIL ']'
++ rm ftn05
+rm: cannot remove 'ftn05': No such file or directory
++ ln -s /nobackup/mkuzmicz/MISSIONS/d_base/tabs/EOP20C04/EOP20C04_iers5722.omst2212 gdntable.mst
++ /nobackup/mkuzmicz/EXECUTABLES/tj2rvg.x
++ cat out6
+ TRAJECTORY CONVERSION PROGRAM TO RVG FORMAT
+VERSION   11
+ N_BUF_ALPHA_REC          137
+ NSATS            1
+ N_WORDS_SAT           24
+ Trajectory Start Date    1230129000000.0000     
+ Trajectory Stop Date    1230205000000.0000     
+ Trajectory Start YMD       1230129
+ Trajectory Stop YMD       1230205
+ Trajectory Start YMD        230129
+ Trajectory Stop YMD        230205
+ Trajectory Start YMD      20230129
+ Trajectory Stop YMD      20230205
+ ET TRAJ_START_MJDSEC, FRACSEC_START_MJDSEC    2589667269.0000000       0.18399999999999750     
+ GPS TRAJ_START_MJDSEC, FRACSEC_START_MJDSEC    2589667218.0000000        0.0000000000000000     
+ ET TRAJ_STOP_MJDSEC, FRACSEC_STOP_MJDSEC    2590272069.0000000       0.18399999999999750     
+ GPS TRAJ_STOP_MJDSEC, FRACSEC_STOP_MJDSEC    2590272018.0000000        0.0000000000000000     
+ TRAJ_START_MJDSEC_ET    2589667269.0000000     
+ TRAJ_START_MJDSEC_UTC    2589667200.0000000     
+ TRAJ_START_MJDSEC_UTC , TRAJ_START_FSEC_UTC    2589667200.0000000        0.0000000000000000     
+ IYMD_TRAJ_START_UTC, HMS_TRAJ_START_UTC     20230129   0.0000000000000000     
+ nominal interval between points DELTAT_NOM    900.00000000000000     
+ GEODYN_TRAJ_COORD_SYS    0.0000000000000000     
+  N_TOTAL_RV_WORDS           29
+  N_TIMES_BUFFER           78
+  SATID    1.0000000000000000     
+ GEODYN 2S version    1810.0300292968750     
+ 2S rundate and runtime    20230209.000000000        113603.00000000000     
+ GEODYN 2E version    1810.0899999999999     
+ 2E create date and runtime    100519.00000000000        20230209113618.000     
+  last header index filled ioff =           21
+  RV_HEADER    0.0000000000000000        2589667218.0000000        0.0000000000000000        1230129000000.0000        2590272018.0000000        0.0000000000000000        1230205000000.0000        900.00000000000000        1810.0300292968750        20230209.000000000        113603.00000000000        1810.0899999999999        100519.00000000000        20230209113618.000        299792458.00000000        398600441500000.00        6378136.2999999998        3.3528199227242064E-003   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+  buffer RV_DATA 
+   2589667218.0000000        0.0000000000000000       -18.000000000000000        0.0000000000000000        18168145.105320707       -9341066.9586385489       -15282791.297212131        2741.2708113492768        891.33249015336924        2703.0601406113174       -36.846231485700010        204.80321371295190        19142293.599365838       -18544342.215382397       -8569970.8454897255       -15282791.297212131       -1609.6321478675316       -1356.8587594232629        2703.0601406113174        18.225999999999981        254.96500000095813        0.0000000000000000        0.0000000000000000        0.0000000000000000        2.3129202768008741E-007   5.7484344179363082E-007 -0.89874425691006488       0.43847321545425277        127.98698641943659     
+   IYMD_BUF_UTC1, HMS_BUF_UTC1      1230129   0.0000000000000000     
+  buffer RV_DATA 
+   2589668118.0000000        0.0000000000000000       -18.000000000000114        0.0000000000000000        20451025.845360294       -8450830.5176526178       -12709596.669564234        2323.6217244093255        1083.7455673010340        3005.8527205532068       -29.912826036244159        205.80117788761254        19145687.934226673       -19922305.947914202       -9631340.5236958582       -12709596.669564234       -1440.9315525884758       -1002.4792045086767        3005.8527205532068        18.211484374999984        254.98672916762405        0.0000000000000000        0.0000000000000000        0.0000000000000000        2.1236132804911359E-007   5.8215604022356291E-007 -0.91264612627946706       0.40875059411173825        131.74725357980580     
+  buffer RV_DATA 
+   2589669018.0000000        0.0000000000000000       -18.000000000000000        0.0000000000000000        22337213.653092884       -7396668.1939567123       -9889812.4914337602        1861.1650625598159        1255.0275569003543        3250.1626357224795       -22.831637417578992        206.17085634928424        19148988.672695946       -21117783.337012179       -10377911.210181978       -9889812.4914337602       -1204.8744108467349       -659.66477629123528        3250.1626357224795        18.196968749999982        255.00845833428991        0.0000000000000000        0.0000000000000000        0.0000000000000000        1.9319976919467257E-007   5.8884535338733404E-007 -0.92556535304113297       0.37858787255993692        135.50752074034341     
+  buffer RV_DATA 
+   2589669918.0000000        0.0000000000000000       -17.999999999999545        0.0000000000000000        23790372.910777140       -6199111.1589847943       -6878258.2463480849        1362.8967640116120        1401.8904313497815        3431.3319031994524       -15.655342639147685        206.12726998436574        19152247.997445278       -22072645.922443755       -10826316.288457301       -6878258.2463480849       -907.45864538983471       -342.06780685609215        3431.3319031994524        18.182453124999981        255.03018750095586        0.0000000000000000        0.0000000000000000        0.0000000000000000        1.7382786799866752E-007   5.9490410450597256E-007 -0.93748802711364465       0.34801752688360710        139.26778790136788     
+  buffer RV_DATA 
+   2589670818.0000000        0.0000000000000000       -17.999999999999545        0.0000000000000000        24782579.276109599       -4881439.5827497905       -3733400.0560734249        838.48235428004261        1521.5227518385823        3545.9269620069158       -8.4217040957695026        205.82899535790034        19155494.691326536       -22735362.829117883       -11004906.406010833       -3733400.0560734249       -557.29916969434021       -61.984643680875706        3545.9269620069158        18.167937499999983        255.05191666762173        0.0000000000000000        0.0000000000000000        0.0000000000000000        1.5426637032271037E-007   6.0032569201382455E-007 -0.94840131139878714       0.31707247205753547        143.02805506285912     
+   IYMD_BUF_UTC2, HMS_BUF_UTC2      1230204   120000.00000000000     
+ N_TOTAL_RV_WORDS =           29
+  last buffer RV_DATA   -999.00000000000000        1.0000000000000000        1810.0300292968750        1810.0899999999999        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+ TRAJECTORY START 20230129      0.0000
+ TRAJECTORY STOP  20230204 120000.0000
+ NORMAL END OF JOB -      673 RECORDS OUTPUT
++ mv fort.40 /nobackup/mkuzmicz/MISSIONS/ETA2/traj/WEEKLY/RVG/w30129.wv415e.rvg
++ echo w30129.wv415e
+/nobackup/mkuzmicz/scripts/ITRF2020/OPS/GEODYN_II_ALL_SLRF2020_2023: line 629: /nobackup/mkuzmicz/INFILES/rv2sp13_INFILE.ETA2: Permission denied
++ echo w30129.wv415e
+
+#######################################################################
+#                                                                     #
+#                     Process the Residuals                           #
+#                                                                     #
+#######################################################################
+
+if [ -s fort.19 ]; then
+
+cp fort.19 /${disk}/$SAT/residuals/${CASE}/${STAGE}/v${SNX_VER}/$ARC.$LABEL
+chmod 775 /${disk}/$SAT/residuals/${CASE}/${STAGE}/v${SNX_VER}/$ARC.$LABEL
+#
+# Add new XTND processing
+#
+utc2gps=0
+infil=residsN
+
+cp fort.19 residsN
+
+echo $utc2gps >binres.in5
+echo $infil >>binres.in5
+
+
+#/umbc/research/epavlis/EXECUTABLES/binresXTND07c.x
+#/umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/binresXTND07c_mkc.x
+
+#/${disk_n}/EXECUTABLES/binresXTND07c_mkc.x
+#/${disk_n}/EXECUTABLES/binresXTND07c_mkc_090603.x
+/nobackup/mkuzmicz/EXECUTABLES/binresXTND07c_mkc_090603.x
+
+cp residsN.ascii  TTD
+#cp /${disk}/$SAT/residuals_ascii/${CASE}/${STAGE}/${ARC}.${LABEL}.sort_by_config  TTD
+
+grep "Reference Time MJD:" TTD > TTA
+#grep "Reference Time MJD:" residsN.ascii > TTA2
+cut -c20-40 TTA > TTB
+#/umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/TIME_RES.x
+#/${disk_n}/EXECUTABLES/TIME_RES_P.x
+/nobackup/mkuzmicz/EXECUTABLES/TIME_RES_P.x
+read YRR MR DRR < TTC
+
+if [ "$YRR" -gt "50" -a "$YRR" -le "99" ];then
+
+ YRa=`expr $YRR + 1900`
+
+elif [ "$YRR" -ge "00" -a "$YRR" -le "50" ];then
+
+ YRa=`expr $YRR + 2000`
+
+fi
+printf "$YRa $MR $DRR" > TIMEb
+#
+chmod 755 res*
+#
+## Program split into part up and part down
+#
+#/umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/res_up_down.x
+#/${disk_n}/EXECUTABLES/res_up_down.x
+/nobackup/mkuzmicz/EXECUTABLES/res_up_down.x
+## Change geocentric coordinates to topocentric (azimuth and elevation) and put fi and lambda for two cases: up and down
+#
+#/space/users/epavlis/EXECUTABLES/ecf2tcf.x
+cp residsN.ascii  TTE
+grep  "Reference Time MJD:" TTE >  rRT 
+grep -v "Reference Time MJD:" TTE >  residsN.ascii 
+#/${disk_n}/EXECUTABLES/cord.x
+/nobackup/mkuzmicz/EXECUTABLES/cord.x
+#
+chmod 755 res*
+## Format TIMEa: 2004 z40808
+#
+echo "${arc_yy} ${ARC}" > TIMEa
+#
+## Merit data to new file
+#
+#zcat /${disk}/$SAT/d_base/data/MRT2/${SAT}_${YR}.mrt2.Z > merit-data
+#zcat /${disk_n}/SSEM/$SAT/d_base/data/MRT2/${SV}_${YR}.mr2.Z > merit-data
+zcat /${disk_n}/MISSIONS/$SAT/d_base/data/MRT2/${YR}.${SAT}.mr2.gz > merit-data
+#19.GISL1
+
+#
+#
+##Joins files from binary from programs: cord and res_up_down to one file
+#
+#/space/users/epavlis/EXECUTABLES/addpos2res.x
+#/${disk}/EXECUTABLES/res_bias3.x
+/nobackup/mkuzmicz/EXECUTABLES/res_bias3.x
+##Format TIMEb: 2004 08 08
+#
+infile2=TIMEb
+#
+printf "$YRa $MR $DRR" > TIMEb
+read YY MM DD < TIMEb
+###################read YY MM DD < TIMEb
+#
+##Format TIMEc: 04221
+#
+#
+#/space/users/epavlis/scripts/ymd2ydoy $YY $MM $DD > TIMEc
+/${disk_n}/scripts/ymd2ydoy $YY $MM $DD > TIMEc
+#
+sort -u -n -k 10,10 residsN.ascii_last2 > residsN.ascii_last2_c
+#
+##Program: (1) reads files TIME, TIMEc.
+## (2) Make new file TIMEc
+##Format TMIEd - two line-
+##0422105268708 - beginning of arc
+##0422784790508 - ending of arc
+##(3) cuts file Merit data for the beginning and ending of arc.
+##(4) joins data from residual files with data from MERIT II.
+#
+#
+cp residsN.ascii_last2_c residsN.ascii_last2
+
+#
+##/space/users/epavlis/EXECUTABLES/addMRT2resXTND28.x
+####_101007 /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/addMRT2resXTND.x
+#NEW program correct with pass from old to new year
+#/${disk}/EXECUTABLES/addMRT2resXTND_08.x
+#/nobackup/mkuzmicz/EXECUTABLES/addMRT2resXTND_08.x
+/nobackup/mkuzmicz/EXECUTABLES/addMRT2resXTND_1205.x
+#/space/users/epavlis/EXECUTABLES/addMRT2resXTND7.x
+#/space/users/magda/EXECUTABLES/res_bias4.x
+#
+chmod 755 *.*
+#
+mv residsN.ascii_last /${disk}/$SAT/residuals_ascii_xtnd/${CASE}/${STAGE}/$PCASE/v${SNX_VER}/${ARC}.${LABEL}.obsresxtnd
+mv residsN.ascii_last2_c /${disk}/$SAT/residuals_ascii_xtnd/${CASE}/${STAGE}/$PCASE/v${SNX_VER}/${ARC}.${LABEL}.resxtnd
+#
+
+sed -n "1,1p" residsN.ascii > t0
+sed -n "2,\$p" residsN.ascii > t1
+#cut -c1-84 t1 > t2
+#cut -c85-150 t1 > t3
+#paste -d" " t2 t3 > t4
+
+sort -b -n -k 4,4 -k 6,6 -k 9,9  -o t5 t1
+
+#cat t0 t5 > resids.sort
+#sort -n -k 5,5 -k 7,7 -k 8,8 -k 10,10 -o t6 t5
+#sort -n -k 4,4 -k 7,7 -k 8,8 -o $infil.sort $infil.ascii
+
+
+cat t0 t5 > sort_by_config
+sort -b -n -k 9,9  residsN.ascii -o residsN.ascii
+#
+cp rRT rRT2
+cat residsN.ascii >> rRT2
+cp  rRT2  residsN.ascii 
+#
+mv residsN.ascii /${disk}/$SAT/residuals_ascii/${CASE}/${STAGE}/$PCASE/v${SNX_VER}/${ARC}.${LABEL}.ascii
+#mv resids.sort /${disk}/$SAT/residuals_ascii/${CASE}/${STAGE}/${ARC}.${LABEL}.sort
+cat sort_by_config >> rRT
+cp rRT sort_by_config 
+mv sort_by_config /${disk}/$SAT/residuals_ascii/${CASE}/${STAGE}/$PCASE/v${SNX_VER}/${ARC}.${LABEL}.sort_by_config
+
+#
+gzip -f /${disk}/$SAT/residuals/${CASE}/${STAGE}/$PCASE/v${SNX_VER}/${ARC}.${LABEL}
+#
+gzip -f /${disk}/$SAT/residuals_ascii/${CASE}/${STAGE}/$PCASE/v${SNX_VER}/${ARC}.${LABEL}.ascii
+#gzip -f /${disk}/${usr}/$SAT/residuals_ascii/${CASE}/${STAGE}/${ARC}.${LABEL}.sort
+gzip -f /${disk}/$SAT/residuals_ascii/${CASE}/${STAGE}/$PCASE/v${SNX_VER}/${ARC}.${LABEL}.sort_by_config
+
+zcat /${disk}/$SAT/residuals_ascii/${CASE}/${STAGE}/$PCASE/v${SNX_VER}/${ARC}.${LABEL}.ascii.gz > ${ARC}.${LABEL}
+
+
+fi
++ '[' -s fort.19 ']'
++ cp fort.19 /nobackup/mkuzmicz/MISSIONS/ETA2/residuals/EMT/WEEKLY/v415/w30129.wv415e
++ chmod 775 /nobackup/mkuzmicz/MISSIONS/ETA2/residuals/EMT/WEEKLY/v415/w30129.wv415e
++ utc2gps=0
++ infil=residsN
++ cp fort.19 residsN
++ echo 0
++ echo residsN
++ /nobackup/mkuzmicz/EXECUTABLES/binresXTND07c_mkc_090603.x
+1Input  File: "residsN                                                         "
+0nc     =       27250
+ na     =           1
+ nsta   =          86
+ maxrec =         187
+ Output File: "residsN.ascii                                                         "
+
+  header(2)   0.70579419402972898     
+ xtime, xtime_dmod86400 :    2589721696.0000000        54496.705794334412     
+ xintsec_snc_mjd30000 :    2589667200.0000000     
+ xtime0, xmjd :    2589667200.0000000        59973.000000000000     
++ cp residsN.ascii TTD
++ grep 'Reference Time MJD:' TTD
++ cut -c20-40 TTA
++ /nobackup/mkuzmicz/EXECUTABLES/TIME_RES_P.x
++ read YRR MR DRR
++ '[' 23 -gt 50 -a 23 -le 99 ']'
++ '[' 23 -ge 00 -a 23 -le 50 ']'
+expr $YRR + 2000
+++ expr 23 + 2000
++ YRa=2023
++ printf '2023 1 29'
++ chmod 755 residsN residsN.ascii residsN.ascii_2 residsN.ascii_3
++ /nobackup/mkuzmicz/EXECUTABLES/res_up_down.x
++ cp residsN.ascii TTE
++ grep 'Reference Time MJD:' TTE
++ grep -v 'Reference Time MJD:' TTE
++ /nobackup/mkuzmicz/EXECUTABLES/cord.x
++ chmod 755 residsN residsN.ascii residsN.ascii_2 residsN.ascii_3 residsN.ascii_new residsN.ascii_new_2 residsN.ascii_station_dow residsN.ascii_station_up
++ echo '2023 w30129'
++ zcat /nobackup/mkuzmicz/MISSIONS/ETA2/d_base/data/MRT2/23.ETA2.mr2.gz
+gzip: /nobackup/mkuzmicz/MISSIONS/ETA2/d_base/data/MRT2/23.ETA2.mr2.gz: No such file or directory
++ /nobackup/mkuzmicz/EXECUTABLES/res_bias3.x
++ infile2=TIMEb
++ printf '2023 1 29'
++ read YY MM DD
++ /nobackup/mkuzmicz/scripts/ymd2ydoy 2023 1 29
+@ year=2023
+if ( 2023 < 1900 ) then
+if ( 2023 < 1980 ) then
+set mm=1
+set dd=29
+set indices= ( 1 2 3 4 5 6 7 8 9 10 11 12 )
+set months= ( 01 02 03 04 05 06 07 08 09 10 11 12 )
+switch ( 2023 )
+set days= ( 0 31 59 90 120 151 181 212 243 273 304 334 )
+@ ndays=365
+endsw
+if ( 29 < = 0 || 29 > 31 ) then
+if ( 1 < = 0 || 1 > 12 ) then
+@ i=1
+@ doy=0
+while ( 1 < = 1 )
+@ doy=29 + 0
+@ i=1 + 1
+end
+while ( 2 < = 1 )
+echo 29 2023
+awk {printf("%s%3.3d\n", substr($2,3,2), $1)}
++ sort -u -n -k 10,10 residsN.ascii_last2
++ cp residsN.ascii_last2_c residsN.ascii_last2
++ /nobackup/mkuzmicz/EXECUTABLES/addMRT2resXTND_1205.x
+At line 86 of file addMRT2resXTND_1205.f (unit = 11, file = 'merit-data')
+Fortran runtime error: End of file
+  Closed 15
+ 2302905449 2303508194
++ chmod 755 binres.in5 fort.12 fort.19 fort.199 fort.30 fort.35 fort.50 fort.52 fort.53 fort.60 fort.88 fort.89 fort.90 fort.91 gdntable.mst o.STATUS_gdnout residsN.ascii residsN.ascii_2 residsN.ascii_3 residsN.ascii_last residsN.ascii_last2 residsN.ascii_last2_c residsN.ascii_last4 residsN.ascii_new residsN.ascii_new_2 residsN.ascii_station_dow residsN.ascii_station_up
+chmod: changing permissions of 'gdntable.mst': Operation not permitted
++ mv residsN.ascii_last /nobackup/mkuzmicz/MISSIONS/ETA2/residuals_ascii_xtnd/EMT/WEEKLY//v415/w30129.wv415e.obsresxtnd
++ mv residsN.ascii_last2_c /nobackup/mkuzmicz/MISSIONS/ETA2/residuals_ascii_xtnd/EMT/WEEKLY//v415/w30129.wv415e.resxtnd
++ sed -n 1,1p residsN.ascii
++ sed -n '2,$p' residsN.ascii
++ sort -b -n -k 4,4 -k 6,6 -k 9,9 -o t5 t1
++ cat t0 t5
++ sort -b -n -k 9,9 residsN.ascii -o residsN.ascii
++ cp rRT rRT2
++ cat residsN.ascii
++ cp rRT2 residsN.ascii
++ mv residsN.ascii /nobackup/mkuzmicz/MISSIONS/ETA2/residuals_ascii/EMT/WEEKLY//v415/w30129.wv415e.ascii
++ cat sort_by_config
++ cp rRT sort_by_config
++ mv sort_by_config /nobackup/mkuzmicz/MISSIONS/ETA2/residuals_ascii/EMT/WEEKLY//v415/w30129.wv415e.sort_by_config
++ gzip -f /nobackup/mkuzmicz/MISSIONS/ETA2/residuals/EMT/WEEKLY//v415/w30129.wv415e
++ gzip -f /nobackup/mkuzmicz/MISSIONS/ETA2/residuals_ascii/EMT/WEEKLY//v415/w30129.wv415e.ascii
++ gzip -f /nobackup/mkuzmicz/MISSIONS/ETA2/residuals_ascii/EMT/WEEKLY//v415/w30129.wv415e.sort_by_config
++ zcat /nobackup/mkuzmicz/MISSIONS/ETA2/residuals_ascii/EMT/WEEKLY//v415/w30129.wv415e.ascii.gz
+#######################################################################
+#                                                                     #
+#          RESIDUAL to plot                                           #
+#######################################################################
+
+cp /${disk}/$SAT/residuals_ascii_xtnd/${CASE}/${STAGE}/$PCASE/v${SNX_VER}/${ARC}.${LABEL}.resxtnd  res-file_org
++ cp /nobackup/mkuzmicz/MISSIONS/ETA2/residuals_ascii_xtnd/EMT/WEEKLY//v415/w30129.wv415e.resxtnd res-file_org
+zcat /${disk}/$SAT/residuals_ascii/${CASE}/${STAGE}/$PCASE/v${SNX_VER}/${ARC}.${LABEL}.ascii.gz >  rRT
++ zcat /nobackup/mkuzmicz/MISSIONS/ETA2/residuals_ascii/EMT/WEEKLY//v415/w30129.wv415e.ascii.gz
+#/${disk}/EXECUTABLES/resfile2plot.x
+/nobackup/mkuzmicz/EXECUTABLES/resfile2plot.x
++ /nobackup/mkuzmicz/EXECUTABLES/resfile2plot.x
+
+cp RES2PLOT /${disk}/$SAT/residuals_ascii_xtnd/${CASE}/${STAGE}/$PCASE/${Date_NEW_ARC}.${LABEL}.RES2PLOT
++ cp RES2PLOT /nobackup/mkuzmicz/MISSIONS/ETA2/residuals_ascii_xtnd/EMT/WEEKLY//230129.wv415e.RES2PLOT
+cp RES2PLOT /${disk}/$SAT/residuals_ascii_xtnd/${CASE}/${STAGE}/$PCASE/${ARC}.${LABEL}.RES2PLOT
++ cp RES2PLOT /nobackup/mkuzmicz/MISSIONS/ETA2/residuals_ascii_xtnd/EMT/WEEKLY//w30129.wv415e.RES2PLOT
+rm res-file_org res-file2 res-file rRT RT
++ rm res-file_org res-file2 res-file rRT RT
+
+
+#######################################################################
+#                                                                     #
+#       Combine the Residuals and Corrections files into one          #
+#                                                                     #
+#######################################################################
+
+if [ -s /${disk}/$SAT/corrections/${CASE}/${STAGE}/CORR.${ARC}.${LABEL}.gz ]; then
+
+  if [ -s ${ARC}.${LABEL} ]; then
+
+    zcat /${disk}/$SAT/residuals_ascii/${CASE}/${STAGE}/${ARC}.${LABEL}.ascii.gz > ${ARC}.${LABEL}
+    zcat /${disk}/$SAT/corrections/${CASE}/${STAGE}/CORR.${ARC}.${LABEL}.gz > CORR.tmp
+
+    sort -n -k 1,1 CORR.tmp -o CORR.tmp.s
+
+    mv CORR.tmp.s CORR.tmp
+
+    sort -n -k 2,2 ${ARC}.${LABEL} -o ${ARC}.${LABEL}.s
+
+    mv ${ARC}.${LABEL}.s ${ARC}.${LABEL}
+
+    $SCRIPTS/MAKE_COR+RES_FILE ${ARC}.${LABEL} CORR.tmp
+
+    zcat /${disk}/$SAT/orbtvu/car/$ARC.${LABEL}.gz > tmp0
+    sed -n "58,\$p" tmp0 > tmp1
+    /bin/grep -v '[A-Z]' tmp1 > tmp2
+    echo "                                            Latitude Longitude Height " > ORBT.tmp
+    cut -c98-133 tmp2 >> ORBT.tmp
+    paste -d" " ${ARC}.${LABEL}.cor ORBT.tmp > CORR+ORBT.tmp
+
+    gzip -f CORR+ORBT.tmp
+    mv CORR+ORBT.tmp.gz /${disk}/$SAT/corrections/${CASE}/${STAGE}/${ARC}.${LABEL}.corb.gz
+    cp ${ARC}.${LABEL}.cor /${disk}/$SAT/corrections/${CASE}/${STAGE}/${ARC}.${LABEL}.cor
+	gzip -f /${disk}/$SAT/corrections/${CASE}/${STAGE}/${ARC}.${LABEL}.cor
+
+  fi
+
+fi
++ '[' -s /nobackup/mkuzmicz/MISSIONS/ETA2/corrections/EMT/WEEKLY/CORR.w30129.wv415e.gz ']'
+
+#
+#
+# -----------------------------------------------------------
+#
+ls -al
++ ls -al
+total 26392
+drwx------     2 mkuzmicz s0860    4096 Feb  9 11:36 .
+drwxrwxrwt 10156 root     root  1855488 Feb  9 11:36 ..
+-rw-rw-r--     1 mkuzmicz s0860      81 Feb  9 11:36 ORBFIL
+-rw-rw-r--     1 mkuzmicz s0860   11408 Feb  9 11:36 RES2PLOT
+-rw-rw-r--     1 mkuzmicz s0860      22 Feb  9 11:36 RTIME
+-rw-rw-r--     1 mkuzmicz s0860       4 Feb  9 11:36 SATG
+-rw-rw-r--     1 mkuzmicz s0860      29 Feb  9 11:36 TIME
+-rw-rw-r--     1 mkuzmicz s0860      12 Feb  9 11:36 TIMEa
+-rw-rw-r--     1 mkuzmicz s0860       9 Feb  9 11:36 TIMEb
+-rw-rw-r--     1 mkuzmicz s0860       6 Feb  9 11:36 TIMEc
+-rw-rw-r--     1 mkuzmicz s0860      28 Feb  9 11:36 TIMEd
+-rw-rw-r--     1 mkuzmicz s0860      41 Feb  9 11:36 TTA
+-rw-rw-r--     1 mkuzmicz s0860      22 Feb  9 11:36 TTB
+-rw-rw-r--     1 mkuzmicz s0860      37 Feb  9 11:36 TTC
+-rw-rw-r--     1 mkuzmicz s0860   14761 Feb  9 11:36 TTD
+-rwxr-xr-x     1 mkuzmicz s0860   14761 Feb  9 11:36 TTE
+-rwxr-xr-x     1 mkuzmicz s0860      10 Feb  9 11:36 binres.in5
+-rwxr-xr-x     1 mkuzmicz s0860      27 Feb  9 11:36 fort.12
+-rwxr-xr-x     1 mkuzmicz s0860 2659616 Feb  9 11:36 fort.19
+-rwxr-xr-x     1 mkuzmicz s0860     552 Feb  9 11:36 fort.199
+-rwxr-xr-x     1 mkuzmicz s0860 2427200 Feb  9 11:36 fort.30
+-rwxr-xr-x     1 mkuzmicz s0860      37 Feb  9 11:36 fort.35
+-rwxr-xr-x     1 mkuzmicz s0860   68128 Feb  9 11:36 fort.50
+-rwxr-xr-x     1 mkuzmicz s0860    4904 Feb  9 11:36 fort.52
+-rwxr-xr-x     1 mkuzmicz s0860   18808 Feb  9 11:36 fort.53
+-rwxr-xr-x     1 mkuzmicz s0860     337 Feb  9 11:36 fort.60
+-rwxr-xr-x     1 mkuzmicz s0860    2555 Feb  9 11:36 fort.88
+-rwxr-xr-x     1 mkuzmicz s0860     152 Feb  9 11:36 fort.89
+-rwxr-xr-x     1 mkuzmicz s0860 1831493 Feb  9 11:36 fort.90
+-rwxr-xr-x     1 mkuzmicz s0860    2625 Feb  9 11:36 fort.91
+-rw-rw-r--     1 mkuzmicz s0860 9476752 Feb  9 11:36 ftn11
+-rw-rw-r--     1 mkuzmicz s0860   37920 Feb  9 11:36 ftn12
+-rw-rw-r--     1 mkuzmicz s0860   37888 Feb  9 11:36 ftn13
+-rw-rw-r--     1 mkuzmicz s0860 2207250 Feb  9 11:36 ftn14
+-rw-rw-r--     1 mkuzmicz s0860       0 Feb  9 11:36 ftn37
+lrwxrwxrwx     1 mkuzmicz s0860      75 Feb  9 11:36 gdntable.mst -> /nobackup/mkuzmicz/MISSIONS/d_base/tabs/EOP20C04/EOP20C04_iers5722.omst2212
+-rw-rw-r--     1 mkuzmicz s0860  231838 Feb  9 11:36 iie
+-rw-rw-r--     1 mkuzmicz s0860       0 Feb  9 11:36 iieerr
+-rw-rw-r--     1 mkuzmicz s0860 2989998 Feb  9 11:36 iis
+-rw-rw-r--     1 mkuzmicz s0860       0 Feb  9 11:36 merit-data
+-rw-rw-r--     1 mkuzmicz s0860       0 Feb  9 11:36 merit-data2
+-rwxr-xr-x     1 mkuzmicz s0860     153 Feb  9 11:36 o.STATUS_gdnout
+-rw-rw-r--     1 mkuzmicz s0860    7875 Feb  9 11:36 out6
+-rw-rw-r--     1 mkuzmicz s0860   14761 Feb  9 11:36 rRT2
+-rwxr-xr-x     1 mkuzmicz s0860 2659616 Feb  9 11:36 residsN
+-rwxr-xr-x     1 mkuzmicz s0860   35328 Feb  9 11:36 residsN.ascii_2
+-rwxr-xr-x     1 mkuzmicz s0860   15272 Feb  9 11:36 residsN.ascii_3
+-rwxr-xr-x     1 mkuzmicz s0860   58420 Feb  9 11:36 residsN.ascii_last2
+-rwxr-xr-x     1 mkuzmicz s0860       0 Feb  9 11:36 residsN.ascii_last4
+-rwxr-xr-x     1 mkuzmicz s0860   17296 Feb  9 11:36 residsN.ascii_new
+-rwxr-xr-x     1 mkuzmicz s0860   32108 Feb  9 11:36 residsN.ascii_new_2
+-rwxr-xr-x     1 mkuzmicz s0860   18216 Feb  9 11:36 residsN.ascii_station_dow
+-rwxr-xr-x     1 mkuzmicz s0860   18216 Feb  9 11:36 residsN.ascii_station_up
+-rw-rw-r--     1 mkuzmicz s0860    9890 Feb  9 11:36 station-cor
+-rw-rw-r--     1 mkuzmicz s0860     160 Feb  9 11:36 t0
+-rw-rw-r--     1 mkuzmicz s0860   14560 Feb  9 11:36 t1
+-rw-rw-r--     1 mkuzmicz s0860   14560 Feb  9 11:36 t5
+-rw-rw-r--     1 mkuzmicz s0860   14761 Feb  9 11:36 w30129.wv415e
+
+#
+# End of IIE
+#
+
+cd ..
++ cd ..
+\rm -r gdyn$tdir
++ rm -r gdyn98924
+19.03user 0.54system 0:20.32elapsed 96%CPU (0avgtext+0avgdata 56668maxresident)k
+11600inputs+154072outputs (0major+87811minor)pagefaults 0swaps
+#
+echo "  #  "
++ echo '  #  '
+  #  
+echo "  #    End of 'RUN_GDN_SLR_IERS2019_RESXTND_230102_EOP20C04'    "
++ echo $'  #    End of \'RUN_GDN_SLR_IERS2019_RESXTND_230102_EOP20C04\'    '
+  #    End of 'RUN_GDN_SLR_IERS2019_RESXTND_230102_EOP20C04'    
+echo "  #  "
+
++ echo '  #  '
+  #  

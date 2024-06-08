@@ -1,0 +1,45 @@
+#!/bin/ksh
+#
+
+set -xv
+
+#   BACKTRACK_1_WEEK
+diskC=nobackup/mkuzmicz
+
+cd /${diskC}/INFILES
+
+echo " OLD "
+
+cat ARC_SETUP_OLD.WEEKLY
+
+echo " NEW "
+
+cat ARC_SETUP_NEW.WEEKLY
+
+echo " NEXT "
+
+cat ARC_SETUP_NXT.WEEKLY
+
+echo " SOL No. "
+
+cat SOLUTION_NO_FOR_LAST_RUN.WEEKLY
+
+
+cp ARC_SETUP_OLD.WEEKLY ARC_SETUP_OLD.WEEKLY.SAVE_BKTRK
+cp ARC_SETUP_NEW.WEEKLY ARC_SETUP_NEW.WEEKLY.SAVE_BKTRK
+cp ARC_SETUP_NXT.WEEKLY ARC_SETUP_NXT.WEEKLY.SAVE_BKTRK
+cp SOLUTION_NO_FOR_LAST_RUN.WEEKLY SOLUTION_NO_FOR_LAST_RUN.WEEKLY.SAVE_BKTRK
+
+#cat *.SAVE_BKTRK
+
+cp ARC_SETUP_NEW.WEEKLY ARC_SETUP_NXT.WEEKLY
+cp ARC_SETUP_OLD.WEEKLY ARC_SETUP_NEW.WEEKLY
+
+chmod 777 ARC_SETUP_OLD.WEEKLY ARC_SETUP_NEW.WEEKLY ARC_SETUP_NXT.WEEKLY SOLUTION_NO_FOR_LAST_RUN.WEEKLY 
+
+echo " ********************************************* "
+echo " *  Now edit /${diskC}/INFILES/ARC_SETUP_OLD.WEEKLY  * "
+echo " *  and shift BACKWARDS by 7 days !!!        * "
+echo " ********************************************* "
+
+exit 0

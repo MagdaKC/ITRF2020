@@ -1,0 +1,241 @@
+/nobackup/mkuzmicz/scripts/ITRF2020/OPS/MAKE_BIAS_LIST[4]: #set: not found [No such file or directory]
+SCR_NAME=MAKE_BIAS_LIST
++ SCR_NAME=MAKE_BIAS_LIST
+SCR_PARM=7
++ SCR_PARM=7
+SCR_LIST="infile SAT STAGE CASE BIASTYPE VER WT"
++ SCR_LIST='infile SAT STAGE CASE BIASTYPE VER WT'
+SCR_VERS=210422.0
+
+
++ SCR_VERS=210422.0
+if [ `expr $#` -gt $SCR_PARM ]; then
+   echo "Usage: $SCR_NAME ${SCR_LIST}\007"
+   exit 101
+fi
+
+expr $#
++ expr 6
++ [ 6 -gt 7 ]
+DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ DateTime='DATE: 02/09/23  TIME: 10:44:50'
+echo " # "
++ echo ' # '
+ # 
+echo " #  $SCR_NAME $* "
++ echo ' #  MAKE_BIAS_LIST ILRS_L12__OPS230204 GISLV WEEKLY OPS 4051 we '
+ #  MAKE_BIAS_LIST ILRS_L12__OPS230204 GISLV WEEKLY OPS 4051 we 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Version $SCR_VERS "
++ echo ' #  Version 210422.0 '
+ #  Version 210422.0 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date DATE: 02/09/23  TIME: 10:44:50 '
+ #  Run Date DATE: 02/09/23  TIME: 10:44:50 
+echo " # "
+
+
++ echo ' # '
+ # 
+infile=$1
++ infile=ILRS_L12__OPS230204
+SAT=$2
++ SAT=GISLV
+STAGE=$3
++ STAGE=WEEKLY
+CASE=$4
++ CASE=OPS
+BIASTYPE=$5
++ BIASTYPE=4051
+VER=${6:-we}
++ VER=we
+WT=${7:-}
+
++ WT=''
+PROJ=$SERVICE
+
++ PROJ=ILRS
+# Select what type of biases to process!
+
+SLMB=$BIASTYPE
+
+
++ SLMB=4051
+####2302009 mkdir -p $MAIN_PATH/INFILES/MBIAS_BLK_$PROJ/$STAGE/$CASE
+echo "$MAIN_PATH/INFILES/MBIAS_BLK_$PROJ/$STAGE/$CASE"
+
++ echo /nobackup/mkuzmicz/INFILES/MBIAS_BLK_ILRS/WEEKLY/OPS
+/nobackup/mkuzmicz/INFILES/MBIAS_BLK_ILRS/WEEKLY/OPS
+where=/nobackup/mkuzmicz/MISSIONS/$SAT/punchdout/$STAGE/$CASE/v${SNX_VER}
++ where=/nobackup/mkuzmicz/MISSIONS/GISLV/punchdout/WEEKLY/OPS/v415
+whrsatID=/nobackup/mkuzmicz/MISSIONS/$SAT/d_base/bias/satIDir
+
++ whrsatID=/nobackup/mkuzmicz/MISSIONS/GISLV/d_base/bias/satIDir
+mkdir mbtmp$$
++ mkdir mbtmp64102
+cd mbtmp$$
++ cd mbtmp64102
+\rm -r ready
++ rm -r ready
+rm: cannot remove 'ready': No such file or directory
+\rm inp
++ rm inp
+rm: cannot remove 'inp': No such file or directory
+mkdir ready
+
++ mkdir ready
+echo $BGN > fort.5
+
++ echo 230129
++ 1> fort.5
+zcat $where/${infile}_${WT}pnc > t0
+
++ zcat /nobackup/mkuzmicz/MISSIONS/GISLV/punchdout/WEEKLY/OPS/v415/ILRS_L12__OPS230204_pnc
++ 1> t0
+cat $whrsatID/$ARC > b0
+
++ cat /nobackup/mkuzmicz/MISSIONS/GISLV/d_base/bias/satIDir/w30129
++ 1> b0
+cat: /nobackup/mkuzmicz/MISSIONS/GISLV/d_base/bias/satIDir/w30129: No such file or directory
+/bin/grep "^PARMSM    $SLMB"  t0 > t1
+
++ /bin/grep '^PARMSM    4051' t0
++ 1> t1
+cut -c9-25 t1 > t2
++ cut -c9-25 t1
++ 1> t2
+cut -c23-24 t1 > t3
++ cut -c23-24 t1
++ 1> t3
+sed "s/^0/ /g" t3 > t30
++ sed 's/^0/ /g' t3
++ 1> t30
+cp t30 twave
+
++ cp t30 twave
+cut -c3-13 t2 > t20
+
++ cut -c3-13 t2
++ 1> t20
+if [ "$BIAS" = "6" ]; then
+
+sed "s/../ 6/g" t30 > twave
+
+elif [ "$BIAS" = "7" ]; then
+
+sed "s/.3/ 7/g" t30 > twave
+
+fi
+
++ [ 7 '=' 6 ]
++ [ 7 '=' 7 ]
++ sed 's/.3/ 7/g' t30
++ 1> twave
+while read site
+do
+
+grep $site b0 > $site
+
+wc -l $site >> inp
+
+done < t20
+
++ 0< t20
++ read site
+while read lrec file
+do
+
+grep -e " 1 " -e " 2 " $file >> ready/$file
+grep -v -e " 1 " -e " 2 " $file > 2prcs
+
+wc -l 2prcs > w0
+read nrec site < w0
+
+if [ $nrec -ne 0 ]; then
+
+  if [ "$BIAS" != "7" ]; then
+     cat 2prcs >> ready/$file
+  elif [ $nrec -eq 1 ]; then
+     cat 2prcs >> ready/$file
+  fi
+
+  lsat=0
+
+  while read site nsat nwv val
+  do
+
+  siteout=$site
+  lsat=`expr $lsat + $nsat`
+
+  wvn=$nwv
+  bias=$val
+
+  done < 2prcs
+
+    echo "  "$siteout " "$lsat " "$wvn "  "$bias >> ready/$file
+
+
+fi
+
+done < inp
+
++ /nobackup/mkuzmicz/scripts/ITRF2020/OPS/MAKE_BIAS_LIST: line 124: inp: cannot open [No such file or directory]
+cd ready
++ cd ready
+ls -1 * > list
+
++ ls -1 '*'
++ 1> list
+ls: cannot access *: No such file or directory
+while read file
+do
+
+    sort -u -n -k 1,1 -k 2,2 $file > ${file}s
+
+done < list
+
++ 0< list
++ read file
+cat *s > ../twaveNEW
+
++ cat '*s'
++ 1> ../twaveNEW
+cat: *s: No such file or directory
+cd ..
++ cd ..
+cut -c15-16 twaveNEW > twaveREP
+
++ cut -c15-16 twaveNEW
++ 1> twaveREP
+sed "s/$/  500/g" twaveREP > t34
+
++ sed 's/$/  500/g' twaveREP
++ 1> t34
+paste -d" " t2 t34 > t4
+
++ paste '-d ' t2 t34
++ 1> t4
+mv t4 bias_in
+
++ mv t4 bias_in
+/u/epavlis/EXECUTABLES/chuz_wv.x < fort.5 > out_chuz_wv 2>&1
+
++ /u/epavlis/EXECUTABLES/chuz_wv.x
++ 0< fort.5 1> out_chuz_wv 2>& 1
+mv bias_out $MAIN_PATH/INFILES/INF_OPS_ITRF2020/MBIAS_BLK_$PROJ/$STAGE/$CASE/v${SNX_VER}/${infile}.$SLMB
+
++ mv bias_out /nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/MBIAS_BLK_ILRS/WEEKLY/OPS/v415/ILRS_L12__OPS230204.4051
+cd ..
++ cd ..
+#\rm -r mbtmp$$
+
+exit 0
++ exit 0

@@ -1,0 +1,204 @@
+/nobackup/mkuzmicz/scripts/ITRF2020/OPS/GET_ELEMS_ALL_REPRO[4]: #set: not found [No such file or directory]
+#   GET_ELEMS_ALL
+
+#             CASE to be either null, "WEEKLY", "MONTHLY", etc
+
+SCR_NAME=GET_ELEMS_ALL
++ SCR_NAME=GET_ELEMS_ALL
+SCR_PARM=10
++ SCR_PARM=10
+SCR_LIST="infile SV ITR VER GTR CASE PROJ SUBSOL DELETE INSERT"
++ SCR_LIST='infile SV ITR VER GTR CASE PROJ SUBSOL DELETE INSERT'
+SCR_VERS=090210.0
+
+
++ SCR_VERS=090210.0
+if [ `expr $#` -lt $SCR_PARM ]; then
+   echo "Usage: $SCR_NAME ${SCR_LIST}\007"
+   exit 101
+fi
+
+expr $#
++ expr 10
++ [ 10 -lt 10 ]
+DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ DateTime='DATE: 02/09/23  TIME: 11:32:18'
+echo " # "
++ echo ' # '
+ # 
+echo " #  $SCR_NAME $* "
++ echo ' #  GET_ELEMS_ALL 2_turn_4_run_series.WEEKLY_v415 E1 0 wv415e 3 WEEKLY . . OUT NONE '
+ #  GET_ELEMS_ALL 2_turn_4_run_series.WEEKLY_v415 E1 0 wv415e 3 WEEKLY . . OUT NONE 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Version $SCR_VERS "
++ echo ' #  Version 090210.0 '
+ #  Version 090210.0 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date DATE: 02/09/23  TIME: 11:32:18 '
+ #  Run Date DATE: 02/09/23  TIME: 11:32:18 
+echo " # "
+
+
++ echo ' # '
+ # 
+infile=$1
++ infile=2_turn_4_run_series.WEEKLY_v415
+SV=$2
++ SV=E1
+ITR=$3
++ ITR=0
+VER=$4
++ VER=wv415e
+GTR=${5:-3}
++ GTR=3
+CASE=${6:-WEEKLY}
++ CASE=WEEKLY
+PROJ=${7:-PP6}
++ PROJ=.
+SUBSOL=${8:-A}
++ SUBSOL=.
+DELETE=${9:-OUT}
++ DELETE=OUT
+INSERT=${10:-NONE}
++ INSERT=NONE
+diskC=$disk_n
+
+
++ diskC=nobackup/mkuzmicz
+  if [ "$SV" = "L1" ]; then
+
+  DSK=${diskC}/REPRO
+  sat=GISL1
+  SATDEL=GISLV
+  satn=7603901
+
+  elif [ "$SV" = "L2" ]; then
+
+  DSK=${diskC}/REPRO
+  sat=GISL2
+  SATDEL=GISLV
+  satn=9207002
+  
+  elif [ "$SV" = "E1" ]; then
+
+  DSK=${diskC}/REPRO
+  sat=ETA1
+  SATDEL=ETAV
+  satn=8900103
+
+  elif [ "$SV" = "E2" ]; then
+
+  DSK=${diskC}/REPRO
+  sat=ETA2
+  SATDEL=ETAV
+  satn=8903903
+
+  elif [ "$SV" = "CHAMP" ]; then
+
+  DSK=${diskC}/REPRO
+  sat=CHAMP
+  SATDEL=$sat
+  satn=0309002
+
+  elif [ "$SV" = "STARL" ]; then
+
+  DSK=${diskC}/REPRO
+  sat=STARL
+  SATDEL=$sat
+  satn=8903903
+
+  elif [ "$SV" = "GFZ" ]; then
+
+  DSK=${diskC}/REPRO
+  sat=GFZ
+  SATDEL=$sat
+  satn=8601795
+  PROJ=
+
+  elif [ "$SV" = "AJISI" ]; then
+
+  DSK=${diskC}/REPRO
+  sat=AJISI
+  SATDEL=$sat
+  satn=8903903
+
+  elif [ "$SV" = " ERS1" ]; then
+
+  DSK=${diskC}/REPRO
+  sat=ERS1
+  SATDEL=$sat
+  satn=8903903
+
+  elif [ "$SV" = "TP" ]; then
+
+  DSK=${diskC}/REPRO
+  sat=TP
+  SATDEL=$sat
+  satn=8903903
+
+  fi
+
++ [ E1 '=' L1 ]
++ [ E1 '=' L2 ]
++ [ E1 '=' E1 ]
++ DSK=nobackup/mkuzmicz/REPRO
++ sat=ETA1
++ SATDEL=ETAV
++ satn=8900103
+export satn
+
+
+
++ export satn
+disk1=/${DSK}/$sat/punchdout/EMT/$CASE/v${SNX_VER}
+
++ disk1=/nobackup/mkuzmicz/REPRO/ETA1/punchdout/EMT/WEEKLY/v415
+cd $disk1
+
++ cd /nobackup/mkuzmicz/REPRO/ETA1/punchdout/EMT/WEEKLY/v415
+while read file new_file
+do
+
+zcat ${file}.$VER.gz > t00
+ 
+#gzip -d ${file}.$VER.gz 
+#cat ${file}.$VER > t00
+#gzip -9 ${file}.$VER
+##
+
+arcline=`sed -n "/\/ARC\/    1 1../=" t00 `
+
+frstline=`expr $arcline + 1`
+
+sed -n "${frstline},\$p" t00 > t1
+
+/bin/grep "^ELEMS" t1 > $MAIN_PATH/INFILES/INF_OPS_ITRF2020/ELEMS_${sat}.${new_file}_v${SNX_VER}
+
+done < $MAIN_PATH/INFILES/INF_OPS_ITRF2020/$infile
+
++ 0< /nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/2_turn_4_run_series.WEEKLY_v415
++ read file new_file
++ zcat w30122.wv415e.gz
++ 1> t00
+sed -n "/\/ARC\/    1 1../=" t00 
++ sed -n '/\/ARC\/    1 1../=' t00
++ arcline=1
+expr $arcline + 1
++ expr 1 + 1
++ frstline=2
++ sed -n '2,$p' t00
++ 1> t1
++ /bin/grep ^ELEMS t1
++ 1> /nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/ELEMS_ETA1.w30129_v415
++ read file new_file
+\rm t1 t00
+
++ rm t1 t00

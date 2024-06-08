@@ -1,0 +1,87 @@
+elif [ "$case" = "DAILY" ];then
+
+  if [ "$sat" = "GISL1" -o "$sat" = "GISL2" ];then
+
+    while read file bgn end nd ac1 ac2 
+    do 
+
+    grep -v -e EPOCH -e ELEMS -e THRDRG t1 > t0
+    arcline=`sed -n "/SATPAR/=" t0 `
+    nextline=`expr $arcline + 1`
+    sed -n "1,${arcline}p" t0 > t1a
+    sed -n "1,\$p" $MAIN_PATH/INFILES/INF_OPS_D/ARC_SETUP_EPOCHS.$case >> t1a
+    sed -n "1,\$p" $MAIN_PATH/INFILES/INF_OPS_D/ELEMS_${sat}.$file     >> t1a
+    arcline=`sed -n "/ALBEDO/=" t0 `
+    lastline=`expr $arcline - 1`
+    sed -n "${nextline},${lastline}p" t0          >> t1a
+
+    sed -e "s/AAAAAA/${ac1}/g" -e "s/BBBBBB/${ac2}/g" t1a > t2
+
+    sed -n "1,\$p" all_bias.MASTER >> t2
+
+    grep " ${ac1}" $disk3/thrdrg.${sat} >> t2
+
+    nextline=`sed -n "/PREPRO/=" t0 `
+    lastline=`expr $nextline + 1`
+    
+    sed -n "${arcline},${nextline}p" t0 >> t2
+    
+    sed -n "1,\$p" $disk4/MASTER_SIGMA.current >> t2
+    
+    sed -n "${lastline},\$p" t0 >> t2
+    
+    sed -e "s/SSSSSS/${bgn}/g" -e "s/PPPPPP/${end}/g" t2 > t1b
+   #mkc 20211104i NEW OBSCOR
+        cat $MAIN_PATH/MISSIONS/d_base/obscor/DEFAULT_JCET_mean > o2
+        cat $MAIN_PATH/MISSIONS/d_base/obscor/$SV/${ARC}_OBSCOR >> o2
+        sed -i -e '/DATA/r o2' t1b
+        ###
+    mv t1b $disk1/${file}
+
+    done < $infile
+
+  elif [ "$sat" = "ETA1" -o "$sat" = "ETA2" ];then
+
+    while read file bgn end nd ac1 
+    do 
+
+    grep -v -e EPOCH -e ELEMS -e THRDRG t1 > t0
+    arcline=`sed -n "/SATPAR/=" t0 `
+    nextline=`expr $arcline + 1`
+    sed -n "1,${arcline}p" t0 > t1a
+    sed -n "1,\$p" $MAIN_PATH/INFILES/INF_OPS_D/ARC_SETUP_EPOCHS.$case >> t1a
+    sed -n "1,\$p" $MAIN_PATH/INFILES/INF_OPS_D/ELEMS_${sat}.$file     >> t1a
+    arcline=`sed -n "/ALBEDO/=" t0 `
+    lastline=`expr $arcline - 1`
+    sed -n "${nextline},${lastline}p" t0          >> t1a
+
+    sed -e "s/AAAAAA/${ac1}/g" t1a > t2
+
+/bin/grep -v -e "MBIAS.........151" -e "MBIAS.........500" -e "MBIAS.........900" all_bias.MASTER > gtmptrnd
+
+cp gtmptrnd all_bias.MASTER
+
+
+    sed -n "1,\$p" all_bias.MASTER >> t2
+    cat EXTRA_BIAS >> t2
+    nextline=`sed -n "/PREPRO/=" t0 `
+    lastline=`expr $nextline + 1`
+    
+    sed -n "${arcline},${nextline}p" t0 >> t2
+    
+    sed -n "1,\$p" $disk4/MASTER_SIGMA.current >> t2
+    
+    sed -n "${lastline},\$p" t0 >> t2
+    
+    sed -e "s/SSSSSS/${bgn}/g" -e "s/PPPPPP/${end}/g" t2 > t1b
+    
+   #mkc 20211104i NEW OBSCOR
+        cat $MAIN_PATH/MISSIONS/d_base/obscor/DEFAULT_JCET_mean > o2
+        cat $MAIN_PATH/MISSIONS/d_base/obscor/$SV/${ARC}_OBSCOR >> o2
+        sed -i -e '/DATA/r o2' t1b
+        ###
+    mv t1b $disk1/${file}
+
+    done < $infile
+
+  fi

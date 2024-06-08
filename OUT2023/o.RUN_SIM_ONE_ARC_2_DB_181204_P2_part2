@@ -1,0 +1,2096 @@
+#
+
+echo "  #  "
++ echo '  #  '
+  #  
+echo "  #    Begin  'RUN_SIM_ARC'    "
++ echo $'  #    Begin  \'RUN_SIM_ARC\'    '
+  #    Begin  'RUN_SIM_ARC'    
+echo "  #  "
+
+
++ echo '  #  '
+  #  
+PROG=RUN_SIM_ARCIM_OPS_D       
++ PROG=RUN_SIM_ARCIM_OPS_D
+disk=umbc/epavlis/data01/LOCAL/magdak
++ disk=umbc/epavlis/data01/LOCAL/magdak
+DISK=$disk/MISSIONS
++ DISK=umbc/epavlis/data01/LOCAL/magdak/MISSIONS
+#disk=nobackup2e/epavlis
+infile=/$disk/INFILES/SIM/$FILE
+
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/
+export NETW disk SS ELCUT DN DISK
++ export NETW disk SS ELCUT DN DISK
+mkdir /tmp/magdak/SIM$$
++ mkdir /tmp/magdak/SIM6673
+cd  /tmp/magdak/SIM$$
+
++ cd /tmp/magdak/SIM6673
+CASE=DAILY
++ CASE=DAILY
+#180905 P2
+LVER=wv170
+
++ LVER=wv170
+export LVER   CASE
+
++ export LVER CASE
+if [ "$SAT" = "GISL1" ];then
+   LOCALDSK=tmp
+   SV=L1
+
+elif [ "$SAT" = "GISL2" ];then
+   LOCALDSK=tmp
+   SV=L2
+elif [ "$SAT" = "ETA1" ];then
+   LOCALDSK=tmp
+   SV=E1
+elif [ "$SAT" = "ETA2" ];then
+   LOCALDSK=tmp
+   SV=E2
+
+   fi
+
+
++ [ GILS1 '=' GISL1 ]
++ [ GILS1 '=' GISL2 ]
++ [ GILS1 '=' ETA1 ]
++ [ GILS1 '=' ETA2 ]
+GRAVITY_MDL=GGM02C.30x30
++ GRAVITY_MDL=GGM02C.30x30
+GRVTIM=GRVTIM110310
++ GRVTIM=GRVTIM110310
+export GRAVITY_MDL GRVTIM
+
++ export GRAVITY_MDL GRVTIM
+ETIDE_MDL=etides+poletide.fxd
++ ETIDE_MDL=etides+poletide.fxd
+#NEW
+OTIDE_MDL=GOT47/20otides_got4.7.fxd
++ OTIDE_MDL=GOT47/20otides_got4.7.fxd
+export ETIDE_MDL OTIDE_MDL
++ export ETIDE_MDL OTIDE_MDL
+#GEODYN
+GDN_2S=giis1507p0_i64_noMDRN.x
++ GDN_2S=giis1507p0_i64_noMDRN.x
+GDN_2E=giie1507p2_i64.x
++ GDN_2E=giie1507p2_i64.x
+export GDN_2S GDN_2E
++ export GDN_2S GDN_2E
+ITRF_APRIORI=SLRF2008
++ ITRF_APRIORI=SLRF2008
+export ITRF_APRIORI
++ export ITRF_APRIORI
+SCRIPTS=/umbc/epavlis/data01/LOCAL/magdak/scripts/OPS_D
++ SCRIPTS=/umbc/epavlis/data01/LOCAL/magdak/scripts/OPS_D
+SCRIPTSSIM=/umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR
++ SCRIPTSSIM=/umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR
+MAIN_PATH=/umbc/epavlis/data01/LOCAL/magdak
++ MAIN_PATH=/umbc/epavlis/data01/LOCAL/magdak
+export SCRIPTS MAIN_PATH
+
++ export SCRIPTS MAIN_PATH
+#while read ARC YR A1 A2
+#do
+#read ARC YR < $infile
+##read NYEAR NDOY Date_NEW_ARC ARC < $MAIN_PATH/INFILES/INF_OPS_D/ARC_SETUP_NEW.$CASE
+read OYEAR ODOY Date_OLD_ARC OLD < $MAIN_PATH/INFILES/INF_OPS_D/ARC_SETUP_OLD.${CASE}_SIM
++ read OYEAR ODOY Date_OLD_ARC OLD
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_D/ARC_SETUP_OLD.DAILY_SIM
+read NYEAR NDOY Date_NEW_ARC ARC < $MAIN_PATH/INFILES/INF_OPS_D/ARC_SETUP_NEW.${CASE}_SIM
++ read NYEAR NDOY Date_NEW_ARC ARC
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_D/ARC_SETUP_NEW.DAILY_SIM
+read EYEAR EDOY Date_END_ARC END_ARC < $MAIN_PATH/INFILES/INF_OPS_D/ARC_SETUP_END.${CASE}_SIM
+
+
++ read EYEAR EDOY Date_END_ARC END_ARC
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_D/ARC_SETUP_END.DAILY_SIM
+#read NYEAR NDOY Date_NEW_ARC ARC < $MAIN_PATH/INFILES/INF_OPS_D/ARC_SETUP_OLD.$CASE
+YR=$NYEAR
++ YR=2023
+echo $ARC $YR $Date_NEW_ARC
+
++ echo w30430 2023 230430
+w30430 2023 230430
+##exit 2016
+export Date_NEW_ARC
+
++ export Date_NEW_ARC
+while read ELCUT
+do
+while read SAT SV
+do
+#LVER=SIM_E10
+LVER=SIM_E${ELCUT}
+echo SIM_E${ELCUT}
+#SAT=GISL1
+#SV=L1
+export SAT SV
+#$SCRIPTSSIM/FILES_17_OPS_D_SIM_NEW $SV GISL1 $ARC $LVER $SAT #> o.FILES_17_OPS_D_L1 2>&1 &
+#180905 $SCRIPTSSIM/FILES_17_OPS_D_SIM_NEW $SV $SAT $ARC $LVER $SAT #> o.FILES_17_OPS_D_L1 2>&1 &
+#exit 000
+TYPE_SIM=DR_SIM
+#180905 
+#$SCRIPTS/RUN_GDN_SLR_IERS2014_RESXTND_2017_P2  $ARC ${LVER}0 $SAT $YR $TYPE_SIM . > o.RUN_GDN_SLR_$ARC_${LVER}0.$CASE.${SVN}.${SAT} 2>&1
+TYPE_SIM=DR_SIM1
+#180905
+#$SCRIPTS/RUN_GDN_SLR_IERS2014_RESXTND_2017_P2  $ARC ${LVER}1 $SAT $YR $TYPE_SIM . > o.RUN_GDN_SLR_$ARC_${LVER}1.$CASE.${SVN}.${SAT} 2>&1
+
+#DIV BY NIGHT AND DAY
+infile=/$disk/INFILES/SIM/$FILE
+SS=$YY
+mkdir /${disk}/MISSIONS/${SAT}/output/DATACATS/N_D
+mkdir /${disk}/SIMULATIONS/SLR/${SAT}/output/DATACATS/N_D
+cp /$disk/INFILES/lamb_2014-2016_org lamb
+cp /$disk/INFILES/stat_2014-2016 stat
+
+#COPY DATACAT file SIM DATA
+#output/DATACATS/DAILY/DR
+LABEL=${LVER}1
+cat /${disk}/SIMULATIONS/SLR/${SAT}/output/DATACATS/$CASE/DR/${ARC}.${LABEL}   > t22
+sort -n -k 1,1 t22 -o t33
+EDOYp=$(echo "${EDOY}-1 "  | bc )
+/umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd $EYEAR $EDOYp > EYYMMDD
+read Date_END_ARC < EYYMMDD
+      YR=`echo $Date_END_ARC|cut -c1-2`
+          MM=`echo $Date_END_ARC|cut -c3-4`
+        DD=`echo $Date_END_ARC|cut -c5-6`
+        if [ "$YR" -gt "50" -a "$YR" -le "99" ];then
+#
+       arc_yy=`expr $YR + 1900`
+#
+#               elif [ "$YR" -ge "00" -a "$YR" -le "50" ];then
+#
+                arc_yy=`expr $YR + 2000`
+#
+                    fi
+         DATE_END=${arc_yy}-${MM}-${DD}
+echo $DATE_END
+# DATE_END=${YR}${MM}${DD}
+#
+#grep $DATE_END 
+cat t33 > t4 
+cut -c58-65 t4 > t42
+#cut -c40-47 t4 > t42
+sort -u t42 >  t43
+rm fort.555
+while read SS
+do
+grep $SS t4 > t5
+#   5053    160403   0:32:00   160403   0:42:00    51    70900513         0         0    7603901         0         0        6
+/umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/make_pass_180905.x
+cut -c1-30 fort.55 > fort.552
+sort -u fort.552 > fort.553
+while read A
+do
+grep "$A" fort.55 > fort.554
+sed -e '$!d' fort.554 >> fort.555
+done <  fort.553
+done <  t43
+
+
+#cat t33 > SIM
+cut -c1-127 fort.555 > fort.556
+sed -e "s/:/ /g" fort.556 > fort.557
+#grep -e "s/:/ //g/" fort.556 > fort.557
+sed -e "s/^  //" fort.557 > SIM
+
+print "${ARC}" > ARC_NAME
+/$disk/EXECUTABLES/STAT_SIM.x
+#ALL OBS
+cp fort.21  ${ARC}_${LABEL}_ALL
+#DAY obs
+cp fort.22 ${ARC}_${LABEL}_D
+#NIGHT obs
+cp fort.23 ${ARC}_${LABEL}_N
+cp ${ARC}_${LABEL}* /${disk}/SIMULATIONS/SLR/${SAT}/output/DATACATS/N_D/.
+#exit 222
+rm fort.21 fort.23 fort.22 t22 t33 t2 t3
+
+EDOYp=$(echo "${EDOY}-1 "  | bc )
+/umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd $EYEAR $EDOYp > EYYMMDD
+read Date_END_ARC < EYYMMDD
+      YR=`echo $Date_END_ARC|cut -c1-2`
+        MM=`echo $Date_END_ARC|cut -c3-4`
+      DD=`echo $Date_END_ARC|cut -c5-6`
+        if [ "$YR" -gt "50" -a "$YR" -le "99" ];then
+
+       arc_yy=`expr $YR + 1900`
+
+            elif [ "$YR" -ge "00" -a "$YR" -le "50" ];then
+
+             arc_yy=`expr $YR + 2000`
+
+                    fi
+         DATE_END=${arc_yy}-${MM}-${DD}
+
+rm t?
+cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/$SAT/output/DATACATS/N_D/${ARC}_${LABEL}_N  t0
+#sed  "s/./-//32" t0 > t1
+sed 's/./-/32' t0 > t1
+sed 's/./-/35' t1 > t2
+sed 's/./-/54' t2 > t3
+sed 's/./-/57' t3 > t4
+sed -e "s/./   /7" t4 > t5
+sed -e "s/./   /29" t5 > t6
+cut -c1-13 t6 > t61
+cut -c18-79 t6 > t62
+paste -d " " t61 t62 > t63
+sort -u  t63 > t6
+grep $DATE_END t6 > t7
+#cp t6 t7
+
+##o40105   75010602    7603901   2014/01/05 00:44:00   2014/01/05 00:50:00     4
+# station | start | stop | obsn | obsd
+
+cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/$SAT/output/DATACATS/N_D/${ARC}_${LABEL}_N_DB
+rm t?
+
+cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/$SAT/output/DATACATS/N_D/${ARC}_${LABEL}_D  t0
+sed 's/./-/32' t0 > t1
+sed 's/./-/35' t1 > t2
+sed 's/./-/54' t2 > t3
+sed 's/./-/57' t3 > t4
+sed 's/./   /7' t4 > t5
+sed 's/./   /29' t5 > t6
+cut -c1-13 t6 > t61
+cut -c18-79 t6 > t62
+paste -d " " t61 t62 > t63
+sort -u  t63 > t6
+grep $DATE_END t6 > t7
+#cp t6 t7
+
+cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/$SAT/output/DATACATS/N_D/${ARC}_${LABEL}_D_DB
+
+#part3 while read A1 STA  A2 START1 START2  STOP1 STOP2 NUM
+#part3 do
+#part3 echo  $STA
+#part3 psql -h localhost -U jasongroup -d datacats --command "insert into ${SV}_sim_$ELCUT values ( $STA, '$START1 $START2', '$STOP1 $STOP2',null, $NUM);"
+#part3 done < /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/$SAT/output/DATACATS/N_D/${ARC}_${LABEL}_D_DB
+#part3 
+#part3 while read A1 STA  A2 START1 START2  STOP1 STOP2 NUM
+#part3 do
+#part3 echo  $STA
+#part3 
+#part3 psql -h localhost -U jasongroup -d datacats --command "insert into ${SV}_sim_$ELCUT values ( $STA, '$START1 $START2', '$STOP1 $STOP2',  $NUM , null);" 
+#part3 done < /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/$SAT/output/DATACATS/N_D/${ARC}_${LABEL}_N_DB
+#part3 
+#part3 
+
+
+
+
+#exit 20180905
+done < /${disk}/INFILES/SIM/SAT
+done < /${disk}/INFILES/SIM/ELCUT_SIM
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/ELCUT_SIM
++ read ELCUT
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT
++ read SAT SV
++ LVER=SIM_E10
++ echo SIM_E10
+SIM_E10
++ export SAT SV
++ TYPE_SIM=DR_SIM
++ TYPE_SIM=DR_SIM1
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/
++ SS=''
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL1/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL1/output/DATACATS/N_D’: File exists
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D’: File exists
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/lamb_2014-2016_org lamb
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/stat_2014-2016 stat
++ LABEL=SIM_E101
++ cat /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/DAILY/DR/w30430.SIM_E101
++ 1> t22
++ sort -n -k 1,1 t22 -o t33
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ DATE_END=-05-06
++ echo -05-06
+-05-06
++ cat t33
++ 1> t4
++ cut -c58-65 t4
++ 1> t42
++ sort -u t42
++ 1> t43
++ rm fort.555
+rm: cannot remove ‘fort.555’: No such file or directory
++ 0< t43
++ read SS
++ cut -c1-127 fort.555
++ 1> fort.556
+cut: fort.555: No such file or directory
++ sed -e 's/:/ /g' fort.556
++ 1> fort.557
++ sed -e 's/^  //' fort.557
++ 1> SIM
++ print w30430
++ 1> ARC_NAME
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/STAT_SIM.x
++ cp fort.21 w30430_SIM_E101_ALL
+cp: cannot stat ‘fort.21’: No such file or directory
++ cp fort.22 w30430_SIM_E101_D
+cp: cannot stat ‘fort.22’: No such file or directory
++ cp fort.23 w30430_SIM_E101_N
+cp: cannot stat ‘fort.23’: No such file or directory
++ cp 'w30430_SIM_E101*' /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/.
+cp: cannot stat ‘w30430_SIM_E101*’: No such file or directory
++ rm fort.21 fort.23 fort.22 t22 t33 t2 t3
+rm: cannot remove ‘fort.21’: No such file or directory
+rm: cannot remove ‘fort.23’: No such file or directory
+rm: cannot remove ‘fort.22’: No such file or directory
+rm: cannot remove ‘t2’: No such file or directory
+rm: cannot remove ‘t3’: No such file or directory
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ echo 230506
++ cut -c1-2
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ echo 230506
++ cut -c3-4
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ [ 23 -ge 00 -a 23 -le 50 ]
+expr $YR + 2000
++ expr 23 + 2000
++ arc_yy=2023
++ DATE_END=2023-05-06
++ rm t4
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/w30430_SIM_E101_N t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed -e 's/./   /7' t4
++ 1> t5
++ sed -e 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/w30430_SIM_E101_N_DB
++ rm t0 t1 t2 t3 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/w30430_SIM_E101_D t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed 's/./   /7' t4
++ 1> t5
++ sed 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/w30430_SIM_E101_D_DB
++ read SAT SV
++ LVER=SIM_E10
++ echo SIM_E10
+SIM_E10
++ export SAT SV
++ TYPE_SIM=DR_SIM
++ TYPE_SIM=DR_SIM1
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/
++ SS=''
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL2/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL2/output/DATACATS/N_D’: File exists
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D’: File exists
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/lamb_2014-2016_org lamb
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/stat_2014-2016 stat
++ LABEL=SIM_E101
++ cat /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/DAILY/DR/w30430.SIM_E101
++ 1> t22
++ sort -n -k 1,1 t22 -o t33
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ DATE_END=2023-05-06
++ echo 2023-05-06
+2023-05-06
++ cat t33
++ 1> t4
++ cut -c58-65 t4
++ 1> t42
++ sort -u t42
++ 1> t43
++ rm fort.555
+rm: cannot remove ‘fort.555’: No such file or directory
++ 0< t43
++ read SS
++ cut -c1-127 fort.555
++ 1> fort.556
+cut: fort.555: No such file or directory
++ sed -e 's/:/ /g' fort.556
++ 1> fort.557
++ sed -e 's/^  //' fort.557
++ 1> SIM
++ print w30430
++ 1> ARC_NAME
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/STAT_SIM.x
++ cp fort.21 w30430_SIM_E101_ALL
+cp: cannot stat ‘fort.21’: No such file or directory
++ cp fort.22 w30430_SIM_E101_D
+cp: cannot stat ‘fort.22’: No such file or directory
++ cp fort.23 w30430_SIM_E101_N
+cp: cannot stat ‘fort.23’: No such file or directory
++ cp 'w30430_SIM_E101*' /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/.
+cp: cannot stat ‘w30430_SIM_E101*’: No such file or directory
++ rm fort.21 fort.23 fort.22 t22 t33 t2 t3
+rm: cannot remove ‘fort.21’: No such file or directory
+rm: cannot remove ‘fort.23’: No such file or directory
+rm: cannot remove ‘fort.22’: No such file or directory
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ echo 230506
++ cut -c1-2
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ echo 230506
++ cut -c3-4
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ [ 23 -ge 00 -a 23 -le 50 ]
+expr $YR + 2000
++ expr 23 + 2000
++ arc_yy=2023
++ DATE_END=2023-05-06
++ rm t0 t1 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/w30430_SIM_E101_N t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed -e 's/./   /7' t4
++ 1> t5
++ sed -e 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/w30430_SIM_E101_N_DB
++ rm t0 t1 t2 t3 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/w30430_SIM_E101_D t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed 's/./   /7' t4
++ 1> t5
++ sed 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/w30430_SIM_E101_D_DB
++ read SAT SV
++ LVER=SIM_E10
++ echo SIM_E10
+SIM_E10
++ export SAT SV
++ TYPE_SIM=DR_SIM
++ TYPE_SIM=DR_SIM1
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/
++ SS=''
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA1/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA1/output/DATACATS/N_D’: File exists
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D’: File exists
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/lamb_2014-2016_org lamb
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/stat_2014-2016 stat
++ LABEL=SIM_E101
++ cat /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/DAILY/DR/w30430.SIM_E101
++ 1> t22
++ sort -n -k 1,1 t22 -o t33
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ echo 230506
++ cut -c1-2
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ echo 230506
++ cut -c3-4
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ echo 230506
++ cut -c5-6
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ DATE_END=2023-05-06
++ echo 2023-05-06
+2023-05-06
++ cat t33
++ 1> t4
++ cut -c58-65 t4
++ 1> t42
++ sort -u t42
++ 1> t43
++ rm fort.555
+rm: cannot remove ‘fort.555’: No such file or directory
++ 0< t43
++ read SS
++ cut -c1-127 fort.555
++ 1> fort.556
+cut: fort.555: No such file or directory
++ sed -e 's/:/ /g' fort.556
++ 1> fort.557
++ sed -e 's/^  //' fort.557
++ 1> SIM
++ print w30430
++ 1> ARC_NAME
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/STAT_SIM.x
++ cp fort.21 w30430_SIM_E101_ALL
+cp: cannot stat ‘fort.21’: No such file or directory
++ cp fort.22 w30430_SIM_E101_D
+cp: cannot stat ‘fort.22’: No such file or directory
++ cp fort.23 w30430_SIM_E101_N
+cp: cannot stat ‘fort.23’: No such file or directory
++ cp 'w30430_SIM_E101*' /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/.
+cp: cannot stat ‘w30430_SIM_E101*’: No such file or directory
++ rm fort.21 fort.23 fort.22 t22 t33 t2 t3
+rm: cannot remove ‘fort.21’: No such file or directory
+rm: cannot remove ‘fort.23’: No such file or directory
+rm: cannot remove ‘fort.22’: No such file or directory
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ [ 23 -ge 00 -a 23 -le 50 ]
+expr $YR + 2000
++ expr 23 + 2000
++ arc_yy=2023
++ DATE_END=2023-05-06
++ rm t0 t1 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/w30430_SIM_E101_N t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed -e 's/./   /7' t4
++ 1> t5
++ sed -e 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/w30430_SIM_E101_N_DB
++ rm t0 t1 t2 t3 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/w30430_SIM_E101_D t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed 's/./   /7' t4
++ 1> t5
++ sed 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/w30430_SIM_E101_D_DB
++ read SAT SV
++ LVER=SIM_E10
++ echo SIM_E10
+SIM_E10
++ export SAT SV
++ TYPE_SIM=DR_SIM
++ TYPE_SIM=DR_SIM1
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/
++ SS=''
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA2/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA2/output/DATACATS/N_D’: File exists
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D’: File exists
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/lamb_2014-2016_org lamb
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/stat_2014-2016 stat
++ LABEL=SIM_E101
++ cat /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/DAILY/DR/w30430.SIM_E101
++ 1> t22
++ sort -n -k 1,1 t22 -o t33
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ echo 230506
++ cut -c1-2
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ echo 230506
++ cut -c3-4
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ echo 230506
++ cut -c5-6
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ DATE_END=2023-05-06
++ echo 2023-05-06
+2023-05-06
++ cat t33
++ 1> t4
++ cut -c58-65 t4
++ 1> t42
++ sort -u t42
++ 1> t43
++ rm fort.555
+rm: cannot remove ‘fort.555’: No such file or directory
++ 0< t43
++ read SS
++ cut -c1-127 fort.555
++ 1> fort.556
+cut: fort.555: No such file or directory
++ sed -e 's/:/ /g' fort.556
++ 1> fort.557
++ sed -e 's/^  //' fort.557
++ 1> SIM
++ print w30430
++ 1> ARC_NAME
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/STAT_SIM.x
++ cp fort.21 w30430_SIM_E101_ALL
+cp: cannot stat ‘fort.21’: No such file or directory
++ cp fort.22 w30430_SIM_E101_D
+cp: cannot stat ‘fort.22’: No such file or directory
++ cp fort.23 w30430_SIM_E101_N
+cp: cannot stat ‘fort.23’: No such file or directory
++ cp 'w30430_SIM_E101*' /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/.
+cp: cannot stat ‘w30430_SIM_E101*’: No such file or directory
++ rm fort.21 fort.23 fort.22 t22 t33 t2 t3
+rm: cannot remove ‘fort.21’: No such file or directory
+rm: cannot remove ‘fort.23’: No such file or directory
+rm: cannot remove ‘fort.22’: No such file or directory
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ [ 23 -ge 00 -a 23 -le 50 ]
+expr $YR + 2000
++ expr 23 + 2000
++ arc_yy=2023
++ DATE_END=2023-05-06
++ rm t0 t1 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/w30430_SIM_E101_N t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed -e 's/./   /7' t4
++ 1> t5
++ sed -e 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/w30430_SIM_E101_N_DB
++ rm t0 t1 t2 t3 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/w30430_SIM_E101_D t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed 's/./   /7' t4
++ 1> t5
++ sed 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/w30430_SIM_E101_D_DB
++ read SAT SV
++ read ELCUT
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT
++ read SAT SV
++ LVER=SIM_E20
++ echo SIM_E20
+SIM_E20
++ export SAT SV
++ TYPE_SIM=DR_SIM
++ TYPE_SIM=DR_SIM1
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/
++ SS=''
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL1/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL1/output/DATACATS/N_D’: File exists
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D’: File exists
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/lamb_2014-2016_org lamb
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/stat_2014-2016 stat
++ LABEL=SIM_E201
++ cat /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/DAILY/DR/w30430.SIM_E201
++ 1> t22
++ sort -n -k 1,1 t22 -o t33
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ echo 230506
++ cut -c1-2
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ DATE_END=2023-05-06
++ echo 2023-05-06
+2023-05-06
++ cat t33
++ 1> t4
++ cut -c58-65 t4
++ 1> t42
++ sort -u t42
++ 1> t43
++ rm fort.555
+rm: cannot remove ‘fort.555’: No such file or directory
++ 0< t43
++ read SS
++ cut -c1-127 fort.555
++ 1> fort.556
+cut: fort.555: No such file or directory
++ sed -e 's/:/ /g' fort.556
++ 1> fort.557
++ sed -e 's/^  //' fort.557
++ 1> SIM
++ print w30430
++ 1> ARC_NAME
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/STAT_SIM.x
++ cp fort.21 w30430_SIM_E201_ALL
+cp: cannot stat ‘fort.21’: No such file or directory
++ cp fort.22 w30430_SIM_E201_D
+cp: cannot stat ‘fort.22’: No such file or directory
++ cp fort.23 w30430_SIM_E201_N
+cp: cannot stat ‘fort.23’: No such file or directory
++ cp 'w30430_SIM_E201*' /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/.
+cp: cannot stat ‘w30430_SIM_E201*’: No such file or directory
++ rm fort.21 fort.23 fort.22 t22 t33 t2 t3
+rm: cannot remove ‘fort.21’: No such file or directory
+rm: cannot remove ‘fort.23’: No such file or directory
+rm: cannot remove ‘fort.22’: No such file or directory
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ [ 23 -ge 00 -a 23 -le 50 ]
+expr $YR + 2000
++ expr 23 + 2000
++ arc_yy=2023
++ DATE_END=2023-05-06
++ rm t0 t1 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/w30430_SIM_E201_N t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed -e 's/./   /7' t4
++ 1> t5
++ sed -e 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/w30430_SIM_E201_N_DB
++ rm t0 t1 t2 t3 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/w30430_SIM_E201_D t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed 's/./   /7' t4
++ 1> t5
++ sed 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/w30430_SIM_E201_D_DB
++ read SAT SV
++ LVER=SIM_E20
++ echo SIM_E20
+SIM_E20
++ export SAT SV
++ TYPE_SIM=DR_SIM
++ TYPE_SIM=DR_SIM1
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/
++ SS=''
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL2/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL2/output/DATACATS/N_D’: File exists
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D’: File exists
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/lamb_2014-2016_org lamb
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/stat_2014-2016 stat
++ LABEL=SIM_E201
++ cat /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/DAILY/DR/w30430.SIM_E201
++ 1> t22
++ sort -n -k 1,1 t22 -o t33
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ echo 230506
++ cut -c1-2
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ DATE_END=2023-05-06
++ echo 2023-05-06
+2023-05-06
++ cat t33
++ 1> t4
++ cut -c58-65 t4
++ 1> t42
++ sort -u t42
++ 1> t43
++ rm fort.555
+rm: cannot remove ‘fort.555’: No such file or directory
++ 0< t43
++ read SS
++ cut -c1-127 fort.555
++ 1> fort.556
+cut: fort.555: No such file or directory
++ sed -e 's/:/ /g' fort.556
++ 1> fort.557
++ sed -e 's/^  //' fort.557
++ 1> SIM
++ print w30430
++ 1> ARC_NAME
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/STAT_SIM.x
++ cp fort.21 w30430_SIM_E201_ALL
+cp: cannot stat ‘fort.21’: No such file or directory
++ cp fort.22 w30430_SIM_E201_D
+cp: cannot stat ‘fort.22’: No such file or directory
++ cp fort.23 w30430_SIM_E201_N
+cp: cannot stat ‘fort.23’: No such file or directory
++ cp 'w30430_SIM_E201*' /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/.
+cp: cannot stat ‘w30430_SIM_E201*’: No such file or directory
++ rm fort.21 fort.23 fort.22 t22 t33 t2 t3
+rm: cannot remove ‘fort.21’: No such file or directory
+rm: cannot remove ‘fort.23’: No such file or directory
+rm: cannot remove ‘fort.22’: No such file or directory
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ [ 23 -ge 00 -a 23 -le 50 ]
+expr $YR + 2000
++ expr 23 + 2000
++ arc_yy=2023
++ DATE_END=2023-05-06
++ rm t0 t1 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/w30430_SIM_E201_N t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed -e 's/./   /7' t4
++ 1> t5
++ sed -e 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/w30430_SIM_E201_N_DB
++ rm t0 t1 t2 t3 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/w30430_SIM_E201_D t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed 's/./   /7' t4
++ 1> t5
++ sed 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/w30430_SIM_E201_D_DB
++ read SAT SV
++ LVER=SIM_E20
++ echo SIM_E20
+SIM_E20
++ export SAT SV
++ TYPE_SIM=DR_SIM
++ TYPE_SIM=DR_SIM1
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/
++ SS=''
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA1/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA1/output/DATACATS/N_D’: File exists
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D’: File exists
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/lamb_2014-2016_org lamb
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/stat_2014-2016 stat
++ LABEL=SIM_E201
++ cat /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/DAILY/DR/w30430.SIM_E201
++ 1> t22
++ sort -n -k 1,1 t22 -o t33
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ DATE_END=2023-05-06
++ echo 2023-05-06
+2023-05-06
++ cat t33
++ 1> t4
++ cut -c58-65 t4
++ 1> t42
++ sort -u t42
++ 1> t43
++ rm fort.555
+rm: cannot remove ‘fort.555’: No such file or directory
++ 0< t43
++ read SS
++ cut -c1-127 fort.555
++ 1> fort.556
+cut: fort.555: No such file or directory
++ sed -e 's/:/ /g' fort.556
++ 1> fort.557
++ sed -e 's/^  //' fort.557
++ 1> SIM
++ print w30430
++ 1> ARC_NAME
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/STAT_SIM.x
++ cp fort.21 w30430_SIM_E201_ALL
+cp: cannot stat ‘fort.21’: No such file or directory
++ cp fort.22 w30430_SIM_E201_D
+cp: cannot stat ‘fort.22’: No such file or directory
++ cp fort.23 w30430_SIM_E201_N
+cp: cannot stat ‘fort.23’: No such file or directory
++ cp 'w30430_SIM_E201*' /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/.
+cp: cannot stat ‘w30430_SIM_E201*’: No such file or directory
++ rm fort.21 fort.23 fort.22 t22 t33 t2 t3
+rm: cannot remove ‘fort.21’: No such file or directory
+rm: cannot remove ‘fort.23’: No such file or directory
+rm: cannot remove ‘fort.22’: No such file or directory
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ [ 23 -ge 00 -a 23 -le 50 ]
+expr $YR + 2000
++ expr 23 + 2000
++ arc_yy=2023
++ DATE_END=2023-05-06
++ rm t0 t1 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/w30430_SIM_E201_N t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed -e 's/./   /7' t4
++ 1> t5
++ sed -e 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/w30430_SIM_E201_N_DB
++ rm t0 t1 t2 t3 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/w30430_SIM_E201_D t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed 's/./   /7' t4
++ 1> t5
++ sed 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/w30430_SIM_E201_D_DB
++ read SAT SV
++ LVER=SIM_E20
++ echo SIM_E20
+SIM_E20
++ export SAT SV
++ TYPE_SIM=DR_SIM
++ TYPE_SIM=DR_SIM1
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/
++ SS=''
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA2/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA2/output/DATACATS/N_D’: File exists
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D’: File exists
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/lamb_2014-2016_org lamb
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/stat_2014-2016 stat
++ LABEL=SIM_E201
++ cat /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/DAILY/DR/w30430.SIM_E201
++ 1> t22
++ sort -n -k 1,1 t22 -o t33
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ DATE_END=2023-05-06
++ echo 2023-05-06
+2023-05-06
++ cat t33
++ 1> t4
++ cut -c58-65 t4
++ 1> t42
++ sort -u t42
++ 1> t43
++ rm fort.555
+rm: cannot remove ‘fort.555’: No such file or directory
++ 0< t43
++ read SS
++ cut -c1-127 fort.555
++ 1> fort.556
+cut: fort.555: No such file or directory
++ sed -e 's/:/ /g' fort.556
++ 1> fort.557
++ sed -e 's/^  //' fort.557
++ 1> SIM
++ print w30430
++ 1> ARC_NAME
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/STAT_SIM.x
++ cp fort.21 w30430_SIM_E201_ALL
+cp: cannot stat ‘fort.21’: No such file or directory
++ cp fort.22 w30430_SIM_E201_D
+cp: cannot stat ‘fort.22’: No such file or directory
++ cp fort.23 w30430_SIM_E201_N
+cp: cannot stat ‘fort.23’: No such file or directory
++ cp 'w30430_SIM_E201*' /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/.
+cp: cannot stat ‘w30430_SIM_E201*’: No such file or directory
++ rm fort.21 fort.23 fort.22 t22 t33 t2 t3
+rm: cannot remove ‘fort.21’: No such file or directory
+rm: cannot remove ‘fort.23’: No such file or directory
+rm: cannot remove ‘fort.22’: No such file or directory
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ [ 23 -ge 00 -a 23 -le 50 ]
+expr $YR + 2000
++ expr 23 + 2000
++ arc_yy=2023
++ DATE_END=2023-05-06
++ rm t0 t1 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/w30430_SIM_E201_N t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed -e 's/./   /7' t4
++ 1> t5
++ sed -e 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/w30430_SIM_E201_N_DB
++ rm t0 t1 t2 t3 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/w30430_SIM_E201_D t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed 's/./   /7' t4
++ 1> t5
++ sed 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/w30430_SIM_E201_D_DB
++ read SAT SV
++ read ELCUT
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT
++ read SAT SV
++ LVER=SIM_E30
++ echo SIM_E30
+SIM_E30
++ export SAT SV
++ TYPE_SIM=DR_SIM
++ TYPE_SIM=DR_SIM1
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/
++ SS=''
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL1/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL1/output/DATACATS/N_D’: File exists
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D’: File exists
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/lamb_2014-2016_org lamb
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/stat_2014-2016 stat
++ LABEL=SIM_E301
++ cat /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/DAILY/DR/w30430.SIM_E301
++ 1> t22
++ sort -n -k 1,1 t22 -o t33
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ DATE_END=2023-05-06
++ echo 2023-05-06
+2023-05-06
++ cat t33
++ 1> t4
++ cut -c58-65 t4
++ 1> t42
++ sort -u t42
++ 1> t43
++ rm fort.555
+rm: cannot remove ‘fort.555’: No such file or directory
++ 0< t43
++ read SS
++ cut -c1-127 fort.555
++ 1> fort.556
+cut: fort.555: No such file or directory
++ sed -e 's/:/ /g' fort.556
++ 1> fort.557
++ sed -e 's/^  //' fort.557
++ 1> SIM
++ print w30430
++ 1> ARC_NAME
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/STAT_SIM.x
++ cp fort.21 w30430_SIM_E301_ALL
+cp: cannot stat ‘fort.21’: No such file or directory
++ cp fort.22 w30430_SIM_E301_D
+cp: cannot stat ‘fort.22’: No such file or directory
++ cp fort.23 w30430_SIM_E301_N
+cp: cannot stat ‘fort.23’: No such file or directory
++ cp 'w30430_SIM_E301*' /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/.
+cp: cannot stat ‘w30430_SIM_E301*’: No such file or directory
++ rm fort.21 fort.23 fort.22 t22 t33 t2 t3
+rm: cannot remove ‘fort.21’: No such file or directory
+rm: cannot remove ‘fort.23’: No such file or directory
+rm: cannot remove ‘fort.22’: No such file or directory
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ [ 23 -ge 00 -a 23 -le 50 ]
+expr $YR + 2000
++ expr 23 + 2000
++ arc_yy=2023
++ DATE_END=2023-05-06
++ rm t0 t1 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/w30430_SIM_E301_N t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed -e 's/./   /7' t4
++ 1> t5
++ sed -e 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/w30430_SIM_E301_N_DB
++ rm t0 t1 t2 t3 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/w30430_SIM_E301_D t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed 's/./   /7' t4
++ 1> t5
++ sed 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/output/DATACATS/N_D/w30430_SIM_E301_D_DB
++ read SAT SV
++ LVER=SIM_E30
++ echo SIM_E30
+SIM_E30
++ export SAT SV
++ TYPE_SIM=DR_SIM
++ TYPE_SIM=DR_SIM1
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/
++ SS=''
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL2/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL2/output/DATACATS/N_D’: File exists
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D’: File exists
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/lamb_2014-2016_org lamb
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/stat_2014-2016 stat
++ LABEL=SIM_E301
++ cat /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/DAILY/DR/w30430.SIM_E301
++ 1> t22
++ sort -n -k 1,1 t22 -o t33
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ echo 230506
++ cut -c1-2
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ DATE_END=2023-05-06
++ echo 2023-05-06
+2023-05-06
++ cat t33
++ 1> t4
++ cut -c58-65 t4
++ 1> t42
++ sort -u t42
++ 1> t43
++ rm fort.555
+rm: cannot remove ‘fort.555’: No such file or directory
++ 0< t43
++ read SS
++ cut -c1-127 fort.555
++ 1> fort.556
+cut: fort.555: No such file or directory
++ sed -e 's/:/ /g' fort.556
++ 1> fort.557
++ sed -e 's/^  //' fort.557
++ 1> SIM
++ print w30430
++ 1> ARC_NAME
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/STAT_SIM.x
++ cp fort.21 w30430_SIM_E301_ALL
+cp: cannot stat ‘fort.21’: No such file or directory
++ cp fort.22 w30430_SIM_E301_D
+cp: cannot stat ‘fort.22’: No such file or directory
++ cp fort.23 w30430_SIM_E301_N
+cp: cannot stat ‘fort.23’: No such file or directory
++ cp 'w30430_SIM_E301*' /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/.
+cp: cannot stat ‘w30430_SIM_E301*’: No such file or directory
++ rm fort.21 fort.23 fort.22 t22 t33 t2 t3
+rm: cannot remove ‘fort.21’: No such file or directory
+rm: cannot remove ‘fort.23’: No such file or directory
+rm: cannot remove ‘fort.22’: No such file or directory
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ [ 23 -ge 00 -a 23 -le 50 ]
+expr $YR + 2000
++ expr 23 + 2000
++ arc_yy=2023
++ DATE_END=2023-05-06
++ rm t0 t1 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/w30430_SIM_E301_N t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed -e 's/./   /7' t4
++ 1> t5
++ sed -e 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/w30430_SIM_E301_N_DB
++ rm t0 t1 t2 t3 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/w30430_SIM_E301_D t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed 's/./   /7' t4
++ 1> t5
++ sed 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/output/DATACATS/N_D/w30430_SIM_E301_D_DB
++ read SAT SV
++ LVER=SIM_E30
++ echo SIM_E30
+SIM_E30
++ export SAT SV
++ TYPE_SIM=DR_SIM
++ TYPE_SIM=DR_SIM1
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/
++ SS=''
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA1/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA1/output/DATACATS/N_D’: File exists
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D’: File exists
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/lamb_2014-2016_org lamb
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/stat_2014-2016 stat
++ LABEL=SIM_E301
++ cat /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/DAILY/DR/w30430.SIM_E301
++ 1> t22
++ sort -n -k 1,1 t22 -o t33
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ DATE_END=2023-05-06
++ echo 2023-05-06
+2023-05-06
++ cat t33
++ 1> t4
++ cut -c58-65 t4
++ 1> t42
++ sort -u t42
++ 1> t43
++ rm fort.555
+rm: cannot remove ‘fort.555’: No such file or directory
++ 0< t43
++ read SS
++ cut -c1-127 fort.555
++ 1> fort.556
+cut: fort.555: No such file or directory
++ sed -e 's/:/ /g' fort.556
++ 1> fort.557
++ sed -e 's/^  //' fort.557
++ 1> SIM
++ print w30430
++ 1> ARC_NAME
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/STAT_SIM.x
++ cp fort.21 w30430_SIM_E301_ALL
+cp: cannot stat ‘fort.21’: No such file or directory
++ cp fort.22 w30430_SIM_E301_D
+cp: cannot stat ‘fort.22’: No such file or directory
++ cp fort.23 w30430_SIM_E301_N
+cp: cannot stat ‘fort.23’: No such file or directory
++ cp 'w30430_SIM_E301*' /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/.
+cp: cannot stat ‘w30430_SIM_E301*’: No such file or directory
++ rm fort.21 fort.23 fort.22 t22 t33 t2 t3
+rm: cannot remove ‘fort.21’: No such file or directory
+rm: cannot remove ‘fort.23’: No such file or directory
+rm: cannot remove ‘fort.22’: No such file or directory
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ [ 23 -ge 00 -a 23 -le 50 ]
+expr $YR + 2000
++ expr 23 + 2000
++ arc_yy=2023
++ DATE_END=2023-05-06
++ rm t0 t1 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/w30430_SIM_E301_N t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed -e 's/./   /7' t4
++ 1> t5
++ sed -e 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/w30430_SIM_E301_N_DB
++ rm t0 t1 t2 t3 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/w30430_SIM_E301_D t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed 's/./   /7' t4
++ 1> t5
++ sed 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/output/DATACATS/N_D/w30430_SIM_E301_D_DB
++ read SAT SV
++ LVER=SIM_E30
++ echo SIM_E30
+SIM_E30
++ export SAT SV
++ TYPE_SIM=DR_SIM
++ TYPE_SIM=DR_SIM1
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/
++ SS=''
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA2/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA2/output/DATACATS/N_D’: File exists
++ mkdir /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D
+mkdir: cannot create directory ‘/umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D’: File exists
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/lamb_2014-2016_org lamb
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/stat_2014-2016 stat
++ LABEL=SIM_E301
++ cat /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/DAILY/DR/w30430.SIM_E301
++ 1> t22
++ sort -n -k 1,1 t22 -o t33
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ DATE_END=2023-05-06
++ echo 2023-05-06
+2023-05-06
++ cat t33
++ 1> t4
++ cut -c58-65 t4
++ 1> t42
++ sort -u t42
++ 1> t43
++ rm fort.555
+rm: cannot remove ‘fort.555’: No such file or directory
++ 0< t43
++ read SS
++ cut -c1-127 fort.555
++ 1> fort.556
+cut: fort.555: No such file or directory
++ sed -e 's/:/ /g' fort.556
++ 1> fort.557
++ sed -e 's/^  //' fort.557
++ 1> SIM
++ print w30430
++ 1> ARC_NAME
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/STAT_SIM.x
++ cp fort.21 w30430_SIM_E301_ALL
+cp: cannot stat ‘fort.21’: No such file or directory
++ cp fort.22 w30430_SIM_E301_D
+cp: cannot stat ‘fort.22’: No such file or directory
++ cp fort.23 w30430_SIM_E301_N
+cp: cannot stat ‘fort.23’: No such file or directory
++ cp 'w30430_SIM_E301*' /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/.
+cp: cannot stat ‘w30430_SIM_E301*’: No such file or directory
++ rm fort.21 fort.23 fort.22 t22 t33 t2 t3
+rm: cannot remove ‘fort.21’: No such file or directory
+rm: cannot remove ‘fort.23’: No such file or directory
+rm: cannot remove ‘fort.22’: No such file or directory
++ bc
++ echo '127-1 '
++ EDOYp=126
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ydoy2ymd 2023 126
++ 1> EYYMMDD
++ read Date_END_ARC
++ 0< EYYMMDD
+echo $Date_END_ARC|cut -c1-2
++ cut -c1-2
++ echo 230506
++ YR=23
+echo $Date_END_ARC|cut -c3-4
++ cut -c3-4
++ echo 230506
++ MM=05
+echo $Date_END_ARC|cut -c5-6
++ cut -c5-6
++ echo 230506
++ DD=06
++ [ 23 -gt 50 -a 23 -le 99 ]
++ [ 23 -ge 00 -a 23 -le 50 ]
+expr $YR + 2000
++ expr 23 + 2000
++ arc_yy=2023
++ DATE_END=2023-05-06
++ rm t0 t1 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/w30430_SIM_E301_N t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed -e 's/./   /7' t4
++ 1> t5
++ sed -e 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/w30430_SIM_E301_N_DB
++ rm t0 t1 t2 t3 t4 t5 t6 t7
++ cp /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/w30430_SIM_E301_D t0
++ sed s/./-/32 t0
++ 1> t1
++ sed s/./-/35 t1
++ 1> t2
++ sed s/./-/54 t2
++ 1> t3
++ sed s/./-/57 t3
++ 1> t4
++ sed 's/./   /7' t4
++ 1> t5
++ sed 's/./   /29' t5
++ 1> t6
++ cut -c1-13 t6
++ 1> t61
++ cut -c18-79 t6
++ 1> t62
++ paste -d ' ' t61 t62
++ 1> t63
++ sort -u t63
++ 1> t6
++ grep 2023-05-06 t6
++ 1> t7
++ cp t7 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/output/DATACATS/N_D/w30430_SIM_E301_D_DB
++ read SAT SV
++ read ELCUT
+cd ..
++ cd ..
+###\rm -rf  /tmp/magdak/SIM$$
+
+exit 0
+
+
++ exit 0

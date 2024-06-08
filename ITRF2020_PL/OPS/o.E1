@@ -1,0 +1,39 @@
+spawn /usr/bin/scp magdak@perseus2.rs.umbc.edu:/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA1/d_base/data/TDF/E1_21.tdf.gz /nobackup/mkuzmicz/MISSIONS/ETA1/d_base/data/TDF/E1_21.tdf.gz
+WARNING: UNAUTHORIZED ACCESS to this computer is in violation of Criminal Law
+         Article section 8-606 and 7-302 of the Annotated Code of MD.
+
+NOTICE:  This system is for the use of authorized users only. Individuals using
+         this computer system without authority, or in excess of their authority
+         , are subject to having all of their activities on this system
+         monitored and recorded by system personnel.
+
+magdak@perseus2.rs.umbc.edu's password: spawn /usr/bin/scp magdak@perseus2.rs.umbc.edu:/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA1/d_base/data/TDF/E1_22.tdf.gz /nobackup/mkuzmicz/MISSIONS/ETA1/d_base/data/TDF/E1_22.tdf.gz
+WARNING: UNAUTHORIZED ACCESS to this computer is in violation of Criminal Law
+         Article section 8-606 and 7-302 of the Annotated Code of MD.
+
+NOTICE:  This system is for the use of authorized users only. Individuals using
+         this computer system without authority, or in excess of their authority
+         , are subject to having all of their activities on this system
+         monitored and recorded by system personnel.
+
+magdak@perseus2.rs.umbc.edu's password: spawn /usr/bin/scp magdak@perseus2.rs.umbc.edu:/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA1/d_base/data/MRT2/21.ETA1.mr2.gz /nobackup/mkuzmicz/MISSIONS/ETA1/d_base/data/MRT2/21.ETA1.mr2.gz
+WARNING: UNAUTHORIZED ACCESS to this computer is in violation of Criminal Law
+         Article section 8-606 and 7-302 of the Annotated Code of MD.
+
+NOTICE:  This system is for the use of authorized users only. Individuals using
+         this computer system without authority, or in excess of their authority
+         , are subject to having all of their activities on this system
+         monitored and recorded by system personnel.
+
+magdak@perseus2.rs.umbc.edu's password: spawn /usr/bin/scp magdak@perseus2.rs.umbc.edu:/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA1/d_base/data/MRT2/22.ETA1.mr2.gz /nobackup/mkuzmicz/MISSIONS/ETA1/d_base/data/MRT2/22.ETA1.mr2.gz
+WARNING: UNAUTHORIZED ACCESS to this computer is in violation of Criminal Law
+         Article section 8-606 and 7-302 of the Annotated Code of MD.
+
+NOTICE:  This system is for the use of authorized users only. Individuals using
+         this computer system without authority, or in excess of their authority
+         , are subject to having all of their activities on this system
+         monitored and recorded by system personnel.
+
+magdak@perseus2.rs.umbc.edu's password: 
+Illegal variable name.
+22.ETA1.mr2.gz                                                                                                                                                                                                                                                                                                                   0%    0     0.0KB/s   --:-- ETA22.ETA1.mr2.gz                                                                                                                                                                                                                                                                                                                 100%  249KB 745.5KB/s   00:00    

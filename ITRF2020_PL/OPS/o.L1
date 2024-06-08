@@ -1,0 +1,26 @@
+spawn /usr/bin/scp magdak@perseus2.rs.umbc.edu:/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL1/d_base/data/TDF/L1_21.tdf.gz /nobackup/mkuzmicz/MISSIONS/GISL1/d_base/data/TDF/L1_21.tdf.gz
+WARNING: UNAUTHORIZED ACCESS to this computer is in violation of Criminal Law
+         Article section 8-606 and 7-302 of the Annotated Code of MD.
+
+NOTICE:  This system is for the use of authorized users only. Individuals using
+         this computer system without authority, or in excess of their authority
+         , are subject to having all of their activities on this system
+         monitored and recorded by system personnel.
+
+magdak@perseus2.rs.umbc.edu's password: spawn /usr/bin/scp magdak@perseus2.rs.umbc.edu:/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL1/d_base/data/TDF/L1_22.tdf.gz /nobackup/mkuzmicz/MISSIONS/GISL1/d_base/data/TDF/L1_22.tdf.gz
+WARNING: UNAUTHORIZED ACCESS to this computer is in violation of Criminal Law
+         Article section 8-606 and 7-302 of the Annotated Code of MD.
+
+NOTICE:  This system is for the use of authorized users only. Individuals using
+         this computer system without authority, or in excess of their authority
+         , are subject to having all of their activities on this system
+         monitored and recorded by system personnel.
+
+magdak@perseus2.rs.umbc.edu's password: spawn /usr/bin/scp magdak@perseus2.rs.umbc.edu:/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL1/d_base/data/MRT2/21.GISL1.mr2.gz /nobackup/mkuzmicz/MISSIONS/GISL1/d_base/data/MRT2/21.GISL1.mr2.gz
+ssh_exchange_identification: read: Connection reset by peer
+spawn /usr/bin/scp magdak@perseus2.rs.umbc.edu:/umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL1/d_base/data/MRT2/22.GISL1.mr2.gz /nobackup/mkuzmicz/MISSIONS/GISL1/d_base/data/MRT2/22.GISL1.mr2.gz
+ssh_exchange_identification: read: Connection reset by peer
+expect: spawn id exp9 not open
+    while executing
+"expect eof"
+    (file "/nobackup/mkuzmicz/scripts/ftp_tdf_Perseus_L1_CRD2" line 21)

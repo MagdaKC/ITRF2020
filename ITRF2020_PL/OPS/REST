@@ -1,0 +1,392 @@
+#---------------------------------------------------
+
+
+#  Make SP3 files 
+
+
+#---------------------------------------------------
+
+read ORBFILE < $MAIN_PATH/INFILES/rv2sp13_INFILE.GISL1
+
+$SCRIPTS/RVG_2_SP13_OPS 1 $ORBFILE $ORBFILE GISL1 120.d0 -0.d0 $SOL_FILE WEEKLY OPS > o.RVG_2_SP13_OPS_GISL1 2>&1
+
+read ORBFILE < $MAIN_PATH/INFILES/rv2sp13_INFILE.GISL2
+
+$SCRIPTS/RVG_2_SP13_OPS 1 $ORBFILE $ORBFILE GISL2 120.d0 -0.d0 $SOL_FILE WEEKLY OPS > o.RVG_2_SP13_OPS_GISL2 2>&1
+
+read ORBFILE < $MAIN_PATH/INFILES/rv2sp13_INFILE.ETA1
+
+$SCRIPTS/RVG_2_SP13_OPS 1 $ORBFILE $ORBFILE ETA1 900.d0 -0.d0 $SOL_FILE WEEKLY OPS > o.RVG_2_SP13_OPS_ETA1 2>&1
+
+read ORBFILE < $MAIN_PATH/INFILES/rv2sp13_INFILE.ETA2
+
+$SCRIPTS/RVG_2_SP13_OPS 1 $ORBFILE $ORBFILE ETA2 900.d0 -0.d0 $SOL_FILE WEEKLY OPS > o.RVG_2_SP13_OPS_ETA2 2>&1
+
+
+###### Submit SINEX to Archives
+####
+#####  By default we are submitting always the L12 + E12 combined product, i.e. $SAT=PPV # ecp 070731
+
+read SNXDIR SNXFILE < $MAIN_PATH/INFILES/SINEX_OF_THIS_RUN.PPV
+#{Date_NXT_ARC}
+cat $MAIN_PATH/INFILES/${SOL_FILE}fnames.sp3 > SP3_FILENAME.tmplt
+##sed "s/ENDATE/${Date_NXT_ARC}/g" $MAIN_PATH/INFILES/TMPLT__fnames.sp3 > SP3_FILENAME.tmplt
+sed "s/ENDATE/${SNX_DATE}/g" $MAIN_PATH/INFILES/TMPLT__fnames.sp3 > SP3_FILENAME.tmplt
+
+
+## Edits by ECP to place SP3 files in the "orbits" subdirectory:
+
+echo put $SNXFILE > orb_fil_2_ftp
+
+echo cd orbits >> orb_fil_2_ftp
+
+## End of ECP edits.
+
+## echo put $SNXFILE > orb_fil_2_ftp    #  Replace ECP edits with this line if you need to undo ECP edits!
+
+####L1
+wherefrom=/$DISK/GISL1/traj/WEEKLY/SP3
+
+sed "s/CDDIS_SAT/lageos1/g" SP3_FILENAME.tmplt > tmp_1
+
+read orb_1 < tmp_1
+
+echo put $wherefrom/${ORBFILE}.sp3.Z ${orb_1}.Z >> orb_fil_2_ftp
+
+####L2
+wherefrom=/$DISK/GISL2/traj/WEEKLY/SP3
+
+sed "s/CDDIS_SAT/lageos2/g" SP3_FILENAME.tmplt > tmp_1
+
+read orb_1 < tmp_1
+
+echo put $wherefrom/${ORBFILE}.sp3.Z ${orb_1}.Z >> orb_fil_2_ftp
+
+####E1
+wherefrom=/$DISK/ETA1/traj/WEEKLY/SP3
+
+sed "s/CDDIS_SAT/etalon1/g" SP3_FILENAME.tmplt > tmp_1
+
+read orb_1 < tmp_1
+echo put $wherefrom/${ORBFILE}.sp3.Z ${orb_1}.Z >> orb_fil_2_ftp
+
+####E2
+wherefrom=/$DISK/ETA2/traj/WEEKLY/SP3
+
+sed "s/CDDIS_SAT/etalon2/g" SP3_FILENAME.tmplt > tmp_1
+
+read orb_1 < tmp_1
+echo put $wherefrom/${ORBFILE}.sp3.Z ${orb_1}.Z >> orb_fil_2_ftp
+
+echo quit >> orb_fil_2_ftp
+
+echo '-------------------------------------------------'
+cat orb_fil_2_ftp
+echo '-------------------------------------------------'
+
+echo $PWD > WHERE_2_RETURN
+
+mv orb_fil_2_ftp $SNXDIR/orb_fil_2_ftp
+
+cd $SNXDIR
+
+cat > inputCDDIS <<EOF1 
+bin
+ 
+case
+
+cd products
+
+EOF1
+
+cat > inputEDC <<EOF2
+bin
+
+case
+
+cd ilrs/products/jcet
+
+EOF2
+
+
+##sed -e "1,\$s/FFFFFF/$SNXFILE/g" inputCDDIS > inputCDDIS2
+
+##sed -e "1,\$s/FFFFFF/$SNXFILE/g" inputEDC > inputEDC2
+
+cat inputCDDIS orb_fil_2_ftp > inputCDDIS2
+
+cat inputEDC orb_fil_2_ftp > inputEDC2
+
+echo '-------------------------------------------------'
+echo  inputCDDIS2
+echo '-------------------------------------------------'
+cat inputCDDIS2
+echo '-------------------------------------------------'
+echo '-------------------------------------------------'
+
+echo '-------------------------------------------------'
+echo  inputEDC2
+echo '-------------------------------------------------'
+cat inputEDC2
+echo '-------------------------------------------------'
+echo '-------------------------------------------------'
+
+
+# Place SINEX on CDDIS Archive first:
+
+#ftp 128.183.102.35       < inputCDDIS2 > outputCDDIS2
+####ftp cddisin.gsfc.nasa.gov       < inputCDDIS2 > outputCDDIS2
+
+\rm output0 loutput0
+/bin/grep -e "Not connected" -e "No control connection for command" outputCDDIS2 > output0
+sum output0 > loutput0
+read lout0 b c < loutput0
+cat output0 loutput0
+
+if [ "$lout0" = "00000" ]; then
+
+   \rm output0 loutput0
+
+else
+
+   echo " Possible network problem with NEW CDDIS " > 2mail
+   cat output0 >> 2mail
+
+   echo "  "
+
+   ####mail -s URGENT_from_SUBMIT_SNX  epavlis@umbc.edu < 2mail
+   ####mail -s URGENT_from_SUBMIT_SNX  magdak@umbc.edu < 2mail
+
+   \rm 2mail
+
+fi
+
+\rm output0 loutput0
+
+
+# Place SINEX on EDC Archive also:
+
+
+#ftp edc.dgfi.tum.de < inputEDC2 > outputEDC2
+#ftp 129.187.165.3    < inputEDC2 > outputEDC2
+
+\rm output0 loutput0
+/bin/grep -e "Not connected" -e "No control connection for command" outputEDC2 > output0
+sum output0 > loutput0
+read lout0 b c < loutput0
+cat output0 loutput0
+
+if [ "$lout0" = "00000" ]; then
+
+   \rm output0 loutput0
+
+else
+
+   echo " Possible network problem with EDC " > 2mail
+   cat output0 >> 2mail
+
+   echo "  "
+
+   mail -s URGENT_from_SUBMIT_SNX  epavlis@umbc.edu < 2mail
+   mail -s URGENT_from_SUBMIT_SNX  magdak@umbc.edu < 2mail
+
+   \rm 2mail
+
+fi
+
+\rm output0 loutput0
+
+# Shift now the files forward for the next round:
+
+read SOLUTION SINEX_FILE < $MAIN_PATH/INFILES/${SERVICE}_${SOL_LPP}_fnames.snx
+
+if [ ! -s /${DISK}/GISLV/sinex/${SERVICE}/$CASE/${SINEX_FILE}.Z ]; then
+   echo /${DISK}/GISLV/sinex/${SERVICE}/$CASE/${SINEX_FILE}.Z doesn\'t exist !
+#  exit 9998
+fi
+
+chmod 777 /${DISK}/GISLV/sinex/${SERVICE}/$CASE/${SINEX_FILE}.Z
+
+IERS_SINEX=${IERS_CPP_CENTER}${IERS_CPP_DATE}${IERS_CPP_TECHNQ}${IERS_CPP_LENGTH}${L12_VERSION}.snx
+
+cp /${DISK}/GISLV/sinex/${SERVICE}/$CASE/${SINEX_FILE}.Z /umbc/epavlis/data01/LOCAL/magdak/IERS_CPP/SINEX/${IERS_SINEX}.Z
+
+chmod 777 /umbc/epavlis/data01/LOCAL/magdak/IERS_CPP/SINEX/${IERS_SINEX}.Z
+
+
+
+if [ "${ETA_IN}" = "YES" ]; then
+#
+
+read SOLUTION SINEX_FILE < $MAIN_PATH/INFILES/${SERVICE}_${SOL_EPP}_fnames.snx
+
+if [ ! -s /${DISK}/PPV/sinex/${SERVICE}/$CASE/${SINEX_FILE}.Z ]; then
+   echo /${DISK}/PPV/sinex/${SERVICE}/$CASE/${SINEX_FILE}.Z doesn\'t exist !
+   exit 9999
+fi
+
+chmod 777 /${DISK}/PPV/sinex/${SERVICE}/$CASE/${SINEX_FILE}.Z
+
+IERS_SINEX=${IERS_CPP_CENTER}${IERS_CPP_DATE}${IERS_CPP_TECHNQ}${IERS_CPP_LENGTH}${OUR_VERSION}.snx
+
+cp /${DISK}/PPV/sinex/${SERVICE}/$CASE/${SINEX_FILE}.Z /umbc/epavlis/data01/LOCAL/magdak/IERS_CPP/SINEX/${IERS_SINEX}.Z
+
+chmod 777 /umbc/epavlis/data01/LOCAL/magdak/IERS_CPP/SINEX/${IERS_SINEX}.Z
+
+fi
+
+cd /nobackupnfs2/mkuzmicz
+cd tmp/magda/${CASE}${wkTmp}
+export SINEX_FILE
+
+$SCRIPTS/REPORT_COVER > o.REPORT_COVER 2>&1
+
+
+############################################
+#
+#NEW 2011-02-04 - report with residual plots
+#
+############################################
+
+#/umbc/research/evans/scripts/resi_plot4_weekly $Date_NEW_ARC > o.resi_plot4_weekly
+$SCRIPTS/resi_plot4_weekly $Date_NEW_ARC > o.resi_plot4_weekly
+#/umbc/research/evans/scripts/polar_resi_multi8_weekly $Date_NEW_ARC > o.polar_resi_multi8_4weekly
+$SCRIPTS/polar_resi_multi8_weekly $Date_NEW_ARC > o.polar_resi_multi8_4weekly
+$SCRIPTS/REPORT_BIAS_PUNCHOUT $ARC > o.REPORT_BIAS_PUNCHOUT 2>&1
+
+cd WEEKLY/${Date_NEW_ARC}
+printf "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=W_REPORT_${Date_NEW_ARC}_v35.pdf  W_REPORT_COVER_PAGE.pdf BIAS_TAB.pdf  JCET_AC_${Date_NEW_ARC}_weekly_sate_stats.pdf  std+high+npts_to_low.pdf JCET_AC_${Date_NEW_ARC}_weekly_admtd_residuals.pdf  JCET_AC_${Date_NEW_ARC}_weekly_edtd_residuals.pdf  ${Date_NEW_ARC}_weekly_sate_trks1.pdf  ${Date_NEW_ARC}_weekly_sate_trks2.pdf " > PDF_EXE
+#printf "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=W_REPORT_${Date_NEW_ARC}_v35.pdf  ${Date_NEW_ARC}_weekly_admtd_residuals.pdf  ${Date_NEW_ARC}_weekly_edtd_residuals.pdf  ${Date_NEW_ARC}_weekly_sate_trks1.pdf  ${Date_NEW_ARC}_weekly_sate_trks2.pdf " > PDF_EXE
+
+chmod 775  PDF_EXE
+./PDF_EXE
+cp W_REPORT_${Date_NEW_ARC}_v35.pdf  /${DISK}/PPV/summaries/${CASE}
+
+
+#cat  W_REPORT_COVER_PAGE  >  W_REPORT_${Date_NEW_ARC}_v35.txt
+#cat ${Date_NEW_ARC}_weekly_sate_stats.txt >>  W_REPORT_${Date_NEW_ARC}_v35.txt
+#cat BIAS_TAB.txt >>  W_REPORT_${Date_NEW_ARC}_v35.txt
+#/umbc/epavlis/data01/LOCAL/magdak/scripts/maila REPORT_${Date_NEW_ARC} REPORT_${Date_NEW_ARC}.pdf
+##echo | mutt  -s W_REPORT_${Date_NEW_ARC}_Pleiades -a  W_REPORT_${Date_NEW_ARC}_v35.pdf magdak@umbc.edu
+##echo | mutt  -s W_REPORT_${Date_NEW_ARC}_Pleiades -a  W_REPORT_${Date_NEW_ARC}_v35.pdf epavlis@umbc.edu
+##echo | mutt  -s W_REPORT_BIAS_${Date_NEW_ARC}_Pleiades -a   W_REPORT_${Date_NEW_ARC}_v35.txt magdak@umbc.edu
+
+#NEW 130618
+echo "W_REPORT_${Date_NEW_ARC}_v35.pdf" > mm.txt
+mail -s "WEEKLY SLRF2008 JCET-PL ${Date_NEW_ARC}" -a  W_REPORT_${Date_NEW_ARC}_v35.pdf epavlis@umbc.edu < mm.txt
+mail -s "WEEKLY SLRF2008 JCET-PL ${Date_NEW_ARC}" -a  W_REPORT_${Date_NEW_ARC}_v35.pdf magdak@umbc.edu < mm.txt
+#mail -s "WEEKLY SLRF2008 JCET-PL ${Date_NEW_ARC}" -a  W_REPORT_${Date_NEW_ARC}_v35.pdf epavlis1@gmail.com < mm.txt
+#mail -s "WEEKLY SLRF2008 JCET-PL ${Date_NEW_ARC}" -a  W_REPORT_${Date_NEW_ARC}_v35.pdf magdakcieslak@gmail.com < mm.txt
+
+#echo | mutt  -s W_REPORT_${Date_NEW_ARC}_Pleiades -a  W_REPORT_${Date_NEW_ARC}_v35.pdf epavlis@umbc.edu
+#echo | mutt  -s W_REPORT_BIAS_${Date_NEW_ARC}_Pleiades -a   W_REPORT_${Date_NEW_ARC}_v35.txt epavlis@umbc.edu
+
+#/umbc/epavlis/data01/LOCAL/magdak/scripts/maila_ecp REPORT_${Date_NEW_ARC}.pdf REPORT_${Date_NEW_ARC}.pdf
+#### BIAS for plots
+/nobackup/mkuzmicz/scripts/BIAS_DB/REPORT_BIAS_PUNCHOUT_OPS_WEEKLY $ARC  $Date_NEW_ARC $NYEAR > o.REPORT_BIAS_PUNCHOUT_OPS_WEEKLY
+
+#NEW UPLOADING 2016/06/16 
+#SINEX
+#read SNXDIR SNXFILE < $MAIN_PATH/INFILES/INF_OPS_D/SINEX_OF_THIS_RUN.PPV
+read SNXDIR SNXFILE < $MAIN_PATH/INFILES/SINEX_OF_THIS_RUN.PPV
+cd $SNXDIR
+#/usr/bin/curl -c .urs_cookies -n -L  https://depot.cddis.eosdis.nasa.gov/CDDIS_FileUpload/login
+#/usr/bin/curl -X POST -b .urs_cookies -F "fileType=SLR"  -F "fileContentType=products" -F "file[]=@$SNXFILE"  https://depot.cddis.eosdis.nasa.gov/CDDIS_FileUpload/upload/ 
+#SP3
+
+#cat $MAIN_PATH/INFILES/${SOL_FILE}fnames.sp3 > SP3_FILENAME.tmplt
+sed "s/ENDATE/${Date_NXT_ARC}/g" $MAIN_PATH/INFILES/TMPLT__fnames.sp3 > SP3_FILENAME.tmplt
+
+
+#L1
+wherefrom=/$DISK/GISL1/traj/WEEKLY/SP3
+#sed "s/CDDIS_SAT/lageos1/g" SP3_FILENAME.tmplt > tmp_1
+#read orb_1 < tmp_1
+echo $wherefrom
+echo $orb_1
+cd $wherefrom
+sed "s/ENDATE/${SNX_DATE}/g" $MAIN_PATH/INFILES/TMPLT__fnames.sp3 > SP3_FILENAME.tmplt
+sed "s/CDDIS_SAT/lageos1/g" SP3_FILENAME.tmplt > tmp_1
+read orb_1 < tmp_1
+#zcat $ARC.wTx.sp3.Z> $orb_1
+cp $ARC.wTx.sp3.Z ${orb_1}.Z
+echo $orb_1
+#/usr/bin/curl -c .urs_cookies -n -L https://depot.cddis.eosdis.nasa.gov/CDDIS_FileUpload/login
+#/usr/bin/curl -X POST -b .urs_cookies -F "fileType=SLR"  -F "fileContentType=products" -F "file[]=@${orb_1}.Z"  https://depot.cddis.eosdis.nasa.gov/CDDIS_FileUpload/upload/ 
+rm $orb_1 tmp_1 
+#L2
+#cat $MAIN_PATH/INFILES/${SOL_FILE}fnames.sp3 > SP3_FILENAME.tmplt
+wherefrom=/$DISK/GISL2/traj/WEEKLY/SP3
+cd $wherefrom
+sed "s/ENDATE/${SNX_DATE}/g" $MAIN_PATH/INFILES/TMPLT__fnames.sp3 > SP3_FILENAME.tmplt
+sed "s/CDDIS_SAT/lageos2/g" SP3_FILENAME.tmplt > tmp_1
+read orb_1 < tmp_1
+echo $wherefrom
+echo $orb_1
+#zcat $ARC.wTx.sp3.Z > $orb_1
+cp $ARC.wTx.sp3.Z ${orb_1}.Z
+
+#/usr/bin/curl -c .urs_cookies -n -L  https://depot.cddis.eosdis.nasa.gov/CDDIS_FileUpload/login
+
+
+#/usr/bin/curl -X POST -b .urs_cookies -F "fileType=SLR"  -F "fileContentType=products" -F "file[]=@${orb_1}.Z" https://depot.cddis.eosdis.nasa.gov/CDDIS_FileUpload/upload/  
+rm $orb_1 tmp_1 
+#E1
+cat $MAIN_PATH/INFILES/${SOL_FILE}fnames.sp3 > SP3_FILENAME.tmplt
+wherefrom=/$DISK/ETA1/traj/WEEKLY/SP3
+cd $wherefrom
+sed "s/ENDATE/${SNX_DATE}/g" $MAIN_PATH/INFILES/TMPLT__fnames.sp3 > SP3_FILENAME.tmplt
+sed "s/CDDIS_SAT/etalon1/g" SP3_FILENAME.tmplt > tmp_1
+read orb_1 < tmp_1
+echo $wherefrom
+echo $orb_1
+#zcat $ARC.wTx.sp3.Z > $orb_1
+cp $ARC.wTx.sp3.Z ${orb_1}.Z
+
+#/usr/bin/curl -c .urs_cookies -n -L  https://depot.cddis.eosdis.nasa.gov/CDDIS_FileUpload/login
+#/usr/bin/curl -X POST -b .urs_cookies -F "fileType=SLR"  -F "fileContentType=products" -F "file[]=@${orb_1}.Z"  https://depot.cddis.eosdis.nasa.gov/CDDIS_FileUpload/upload/ 
+rm $orb_1 tmp_1 
+#E2
+cat $MAIN_PATH/INFILES/${SOL_FILE}fnames.sp3 > SP3_FILENAME.tmplt
+wherefrom=/$DISK/ETA2/traj/WEEKLY/SP3
+cd $wherefrom
+sed "s/ENDATE/${SNX_DATE}/g" $MAIN_PATH/INFILES/TMPLT__fnames.sp3 > SP3_FILENAME.tmplt
+sed "s/CDDIS_SAT/etalon2/g" SP3_FILENAME.tmplt > tmp_1
+read orb_1 < tmp_1
+echo $wherefrom
+echo $orb_1
+#zcat $ARC.wTx.sp3.Z > $orb_1
+cp $ARC.wTx.sp3.Z ${orb_1}.Z
+
+#/usr/bin/curl -c .urs_cookies -n -L  https://depot.cddis.eosdis.nasa.gov/CDDIS_FileUpload/login
+#/usr/bin/curl -X POST -b .urs_cookies -F "fileType=SLR"  -F "fileContentType=products" -F "file[]=@${orb_1}.Z"  https://depot.cddis.eosdis.nasa.gov/CDDIS_FileUpload/upload/ 
+rm $orb_1 tmp_1 
+
+
+cp -r $CDIR/WEEKLY/$Date_NEW_ARC  /nobackup/mkuzmicz/MISSIONS/PPV/plots/EMT/WEEKLY/.
+
+cd ../../
+$SCRIPTS/SHIFT_FILES_FORWARD $CASE $MAIN_PATH
+#### CHMOD filies to rerun process
+cp /nobackup/mkuzmicz/INFILES/CHMOD_2_WEEKLY_RUN_STAR t0
+
+#sed -e "s/AAAAAA/$ARC/" t0 > t1
+#sed -e "s/DDDDDD/$Date_NEW_ARC/" t1 > t2
+#sed -e "s/NNNNNN/$Date_NXT_ARC/" t2 > t3
+cp t0 CHMOD_2_WEEKLY_RUN_run
+chmod 775 CHMOD_2_WEEKLY_RUN_run
+./CHMOD_2_WEEKLY_RUN_run
+
+chmod -R 775 /nobackup/mkuzmicz/tmp/magda/*
+chmod -R 775 /nobackupnfs2/mkuzmicz/tmp/magda/*
+chmod -R 775 /nobackupnfs2/mkuzmicz/tmp/magdak/*
+$SCRIPTS/CLEANUP
+
+
+#done < $MAIN_PATH/INFILES/$RUN_FILE
+#### CHMOD filies to rerun process
+
+
+print "THE END RUN WEEKLY L&E" > END_txt
+mail -s "WEEKLY END L&E" magdak@umbc.edu < END_txt
+#mail -s "WEEKLY END L&E" magdakcieslak@gmail.com < END_txt

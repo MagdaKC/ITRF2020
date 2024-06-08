@@ -1,0 +1,283 @@
+
+# PARMRDR_OPS_TRF (based on "parmrdr03_TRF" and tuned to the WEEKLY/OPS products)
+
+if [ `expr $#` -gt 5 ]; then
+   echo "Usage: PARMRDR_OPS_TRF sol sat [disk] [STAGE] [CASE] 2> script_out \007"
+   exit 100
+fi
+expr $#
+++ expr 5
++ '[' 5 -gt 5 ']'
+
+sol=$1
++ sol=ILRS_LE12_OPS230204_
+sat=${2:-PPV}
++ sat=PPV
+disk=${3:-nobackup/mkuzmicz/MISSIONS}
++ disk=nobackup/mkuzmicz/MISSIONS
+STAGE=${4:-WEEKLY}
++ STAGE=WEEKLY
+CASE=${5:-OPS}
++ CASE=OPS
+
+infile=${sol}pnc
++ infile=ILRS_LE12_OPS230204_pnc
+HOME=/nobackup/mkuzmicz
++ HOME=/nobackup/mkuzmicz
+
+if [ ! -d /${disk}/${sat}/products ]; then
+   mkdir /${disk}/${sat}/products
+fi
++ '[' '!' -d /nobackup/mkuzmicz/MISSIONS/PPV/products ']'
+#
+if [ ! -d /${disk}/${sat}/products/COMPARE ]; then
+   mkdir /${disk}/${sat}/products/COMPARE
+fi
++ '[' '!' -d /nobackup/mkuzmicz/MISSIONS/PPV/products/COMPARE ']'
+#
+if [ ! -d /${disk}/${sat}/products/COMPARE/$STAGE ]; then
+   mkdir /${disk}/${sat}/products/COMPARE/$STAGE
+fi
++ '[' '!' -d /nobackup/mkuzmicz/MISSIONS/PPV/products/COMPARE/WEEKLY ']'
+#
+if [ ! -d /${disk}/${sat}/products/COMPARE/$STAGE/$CASE ]; then
+   mkdir /${disk}/${sat}/products/COMPARE/$STAGE/$CASE
+fi
++ '[' '!' -d /nobackup/mkuzmicz/MISSIONS/PPV/products/COMPARE/WEEKLY/OPS ']'
+#
+#if [ ! -d /${disk}/${sat}/products/COMPARE/$STAGE/$CASE/CASE_$SUBCASE ]; then
+#   mkdir /${disk}/${sat}/products/COMPARE/$STAGE/$CASE/CASE_$SUBCASE
+#fi
+#
+if [ ! -d /${disk}/${sat}/products/$STAGE ]; then
+   mkdir /${disk}/${sat}/products/$STAGE
+fi
++ '[' '!' -d /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY ']'
+#
+if [ ! -d /${disk}/${sat}/products/$STAGE/$CASE ]; then
+   mkdir /${disk}/${sat}/products/$STAGE/$CASE
+fi
++ '[' '!' -d /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS ']'
+#
+if [ ! -d /${disk}/${sat}/products/$STAGE/$CASE/${sol} ]; then
+   mkdir /${disk}/${sat}/products/$STAGE/$CASE/${sol}
+fi
++ '[' '!' -d /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_ ']'
+#
+#if [ ! -d /${disk}/${sat}/products/$STAGE/$CASE/CASE_$SUBCASE ]; then
+#   mkdir /${disk}/${sat}/products/$STAGE/$CASE/CASE_$SUBCASE
+#fi
+#
+#if [ ! -d /${disk}/${sat}/products/$STAGE/$CASE/CASE_$SUBCASE/${sol} ]; then
+#   mkdir /${disk}/${sat}/products/$STAGE/$CASE/CASE_$SUBCASE/${sol}
+#fi
+#
+if [ ! -d /${disk}/${sat}/parmvl/$STAGE ]; then
+   mkdir /${disk}/${sat}/parmvl/$STAGE
+fi
++ '[' '!' -d /nobackup/mkuzmicz/MISSIONS/PPV/parmvl/WEEKLY ']'
+#
+if [ ! -d /${disk}/${sat}/parmvl/$STAGE/$CASE ]; then
+   mkdir /${disk}/${sat}/parmvl/$STAGE/$CASE
+fi
++ '[' '!' -d /nobackup/mkuzmicz/MISSIONS/PPV/parmvl/WEEKLY/OPS ']'
+#
+#if [ ! -d /${disk}/${sat}/parmvl/$STAGE/$CASE/CASE_$SUBCASE ]; then
+#   mkdir /${disk}/${sat}/parmvl/$STAGE/$CASE/CASE_$SUBCASE
+#fi
+#
+# execute job
+#
+mkdir /tmp/parmrdr$$
++ mkdir /tmp/parmrdr40135
+cd /tmp/parmrdr$$
++ cd /tmp/parmrdr40135
+
+
+cat $HOME/INFILES/parmrdr01.$sat > fort.5 
++ cat /nobackup/mkuzmicz/INFILES/parmrdr01.PPV
+
+
+
+cat /$disk/d_base/site/newall > fort.9
++ cat /nobackup/mkuzmicz/MISSIONS/d_base/site/newall
+cat /$disk/d_base/site/INSTRMNT > fort.8
++ cat /nobackup/mkuzmicz/MISSIONS/d_base/site/INSTRMNT
+zcat /$disk/$sat/parmvl/$STAGE/$CASE/v${SNX_VER}/$infile.gz > temp  
++ zcat /nobackup/mkuzmicz/MISSIONS/PPV/parmvl/WEEKLY/OPS/v415/ILRS_LE12_OPS230204_pnc.gz
+
+grep 'RMS....E...' temp > fort.10
++ grep RMS....E... temp
+
+grep 'PARM..' temp > temp1
++ grep PARM.. temp
+grep 'PARM..    95' temp1 > t85
++ grep 'PARM..    95' temp1
+grep 'PARM..    96' temp1 > t86
++ grep 'PARM..    96' temp1
+
+grep 'PARM..   11........3' temp1 > t-8
++ grep 'PARM..   11........3' temp1
+grep 'PARM..   13.........' temp1 >> t-8
++ grep 'PARM..   13.........' temp1
+
+#OLD STYLE: grep 'PARM..   1' temp1 > t-8
+
+echo 'PARMSM99999' > lst
++ echo PARMSM99999
+
+cat t85 t86 t-8 lst >> fort.10
++ cat t85 t86 t-8 lst
+
+sed "1,\$s/PARMSM/PARMVL/g" fort.10 > $infile.PARMVL
++ sed '1,$s/PARMSM/PARMVL/g' fort.10
+gzip -9 -f $infile.PARMVL
++ gzip -9 -f ILRS_LE12_OPS230204_pnc.PARMVL
+mv $infile.PARMVL.gz /$disk/$sat/parmvl/$STAGE/$CASE/v${SNX_VER}/$infile.PARMVL.gz
++ mv ILRS_LE12_OPS230204_pnc.PARMVL.gz /nobackup/mkuzmicz/MISSIONS/PPV/parmvl/WEEKLY/OPS/v415/ILRS_LE12_OPS230204_pnc.PARMVL.gz
+
+
+
+#exit 99
+
+
+/nobackup/mkuzmicz/EXECUTABLES/parmrdr01.x  < fort.5 > /$disk/$sat/products/$STAGE/$CASE/${sol}/PRM.$infile               
++ /nobackup/mkuzmicz/EXECUTABLES/parmrdr01.x
+STOP  !!! EOF on #10 before TCS encounter !!!
+
+#----------------------------------
+
+ls -la
++ ls -la
+total 2172
+drwxrwxr-x     2 mkuzmicz s0860    4096 Feb  9 14:06 .
+drwxrwxrwt 10154 root     root  1855488 Feb  9 14:06 ..
+-rw-rw-r--     1 mkuzmicz s0860   22437 Feb  9 14:06 fort.10
+-rw-rw-r--     1 mkuzmicz s0860     648 Feb  9 14:06 fort.14
+-rw-rw-r--     1 mkuzmicz s0860     648 Feb  9 14:06 fort.15
+-rw-rw-r--     1 mkuzmicz s0860     648 Feb  9 14:06 fort.16
+-rw-rw-r--     1 mkuzmicz s0860     648 Feb  9 14:06 fort.17
+-rw-rw-r--     1 mkuzmicz s0860    1306 Feb  9 14:06 fort.18
+-rw-rw-r--     1 mkuzmicz s0860    3483 Feb  9 14:06 fort.19
+-rw-rw-r--     1 mkuzmicz s0860    8313 Feb  9 14:06 fort.20
+-rw-rw-r--     1 mkuzmicz s0860    3945 Feb  9 14:06 fort.21
+-rw-rw-r--     1 mkuzmicz s0860    8313 Feb  9 14:06 fort.22
+-rw-rw-r--     1 mkuzmicz s0860      81 Feb  9 14:06 fort.23
+-rw-rw-r--     1 mkuzmicz s0860      81 Feb  9 14:06 fort.24
+-rw-rw-r--     1 mkuzmicz s0860     648 Feb  9 14:06 fort.27
+-rw-rw-r--     1 mkuzmicz s0860     648 Feb  9 14:06 fort.28
+-rw-rw-r--     1 mkuzmicz s0860     546 Feb  9 14:06 fort.29
+-rw-rw-r--     1 mkuzmicz s0860    2856 Feb  9 14:06 fort.30
+-rw-rw-r--     1 mkuzmicz s0860     620 Feb  9 14:06 fort.34
+-rw-rw-r--     1 mkuzmicz s0860     572 Feb  9 14:06 fort.35
+-rw-rw-r--     1 mkuzmicz s0860     620 Feb  9 14:06 fort.36
+-rw-rw-r--     1 mkuzmicz s0860     574 Feb  9 14:06 fort.37
+-rw-rw-r--     1 mkuzmicz s0860    1306 Feb  9 14:06 fort.38
+-rw-rw-r--     1 mkuzmicz s0860     623 Feb  9 14:06 fort.40
+-rw-rw-r--     1 mkuzmicz s0860    8313 Feb  9 14:06 fort.42
+-rw-rw-r--     1 mkuzmicz s0860     550 Feb  9 14:06 fort.47
+-rw-rw-r--     1 mkuzmicz s0860     516 Feb  9 14:06 fort.48
+-rw-rw-r--     1 mkuzmicz s0860     546 Feb  9 14:06 fort.49
+-rw-rw-r--     1 mkuzmicz s0860     443 Feb  9 14:06 fort.5
+-rw-rw-r--     1 mkuzmicz s0860     602 Feb  9 14:06 fort.50
+-rw-rw-r--     1 mkuzmicz s0860     546 Feb  9 14:06 fort.59
+-rw-rw-r--     1 mkuzmicz s0860    1477 Feb  9 14:06 fort.60
+-rw-rw-r--     1 mkuzmicz s0860     546 Feb  9 14:06 fort.69
+-rw-rw-r--     1 mkuzmicz s0860    2359 Feb  9 14:06 fort.70
+-rw-rw-r--     1 mkuzmicz s0860   70756 Feb  9 14:06 fort.8
+-rw-rw-r--     1 mkuzmicz s0860   23358 Feb  9 14:06 fort.9
+-rw-rw-r--     1 mkuzmicz s0860      12 Feb  9 14:06 lst
+-rw-rw-r--     1 mkuzmicz s0860   16758 Feb  9 14:06 t-8
+-rw-rw-r--     1 mkuzmicz s0860    2793 Feb  9 14:06 t85
+-rw-rw-r--     1 mkuzmicz s0860    2793 Feb  9 14:06 t86
+-rw-rw-r--     1 mkuzmicz s0860   22425 Feb  9 14:06 temp
+-rw-rw-r--     1 mkuzmicz s0860   22344 Feb  9 14:06 temp1
+
+#----------------------------------
+cp fort.11 /$disk/$sat/products/$STAGE/$CASE/$sol/state
++ cp fort.11 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/state
+cp: cannot stat 'fort.11': No such file or directory
+cp fort.12 /$disk/$sat/products/$STAGE/$CASE/$sol/accel
++ cp fort.12 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/accel
+cp: cannot stat 'fort.12': No such file or directory
+cp fort.13 /$disk/$sat/products/$STAGE/$CASE/$sol/solrd
++ cp fort.13 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/solrd
+cp: cannot stat 'fort.13': No such file or directory
+cp fort.14 /$disk/$sat/products/$STAGE/$CASE/$sol/xypmaI
++ cp fort.14 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/xypmaI
+cp fort.15 /$disk/$sat/products/$STAGE/$CASE/$sol/xypm0I
++ cp fort.15 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/xypm0I
+cp fort.16 /$disk/$sat/products/$STAGE/$CASE/$sol/a1utaI
++ cp fort.16 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/a1utaI
+cp fort.17 /$disk/$sat/products/$STAGE/$CASE/$sol/a1ut0I
++ cp fort.17 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/a1ut0I
+cp fort.18 /$disk/$sat/products/$STAGE/$CASE/$sol/sprdct
++ cp fort.18 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/sprdct
+cp fort.19 /$disk/$sat/products/$STAGE/$CASE/$sol/stagdt.gdn1
++ cp fort.19 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/stagdt.gdn1
+cp fort.20 /$disk/$sat/products/$STAGE/$CASE/$sol/stagdt.gdn2
++ cp fort.20 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/stagdt.gdn2
+cp fort.21 /$disk/$sat/products/$STAGE/$CASE/$sol/stacrt.gdn1
++ cp fort.21 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/stacrt.gdn1
+cp fort.22 /$disk/$sat/products/$STAGE/$CASE/$sol/stacrt.gdn2
++ cp fort.22 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/stacrt.gdn2
+cp fort.23 /$disk/$sat/products/$STAGE/$CASE/$sol/tcscoms
++ cp fort.23 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/tcscoms
+cp fort.24 /$disk/$sat/products/$STAGE/$CASE/$sol/tcseops
++ cp fort.24 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/tcseops
+cp fort.25 /$disk/$sat/products/$STAGE/$CASE/$sol/tsort1
++ cp fort.25 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/tsort1
+cp: cannot stat 'fort.25': No such file or directory
+cp fort.26 /$disk/$sat/products/$STAGE/$CASE/$sol/tsort2
++ cp fort.26 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/tsort2
+cp: cannot stat 'fort.26': No such file or directory
+cp fort.27 /$disk/$sat/products/$STAGE/$CASE/$sol/xyutaG
++ cp fort.27 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/xyutaG
+cp fort.28 /$disk/$sat/products/$STAGE/$CASE/$sol/xyut0G
++ cp fort.28 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/xyut0G
+cp fort.29 /$disk/$sat/products/$STAGE/$CASE/$sol/iers_sub
++ cp fort.29 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/iers_sub
+cp fort.30 /$disk/$sat/products/$STAGE/$CASE/$sol/trfxfrm
++ cp fort.30 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/trfxfrm
+cp fort.34 /$disk/$sat/products/$STAGE/$CASE/$sol/xypmaIr
++ cp fort.34 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/xypmaIr
+cp fort.35 /$disk/$sat/products/$STAGE/$CASE/$sol/xypm0Ir
++ cp fort.35 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/xypm0Ir
+cp fort.36 /$disk/$sat/products/$STAGE/$CASE/$sol/a1utaIr
++ cp fort.36 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/a1utaIr
+cp fort.37 /$disk/$sat/products/$STAGE/$CASE/$sol/a1ut0Ir
++ cp fort.37 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/a1ut0Ir
+cp fort.38 /$disk/$sat/products/$STAGE/$CASE/$sol/sprdctr
++ cp fort.38 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/sprdctr
+cp fort.40 /$disk/$sat/products/$STAGE/$CASE/$sol/temp_ut1utc
++ cp fort.40 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/temp_ut1utc
+cp fort.47 /$disk/$sat/products/$STAGE/$CASE/$sol/xyutaGr
++ cp fort.47 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/xyutaGr
+cp fort.48 /$disk/$sat/products/$STAGE/$CASE/$sol/xyut0Gr
++ cp fort.48 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/xyut0Gr
+cp fort.49 /$disk/$sat/products/$STAGE/$CASE/$sol/iers_subr
++ cp fort.49 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/iers_subr
+cp fort.50 /$disk/$sat/products/$STAGE/$CASE/$sol/temp_ut1utcr
++ cp fort.50 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/temp_ut1utcr
+cp fort.60 /$disk/$sat/products/$STAGE/$CASE/$sol/iers_sub2001
++ cp fort.60 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/iers_sub2001
+cp fort.70 /$disk/$sat/products/$STAGE/$CASE/$sol/iers_sub2001.sprdct
++ cp fort.70 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/iers_sub2001.sprdct
+cp fort.90 /$disk/$sat/products/$STAGE/$CASE/$sol/unit90
++ cp fort.90 /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/unit90
+cp: cannot stat 'fort.90': No such file or directory
+
+#
+cd ..
++ cd ..
+\rm -r parmrdr$$
++ rm -r parmrdr40135
+
+cd /$disk/$sat/products/COMPARE/$STAGE/$CASE
++ cd /nobackup/mkuzmicz/MISSIONS/PPV/products/COMPARE/WEEKLY/OPS
+ln -s /$disk/$sat/products/$STAGE/$CASE/$sol/stacrt.gdn2 $sol       
++ ln -s /nobackup/mkuzmicz/MISSIONS/PPV/products/WEEKLY/OPS/ILRS_LE12_OPS230204_/stacrt.gdn2 ILRS_LE12_OPS230204_
+ln: failed to create symbolic link 'ILRS_LE12_OPS230204_': File exists
+
+exit 0
++ exit 0

@@ -1,0 +1,13 @@
+mkdir ./unit5/WEEKLY/OPS/v415
+mkdir ./products/WEEKLY/v415
+mkdir ./pgscmt/WEEKLY/OPS/v415
+mkdir ./punchdout/WEEKLY/OPS/v415
+mkdir ./pgscov/WEEKLY/OPS/v415
+mkdir ./sinex/ILRS/WEEKLY/v415
+mkdir ./emat/WEEKLY/v415
+mkdir ./emat/v415
+mkdir ./output/mksinex_out/ILRS/WEEKLY/v415
+mkdir ./output/DATACATS/WEEKLY/EMT/v415
+mkdir ./output/DATACATS/WEEKLY/DR/v415
+mkdir ./output/WEEKLY/OPS/v415
+mkdir ./unit4/OPS/v415

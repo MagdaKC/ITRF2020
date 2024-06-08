@@ -1,0 +1,4 @@
+ #DAY of the week 1-monday
+   DY=` date '+ %w'`
+    echo $DY > DD1
+     read DAY < DD1

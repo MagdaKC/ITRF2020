@@ -1,0 +1,19 @@
+PS3='Choose your SINEX VER: '
+SNV=("v415" "v450" "v80")
+select fav in "${SNV[@]}"; do
+case $fav in
+"v415")
+SNX_VER=415
+# optionally call a function or run some code here
+;;
+"v450")
+SNX_VER=450
+# optionally call a function or run some code here
+;;
+"v80")
+SNX_VER=80
+# optionally call a function or run some code here
+break
+;;
+done
+export SNX_VER

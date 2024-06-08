@@ -1,0 +1,2110 @@
+#
+
+echo "  #  "
++ echo '  #  '
+  #  
+echo "  #    Begin  'RUN_SIM_ARC'    "
++ echo $'  #    Begin  \'RUN_SIM_ARC\'    '
+  #    Begin  'RUN_SIM_ARC'    
+echo "  #  "
+
+
++ echo '  #  '
+  #  
+PROG=RUN_SIM_ARCIM_OPS_D       
++ PROG=RUN_SIM_ARCIM_OPS_D
+disk=umbc/epavlis/data01/LOCAL/magdak
++ disk=umbc/epavlis/data01/LOCAL/magdak
+DISK=$disk/MISSIONS
++ DISK=umbc/epavlis/data01/LOCAL/magdak/MISSIONS
+#disk=nobackup2e/epavlis
+infile=/$disk/INFILES/SIM/$FILE
+
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/
+export NETW disk SS ELCUT DN DISK
++ export NETW disk SS ELCUT DN DISK
+mkdir /tmp/magdak/SIM$$
++ mkdir /tmp/magdak/SIM32691
+cd  /tmp/magdak/SIM$$
+
++ cd /tmp/magdak/SIM32691
+CASE=DAILY
++ CASE=DAILY
+#180905 P2
+LVER=wv180
+
++ LVER=wv180
+export LVER   CASE
+
++ export LVER CASE
+if [ "$SAT" = "GISL1" ];then
+   LOCALDSK=tmp
+   SV=L1
+
+elif [ "$SAT" = "GISL2" ];then
+   LOCALDSK=tmp
+   SV=L2
+elif [ "$SAT" = "ETA1" ];then
+   LOCALDSK=tmp
+   SV=E1
+elif [ "$SAT" = "ETA2" ];then
+   LOCALDSK=tmp
+   SV=E2
+
+   fi
+
+
++ [ GILS1 '=' GISL1 ]
++ [ GILS1 '=' GISL2 ]
++ [ GILS1 '=' ETA1 ]
++ [ GILS1 '=' ETA2 ]
+GRAVITY_MDL=GGM02C.30x30
++ GRAVITY_MDL=GGM02C.30x30
+GRVTIM=GRVTIM110310
++ GRVTIM=GRVTIM110310
+export GRAVITY_MDL GRVTIM
+
++ export GRAVITY_MDL GRVTIM
+ETIDE_MDL=etides+poletide.fxd
++ ETIDE_MDL=etides+poletide.fxd
+#NEW
+OTIDE_MDL=GOT47/20otides_got4.7.fxd
++ OTIDE_MDL=GOT47/20otides_got4.7.fxd
+export ETIDE_MDL OTIDE_MDL
++ export ETIDE_MDL OTIDE_MDL
+#GEODYN
+GDN_2S=giis1507p0_i64_noMDRN.x
++ GDN_2S=giis1507p0_i64_noMDRN.x
+GDN_2E=giie1507p2_i64.x
++ GDN_2E=giie1507p2_i64.x
+export GDN_2S GDN_2E
++ export GDN_2S GDN_2E
+ITRF_APRIORI=SLRF2008
++ ITRF_APRIORI=SLRF2008
+export ITRF_APRIORI
++ export ITRF_APRIORI
+SCRIPTS=/umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS
++ SCRIPTS=/umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS
+SCRIPTSSIM=/umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR
++ SCRIPTSSIM=/umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR
+MAIN_PATH=/umbc/epavlis/data01/LOCAL/magdak
++ MAIN_PATH=/umbc/epavlis/data01/LOCAL/magdak
+ RUN_GDN_SLR_SCR=RUN_GDN_SLR_2023
++ RUN_GDN_SLR_SCR=RUN_GDN_SLR_2023
+export SCRIPTS MAIN_PATH
+
++ export SCRIPTS MAIN_PATH
+#while read ARC YR A1 A2
+#do
+#read ARC YR < $infile
+##read NYEAR NDOY Date_NEW_ARC ARC < $MAIN_PATH/INFILES/INF_OPS_D/ARC_SETUP_NEW.$CASE
+
+read OYEAR ODOY Date_OLD_ARC OLD < $MAIN_PATH/INFILES/INF_OPS_ITRF2020/ARC_SETUP_OLD.${CASE}_v${SNX_VER}
++ read OYEAR ODOY Date_OLD_ARC OLD
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_ITRF2020/ARC_SETUP_OLD.DAILY_v180
+read NYEAR NDOY Date_NEW_ARC ARC < $MAIN_PATH/INFILES/INF_OPS_ITRF2020/ARC_SETUP_NEW.${CASE}_v${SNX_VER}
++ read NYEAR NDOY Date_NEW_ARC ARC
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_ITRF2020/ARC_SETUP_NEW.DAILY_v180
+read XYEAR XDOY Date_NXT_ARC NXT < $MAIN_PATH/INFILES/INF_OPS_ITRF2020/ARC_SETUP_NXT.${CASE}_v${SNX_VER}
++ read XYEAR XDOY Date_NXT_ARC NXT
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_ITRF2020/ARC_SETUP_NXT.DAILY_v180
+read EYEAR EDOY Date_END_ARC END_ARC < $MAIN_PATH/INFILES/INF_OPS_ITRF2020/ARC_SETUP_END.${CASE}_v${SNX_VER}
++ read EYEAR EDOY Date_END_ARC END_ARC
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_ITRF2020/ARC_SETUP_END.DAILY_v180
+export NYEAR
++ export NYEAR
+#read NYEAR NDOY Date_NEW_ARC ARC < $MAIN_PATH/INFILES/INF_OPS_D/ARC_SETUP_OLD.$CASE
+YR=$NYEAR
++ YR=2023
+echo $ARC $YR $Date_NEW_ARC
+
++ echo w30430 2023 230430
+w30430 2023 230430
+##exit 2016
+export Date_NEW_ARC
+
++ export Date_NEW_ARC
+while read ELCUT
+do
+while read SAT SV
+do
+#LVER=SIM_E10
+LVER=SIM_E${ELCUT}
+echo SIM_E${ELCUT}
+#SAT=GISL1
+#SV=L1
+export SAT SV
+#$SCRIPTSSIM/FILES_17_OPS_D_SIM_NEW $SV GISL1 $ARC $LVER $SAT #> o.FILES_17_OPS_D_L1 2>&1 &
+#180905 
+$SCRIPTSSIM/FILES_17_OPS_D_SIM_v180_P2 $SV $SAT $ARC $LVER $SAT #> o.FILES_17_OPS_D_L1 2>&1 &
+#exit 000
+TYPE_SIM=DR_SIM
+#180905 
+$SCRIPTS/$RUN_GDN_SLR_SCR  $ARC ${LVER}0 $SAT $YR $TYPE_SIM . $CASE > o.RUN_GDN_SLR_$ARC_${LVER}0.$CASE.${SVN}.${SAT} 2>&1
+#exit 0
+TYPE_SIM=DR_SIM1
+#180905
+$SCRIPTS/$RUN_GDN_SLR_SCR  $ARC ${LVER}1 $SAT $YR $TYPE_SIM . $CASE > o.RUN_GDN_SLR_$ARC_${LVER}1.$CASE.${SVN}.${SAT} 2>&1
+
+done < /${disk}/INFILES/SIM/SAT
+done < /${disk}/INFILES/SIM/ELCUT_SIM
+
+
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/ELCUT_SIM
++ read ELCUT
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT
++ read SAT SV
++ LVER=SIM_E10
++ echo SIM_E10
+SIM_E10
++ export SAT SV
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR/FILES_17_OPS_D_SIM_v180_P2 L1 GISL1 w30430 SIM_E10 GISL1
+set -xv
+
+
+
+
++ set -xv
+Date=`date +%y%m%d`
+date +%y%m%d
++ date +%y%m%d
++ Date=230621
+#DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+
+echo " # "
++ echo ' # '
+ # 
+echo " # $SCR_NAME $* "
++ echo ' #  L1 GISL1 w30430 SIM_E10 GISL1 '
+ #  L1 GISL1 w30430 SIM_E10 GISL1 
+echo " # "
++ echo ' # '
+ # 
+echo " # Version $SCR_VERS "
++ echo ' # Version  '
+ # Version  
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date  '
+ #  Run Date  
+echo " # "
++ echo ' # '
+ # 
+#NETW=$2
+SV=$1
++ SV=L1
+SAT=$2
++ SAT=GISL1
+ARC=$3
++ ARC=w30430
+LVER=$4
++ LVER=SIM_E10
+disk=/umbc/epavlis/data01/LOCAL/magdak
++ disk=/umbc/epavlis/data01/LOCAL/magdak
+mkdir -p /tmp/magda
++ mkdir -p /tmp/magda
+cd /tmp/magda
++ cd /tmp/magda
+mkdir ${CASE}$$
++ mkdir DAILY32693
+cd ${CASE}$$
+
++ cd DAILY32693
+TMPP=/tmp/magda/${CASE}$$
++ TMPP=/tmp/magda/DAILY32693
+## you do not need the next cmd, you are already there!
+#cd $TMPP
+export TMPP
+
++ export TMPP
+dirlast1=$disk/INFILES/SIM
+
++ dirlast1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM
+##This file must contain in one column all the arc names you want to process:
+
+#INFILE1=$disk/INFILES/SIM/ARC_2016_ALL
+INFILE1=$disk/INFILES/SIM/LIST_ND_OPS
+
+
+
++ INFILE1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/LIST_ND_OPS
+##while read ARC YR START STOP 
+#do
+# AT_L1: 7603901
+cat  ${dirlast1}/SAT_${SV} > SAT
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT_L1
++ 1> SAT
+# EPOCH              AAAAA   0 0.0000000 AAAAA01 0 0.0000000BBBBBB   000.0000000
+#cat  ${dirlast1}/data_OPS  > t0
+#sed -e "s/AAAAA/$START/g" t0 > t1
+#sed -e "s/BBBBBB/$STOP/g" t1 > t2
+grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/d_base/trnd/DR/DAILY/v${SNX_VER}/${ARC} > data
++ grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL1/d_base/trnd/DR/DAILY/v180/w30430
++ 1> data
+#cp t2 data 
+#STATIONS_L12_ITRF2008_2016 - station list (copy 2011) 
+#cut -c12-19  ${dirlast1}/STATIONS_L12_ITRF2008_2016 > STATIONS
+##
+#NEW
+#cp /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/output/DATACATS/DAILY/DR/${ARC}.w?3  t0
+##cut -c58-65 t0 > t1 
+#cut -c56-65 t0 > t1 
+#sort -u t1 > t2 
+#cp t2 STATIONS1
+#cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/stat_2014-2016 STATIONS2
+#cat STATIONS2 >> STATIONS1
+#sed -e "s/ //g" STATIONS1 > STATIONS11
+#sort -u STATIONS11 > STATIONS
+#
+#zgrep "TIMVEL" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/SLRF2008/DAILY/${ARC}.adj.Z > S0
+zgrep "TIMVE" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/${ARC}.adj.gz > S0
++ zgrep TIMVE /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/w30430.adj.gz
++ 1> S0
+cut -c13-20 S0> S1
++ cut -c13-20 S0
++ 1> S1
+grep -v "0000$" S1 > S2
++ grep -v '0000$' S1
++ 1> S2
+sort -u S2 > S3
++ sort -u S2
++ 1> S3
+#grep -vf S3 STATIONS   > S4
+#echo $( cat S4)> S4  
+#sed "s/ / -e /g" S4 > S5   
+#read line < S5   
+#grep -v -e $line STATIONS > STATIONS0
+#cp STATIONS0 STATIONS
+cp S3 STATIONS
++ cp S3 STATIONS
+#   fi
+#cp  ${dirlast1}/stat_2014-2016  STATIONS
+#info simulations 120 120 20 51 0 0 120
+cat  ${dirlast1}/info_$LVER > info
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/info_SIM_E10
++ 1> info
+$disk/EXECUTABLES/FILES_17_150205.x
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/FILES_17_150205.x
+ 230430230507   0 0
+#$disk/EXECUTABLES/FILE_17_120618.x
+cp ftn17 $disk/SIMULATIONS/SLR/${SAT}/schedules/${ARC}
++ cp ftn17 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/schedules/w30430
+# 
+#exit 2015
+#done < $INFILE1
+cd  ..
++ cd ..
+###\rm -r ${CASE}$$
+
+
+#rm *
+exit
+
+
+
+
+
+
++ exit
++ TYPE_SIM=DR_SIM
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E100 GISL1 2023 DR_SIM . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E100.DAILY..GISL1 2>& 1
++ TYPE_SIM=DR_SIM1
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E101 GISL1 2023 DR_SIM1 . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E101.DAILY..GISL1 2>& 1
++ read SAT SV
++ LVER=SIM_E10
++ echo SIM_E10
+SIM_E10
++ export SAT SV
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR/FILES_17_OPS_D_SIM_v180_P2 L2 GISL2 w30430 SIM_E10 GISL2
+set -xv
+
+
+
+
++ set -xv
+Date=`date +%y%m%d`
+date +%y%m%d
++ date +%y%m%d
++ Date=230621
+#DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+
+echo " # "
++ echo ' # '
+ # 
+echo " # $SCR_NAME $* "
++ echo ' #  L2 GISL2 w30430 SIM_E10 GISL2 '
+ #  L2 GISL2 w30430 SIM_E10 GISL2 
+echo " # "
++ echo ' # '
+ # 
+echo " # Version $SCR_VERS "
++ echo ' # Version  '
+ # Version  
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date  '
+ #  Run Date  
+echo " # "
++ echo ' # '
+ # 
+#NETW=$2
+SV=$1
++ SV=L2
+SAT=$2
++ SAT=GISL2
+ARC=$3
++ ARC=w30430
+LVER=$4
++ LVER=SIM_E10
+disk=/umbc/epavlis/data01/LOCAL/magdak
++ disk=/umbc/epavlis/data01/LOCAL/magdak
+mkdir -p /tmp/magda
++ mkdir -p /tmp/magda
+cd /tmp/magda
++ cd /tmp/magda
+mkdir ${CASE}$$
++ mkdir DAILY610
+cd ${CASE}$$
+
++ cd DAILY610
+TMPP=/tmp/magda/${CASE}$$
++ TMPP=/tmp/magda/DAILY610
+## you do not need the next cmd, you are already there!
+#cd $TMPP
+export TMPP
+
++ export TMPP
+dirlast1=$disk/INFILES/SIM
+
++ dirlast1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM
+##This file must contain in one column all the arc names you want to process:
+
+#INFILE1=$disk/INFILES/SIM/ARC_2016_ALL
+INFILE1=$disk/INFILES/SIM/LIST_ND_OPS
+
+
+
++ INFILE1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/LIST_ND_OPS
+##while read ARC YR START STOP 
+#do
+# AT_L1: 7603901
+cat  ${dirlast1}/SAT_${SV} > SAT
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT_L2
++ 1> SAT
+# EPOCH              AAAAA   0 0.0000000 AAAAA01 0 0.0000000BBBBBB   000.0000000
+#cat  ${dirlast1}/data_OPS  > t0
+#sed -e "s/AAAAA/$START/g" t0 > t1
+#sed -e "s/BBBBBB/$STOP/g" t1 > t2
+grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/d_base/trnd/DR/DAILY/v${SNX_VER}/${ARC} > data
++ grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL2/d_base/trnd/DR/DAILY/v180/w30430
++ 1> data
+#cp t2 data 
+#STATIONS_L12_ITRF2008_2016 - station list (copy 2011) 
+#cut -c12-19  ${dirlast1}/STATIONS_L12_ITRF2008_2016 > STATIONS
+##
+#NEW
+#cp /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/output/DATACATS/DAILY/DR/${ARC}.w?3  t0
+##cut -c58-65 t0 > t1 
+#cut -c56-65 t0 > t1 
+#sort -u t1 > t2 
+#cp t2 STATIONS1
+#cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/stat_2014-2016 STATIONS2
+#cat STATIONS2 >> STATIONS1
+#sed -e "s/ //g" STATIONS1 > STATIONS11
+#sort -u STATIONS11 > STATIONS
+#
+#zgrep "TIMVEL" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/SLRF2008/DAILY/${ARC}.adj.Z > S0
+zgrep "TIMVE" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/${ARC}.adj.gz > S0
++ zgrep TIMVE /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/w30430.adj.gz
++ 1> S0
+cut -c13-20 S0> S1
++ cut -c13-20 S0
++ 1> S1
+grep -v "0000$" S1 > S2
++ grep -v '0000$' S1
++ 1> S2
+sort -u S2 > S3
++ sort -u S2
++ 1> S3
+#grep -vf S3 STATIONS   > S4
+#echo $( cat S4)> S4  
+#sed "s/ / -e /g" S4 > S5   
+#read line < S5   
+#grep -v -e $line STATIONS > STATIONS0
+#cp STATIONS0 STATIONS
+cp S3 STATIONS
++ cp S3 STATIONS
+#   fi
+#cp  ${dirlast1}/stat_2014-2016  STATIONS
+#info simulations 120 120 20 51 0 0 120
+cat  ${dirlast1}/info_$LVER > info
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/info_SIM_E10
++ 1> info
+$disk/EXECUTABLES/FILES_17_150205.x
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/FILES_17_150205.x
+ 230430230507   0 0
+#$disk/EXECUTABLES/FILE_17_120618.x
+cp ftn17 $disk/SIMULATIONS/SLR/${SAT}/schedules/${ARC}
++ cp ftn17 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/schedules/w30430
+# 
+#exit 2015
+#done < $INFILE1
+cd  ..
++ cd ..
+###\rm -r ${CASE}$$
+
+
+#rm *
+exit
+
+
+
+
+
+
++ exit
++ TYPE_SIM=DR_SIM
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E100 GISL2 2023 DR_SIM . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E100.DAILY..GISL2 2>& 1
++ TYPE_SIM=DR_SIM1
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E101 GISL2 2023 DR_SIM1 . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E101.DAILY..GISL2 2>& 1
++ read SAT SV
++ LVER=SIM_E10
++ echo SIM_E10
+SIM_E10
++ export SAT SV
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR/FILES_17_OPS_D_SIM_v180_P2 E1 ETA1 w30430 SIM_E10 ETA1
+set -xv
+
+
+
+
++ set -xv
+Date=`date +%y%m%d`
+date +%y%m%d
++ date +%y%m%d
++ Date=230621
+#DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+
+echo " # "
++ echo ' # '
+ # 
+echo " # $SCR_NAME $* "
++ echo ' #  E1 ETA1 w30430 SIM_E10 ETA1 '
+ #  E1 ETA1 w30430 SIM_E10 ETA1 
+echo " # "
++ echo ' # '
+ # 
+echo " # Version $SCR_VERS "
++ echo ' # Version  '
+ # Version  
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date  '
+ #  Run Date  
+echo " # "
++ echo ' # '
+ # 
+#NETW=$2
+SV=$1
++ SV=E1
+SAT=$2
++ SAT=ETA1
+ARC=$3
++ ARC=w30430
+LVER=$4
++ LVER=SIM_E10
+disk=/umbc/epavlis/data01/LOCAL/magdak
++ disk=/umbc/epavlis/data01/LOCAL/magdak
+mkdir -p /tmp/magda
++ mkdir -p /tmp/magda
+cd /tmp/magda
++ cd /tmp/magda
+mkdir ${CASE}$$
++ mkdir DAILY1009
+cd ${CASE}$$
+
++ cd DAILY1009
+TMPP=/tmp/magda/${CASE}$$
++ TMPP=/tmp/magda/DAILY1009
+## you do not need the next cmd, you are already there!
+#cd $TMPP
+export TMPP
+
++ export TMPP
+dirlast1=$disk/INFILES/SIM
+
++ dirlast1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM
+##This file must contain in one column all the arc names you want to process:
+
+#INFILE1=$disk/INFILES/SIM/ARC_2016_ALL
+INFILE1=$disk/INFILES/SIM/LIST_ND_OPS
+
+
+
++ INFILE1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/LIST_ND_OPS
+##while read ARC YR START STOP 
+#do
+# AT_L1: 7603901
+cat  ${dirlast1}/SAT_${SV} > SAT
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT_E1
++ 1> SAT
+# EPOCH              AAAAA   0 0.0000000 AAAAA01 0 0.0000000BBBBBB   000.0000000
+#cat  ${dirlast1}/data_OPS  > t0
+#sed -e "s/AAAAA/$START/g" t0 > t1
+#sed -e "s/BBBBBB/$STOP/g" t1 > t2
+grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/d_base/trnd/DR/DAILY/v${SNX_VER}/${ARC} > data
++ grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA1/d_base/trnd/DR/DAILY/v180/w30430
++ 1> data
+#cp t2 data 
+#STATIONS_L12_ITRF2008_2016 - station list (copy 2011) 
+#cut -c12-19  ${dirlast1}/STATIONS_L12_ITRF2008_2016 > STATIONS
+##
+#NEW
+#cp /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/output/DATACATS/DAILY/DR/${ARC}.w?3  t0
+##cut -c58-65 t0 > t1 
+#cut -c56-65 t0 > t1 
+#sort -u t1 > t2 
+#cp t2 STATIONS1
+#cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/stat_2014-2016 STATIONS2
+#cat STATIONS2 >> STATIONS1
+#sed -e "s/ //g" STATIONS1 > STATIONS11
+#sort -u STATIONS11 > STATIONS
+#
+#zgrep "TIMVEL" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/SLRF2008/DAILY/${ARC}.adj.Z > S0
+zgrep "TIMVE" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/${ARC}.adj.gz > S0
++ zgrep TIMVE /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/w30430.adj.gz
++ 1> S0
+cut -c13-20 S0> S1
++ cut -c13-20 S0
++ 1> S1
+grep -v "0000$" S1 > S2
++ grep -v '0000$' S1
++ 1> S2
+sort -u S2 > S3
++ sort -u S2
++ 1> S3
+#grep -vf S3 STATIONS   > S4
+#echo $( cat S4)> S4  
+#sed "s/ / -e /g" S4 > S5   
+#read line < S5   
+#grep -v -e $line STATIONS > STATIONS0
+#cp STATIONS0 STATIONS
+cp S3 STATIONS
++ cp S3 STATIONS
+#   fi
+#cp  ${dirlast1}/stat_2014-2016  STATIONS
+#info simulations 120 120 20 51 0 0 120
+cat  ${dirlast1}/info_$LVER > info
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/info_SIM_E10
++ 1> info
+$disk/EXECUTABLES/FILES_17_150205.x
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/FILES_17_150205.x
+ 230430230507   0 0
+#$disk/EXECUTABLES/FILE_17_120618.x
+cp ftn17 $disk/SIMULATIONS/SLR/${SAT}/schedules/${ARC}
++ cp ftn17 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/schedules/w30430
+# 
+#exit 2015
+#done < $INFILE1
+cd  ..
++ cd ..
+###\rm -r ${CASE}$$
+
+
+#rm *
+exit
+
+
+
+
+
+
++ exit
++ TYPE_SIM=DR_SIM
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E100 ETA1 2023 DR_SIM . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E100.DAILY..ETA1 2>& 1
++ TYPE_SIM=DR_SIM1
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E101 ETA1 2023 DR_SIM1 . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E101.DAILY..ETA1 2>& 1
++ read SAT SV
++ LVER=SIM_E10
++ echo SIM_E10
+SIM_E10
++ export SAT SV
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR/FILES_17_OPS_D_SIM_v180_P2 E2 ETA2 w30430 SIM_E10 ETA2
+set -xv
+
+
+
+
++ set -xv
+Date=`date +%y%m%d`
+date +%y%m%d
++ date +%y%m%d
++ Date=230621
+#DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+
+echo " # "
++ echo ' # '
+ # 
+echo " # $SCR_NAME $* "
++ echo ' #  E2 ETA2 w30430 SIM_E10 ETA2 '
+ #  E2 ETA2 w30430 SIM_E10 ETA2 
+echo " # "
++ echo ' # '
+ # 
+echo " # Version $SCR_VERS "
++ echo ' # Version  '
+ # Version  
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date  '
+ #  Run Date  
+echo " # "
++ echo ' # '
+ # 
+#NETW=$2
+SV=$1
++ SV=E2
+SAT=$2
++ SAT=ETA2
+ARC=$3
++ ARC=w30430
+LVER=$4
++ LVER=SIM_E10
+disk=/umbc/epavlis/data01/LOCAL/magdak
++ disk=/umbc/epavlis/data01/LOCAL/magdak
+mkdir -p /tmp/magda
++ mkdir -p /tmp/magda
+cd /tmp/magda
++ cd /tmp/magda
+mkdir ${CASE}$$
++ mkdir DAILY1354
+cd ${CASE}$$
+
++ cd DAILY1354
+TMPP=/tmp/magda/${CASE}$$
++ TMPP=/tmp/magda/DAILY1354
+## you do not need the next cmd, you are already there!
+#cd $TMPP
+export TMPP
+
++ export TMPP
+dirlast1=$disk/INFILES/SIM
+
++ dirlast1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM
+##This file must contain in one column all the arc names you want to process:
+
+#INFILE1=$disk/INFILES/SIM/ARC_2016_ALL
+INFILE1=$disk/INFILES/SIM/LIST_ND_OPS
+
+
+
++ INFILE1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/LIST_ND_OPS
+##while read ARC YR START STOP 
+#do
+# AT_L1: 7603901
+cat  ${dirlast1}/SAT_${SV} > SAT
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT_E2
++ 1> SAT
+# EPOCH              AAAAA   0 0.0000000 AAAAA01 0 0.0000000BBBBBB   000.0000000
+#cat  ${dirlast1}/data_OPS  > t0
+#sed -e "s/AAAAA/$START/g" t0 > t1
+#sed -e "s/BBBBBB/$STOP/g" t1 > t2
+grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/d_base/trnd/DR/DAILY/v${SNX_VER}/${ARC} > data
++ grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA2/d_base/trnd/DR/DAILY/v180/w30430
++ 1> data
+#cp t2 data 
+#STATIONS_L12_ITRF2008_2016 - station list (copy 2011) 
+#cut -c12-19  ${dirlast1}/STATIONS_L12_ITRF2008_2016 > STATIONS
+##
+#NEW
+#cp /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/output/DATACATS/DAILY/DR/${ARC}.w?3  t0
+##cut -c58-65 t0 > t1 
+#cut -c56-65 t0 > t1 
+#sort -u t1 > t2 
+#cp t2 STATIONS1
+#cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/stat_2014-2016 STATIONS2
+#cat STATIONS2 >> STATIONS1
+#sed -e "s/ //g" STATIONS1 > STATIONS11
+#sort -u STATIONS11 > STATIONS
+#
+#zgrep "TIMVEL" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/SLRF2008/DAILY/${ARC}.adj.Z > S0
+zgrep "TIMVE" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/${ARC}.adj.gz > S0
++ zgrep TIMVE /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/w30430.adj.gz
++ 1> S0
+cut -c13-20 S0> S1
++ cut -c13-20 S0
++ 1> S1
+grep -v "0000$" S1 > S2
++ grep -v '0000$' S1
++ 1> S2
+sort -u S2 > S3
++ sort -u S2
++ 1> S3
+#grep -vf S3 STATIONS   > S4
+#echo $( cat S4)> S4  
+#sed "s/ / -e /g" S4 > S5   
+#read line < S5   
+#grep -v -e $line STATIONS > STATIONS0
+#cp STATIONS0 STATIONS
+cp S3 STATIONS
++ cp S3 STATIONS
+#   fi
+#cp  ${dirlast1}/stat_2014-2016  STATIONS
+#info simulations 120 120 20 51 0 0 120
+cat  ${dirlast1}/info_$LVER > info
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/info_SIM_E10
++ 1> info
+$disk/EXECUTABLES/FILES_17_150205.x
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/FILES_17_150205.x
+ 230430230507   0 0
+#$disk/EXECUTABLES/FILE_17_120618.x
+cp ftn17 $disk/SIMULATIONS/SLR/${SAT}/schedules/${ARC}
++ cp ftn17 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/schedules/w30430
+# 
+#exit 2015
+#done < $INFILE1
+cd  ..
++ cd ..
+###\rm -r ${CASE}$$
+
+
+#rm *
+exit
+
+
+
+
+
+
++ exit
++ TYPE_SIM=DR_SIM
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E100 ETA2 2023 DR_SIM . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E100.DAILY..ETA2 2>& 1
++ TYPE_SIM=DR_SIM1
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E101 ETA2 2023 DR_SIM1 . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E101.DAILY..ETA2 2>& 1
++ read SAT SV
++ read ELCUT
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT
++ read SAT SV
++ LVER=SIM_E20
++ echo SIM_E20
+SIM_E20
++ export SAT SV
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR/FILES_17_OPS_D_SIM_v180_P2 L1 GISL1 w30430 SIM_E20 GISL1
+set -xv
+
+
+
+
++ set -xv
+Date=`date +%y%m%d`
+date +%y%m%d
++ date +%y%m%d
++ Date=230621
+#DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+
+echo " # "
++ echo ' # '
+ # 
+echo " # $SCR_NAME $* "
++ echo ' #  L1 GISL1 w30430 SIM_E20 GISL1 '
+ #  L1 GISL1 w30430 SIM_E20 GISL1 
+echo " # "
++ echo ' # '
+ # 
+echo " # Version $SCR_VERS "
++ echo ' # Version  '
+ # Version  
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date  '
+ #  Run Date  
+echo " # "
++ echo ' # '
+ # 
+#NETW=$2
+SV=$1
++ SV=L1
+SAT=$2
++ SAT=GISL1
+ARC=$3
++ ARC=w30430
+LVER=$4
++ LVER=SIM_E20
+disk=/umbc/epavlis/data01/LOCAL/magdak
++ disk=/umbc/epavlis/data01/LOCAL/magdak
+mkdir -p /tmp/magda
++ mkdir -p /tmp/magda
+cd /tmp/magda
++ cd /tmp/magda
+mkdir ${CASE}$$
++ mkdir DAILY1779
+cd ${CASE}$$
+
++ cd DAILY1779
+TMPP=/tmp/magda/${CASE}$$
++ TMPP=/tmp/magda/DAILY1779
+## you do not need the next cmd, you are already there!
+#cd $TMPP
+export TMPP
+
++ export TMPP
+dirlast1=$disk/INFILES/SIM
+
++ dirlast1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM
+##This file must contain in one column all the arc names you want to process:
+
+#INFILE1=$disk/INFILES/SIM/ARC_2016_ALL
+INFILE1=$disk/INFILES/SIM/LIST_ND_OPS
+
+
+
++ INFILE1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/LIST_ND_OPS
+##while read ARC YR START STOP 
+#do
+# AT_L1: 7603901
+cat  ${dirlast1}/SAT_${SV} > SAT
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT_L1
++ 1> SAT
+# EPOCH              AAAAA   0 0.0000000 AAAAA01 0 0.0000000BBBBBB   000.0000000
+#cat  ${dirlast1}/data_OPS  > t0
+#sed -e "s/AAAAA/$START/g" t0 > t1
+#sed -e "s/BBBBBB/$STOP/g" t1 > t2
+grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/d_base/trnd/DR/DAILY/v${SNX_VER}/${ARC} > data
++ grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL1/d_base/trnd/DR/DAILY/v180/w30430
++ 1> data
+#cp t2 data 
+#STATIONS_L12_ITRF2008_2016 - station list (copy 2011) 
+#cut -c12-19  ${dirlast1}/STATIONS_L12_ITRF2008_2016 > STATIONS
+##
+#NEW
+#cp /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/output/DATACATS/DAILY/DR/${ARC}.w?3  t0
+##cut -c58-65 t0 > t1 
+#cut -c56-65 t0 > t1 
+#sort -u t1 > t2 
+#cp t2 STATIONS1
+#cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/stat_2014-2016 STATIONS2
+#cat STATIONS2 >> STATIONS1
+#sed -e "s/ //g" STATIONS1 > STATIONS11
+#sort -u STATIONS11 > STATIONS
+#
+#zgrep "TIMVEL" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/SLRF2008/DAILY/${ARC}.adj.Z > S0
+zgrep "TIMVE" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/${ARC}.adj.gz > S0
++ zgrep TIMVE /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/w30430.adj.gz
++ 1> S0
+cut -c13-20 S0> S1
++ cut -c13-20 S0
++ 1> S1
+grep -v "0000$" S1 > S2
++ grep -v '0000$' S1
++ 1> S2
+sort -u S2 > S3
++ sort -u S2
++ 1> S3
+#grep -vf S3 STATIONS   > S4
+#echo $( cat S4)> S4  
+#sed "s/ / -e /g" S4 > S5   
+#read line < S5   
+#grep -v -e $line STATIONS > STATIONS0
+#cp STATIONS0 STATIONS
+cp S3 STATIONS
++ cp S3 STATIONS
+#   fi
+#cp  ${dirlast1}/stat_2014-2016  STATIONS
+#info simulations 120 120 20 51 0 0 120
+cat  ${dirlast1}/info_$LVER > info
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/info_SIM_E20
++ 1> info
+$disk/EXECUTABLES/FILES_17_150205.x
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/FILES_17_150205.x
+ 230430230507   0 0
+#$disk/EXECUTABLES/FILE_17_120618.x
+cp ftn17 $disk/SIMULATIONS/SLR/${SAT}/schedules/${ARC}
++ cp ftn17 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/schedules/w30430
+# 
+#exit 2015
+#done < $INFILE1
+cd  ..
++ cd ..
+###\rm -r ${CASE}$$
+
+
+#rm *
+exit
+
+
+
+
+
+
++ exit
++ TYPE_SIM=DR_SIM
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E200 GISL1 2023 DR_SIM . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E200.DAILY..GISL1 2>& 1
++ TYPE_SIM=DR_SIM1
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E201 GISL1 2023 DR_SIM1 . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E201.DAILY..GISL1 2>& 1
++ read SAT SV
++ LVER=SIM_E20
++ echo SIM_E20
+SIM_E20
++ export SAT SV
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR/FILES_17_OPS_D_SIM_v180_P2 L2 GISL2 w30430 SIM_E20 GISL2
+set -xv
+
+
+
+
++ set -xv
+Date=`date +%y%m%d`
+date +%y%m%d
++ date +%y%m%d
++ Date=230621
+#DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+
+echo " # "
++ echo ' # '
+ # 
+echo " # $SCR_NAME $* "
++ echo ' #  L2 GISL2 w30430 SIM_E20 GISL2 '
+ #  L2 GISL2 w30430 SIM_E20 GISL2 
+echo " # "
++ echo ' # '
+ # 
+echo " # Version $SCR_VERS "
++ echo ' # Version  '
+ # Version  
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date  '
+ #  Run Date  
+echo " # "
++ echo ' # '
+ # 
+#NETW=$2
+SV=$1
++ SV=L2
+SAT=$2
++ SAT=GISL2
+ARC=$3
++ ARC=w30430
+LVER=$4
++ LVER=SIM_E20
+disk=/umbc/epavlis/data01/LOCAL/magdak
++ disk=/umbc/epavlis/data01/LOCAL/magdak
+mkdir -p /tmp/magda
++ mkdir -p /tmp/magda
+cd /tmp/magda
++ cd /tmp/magda
+mkdir ${CASE}$$
++ mkdir DAILY2161
+cd ${CASE}$$
+
++ cd DAILY2161
+TMPP=/tmp/magda/${CASE}$$
++ TMPP=/tmp/magda/DAILY2161
+## you do not need the next cmd, you are already there!
+#cd $TMPP
+export TMPP
+
++ export TMPP
+dirlast1=$disk/INFILES/SIM
+
++ dirlast1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM
+##This file must contain in one column all the arc names you want to process:
+
+#INFILE1=$disk/INFILES/SIM/ARC_2016_ALL
+INFILE1=$disk/INFILES/SIM/LIST_ND_OPS
+
+
+
++ INFILE1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/LIST_ND_OPS
+##while read ARC YR START STOP 
+#do
+# AT_L1: 7603901
+cat  ${dirlast1}/SAT_${SV} > SAT
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT_L2
++ 1> SAT
+# EPOCH              AAAAA   0 0.0000000 AAAAA01 0 0.0000000BBBBBB   000.0000000
+#cat  ${dirlast1}/data_OPS  > t0
+#sed -e "s/AAAAA/$START/g" t0 > t1
+#sed -e "s/BBBBBB/$STOP/g" t1 > t2
+grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/d_base/trnd/DR/DAILY/v${SNX_VER}/${ARC} > data
++ grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL2/d_base/trnd/DR/DAILY/v180/w30430
++ 1> data
+#cp t2 data 
+#STATIONS_L12_ITRF2008_2016 - station list (copy 2011) 
+#cut -c12-19  ${dirlast1}/STATIONS_L12_ITRF2008_2016 > STATIONS
+##
+#NEW
+#cp /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/output/DATACATS/DAILY/DR/${ARC}.w?3  t0
+##cut -c58-65 t0 > t1 
+#cut -c56-65 t0 > t1 
+#sort -u t1 > t2 
+#cp t2 STATIONS1
+#cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/stat_2014-2016 STATIONS2
+#cat STATIONS2 >> STATIONS1
+#sed -e "s/ //g" STATIONS1 > STATIONS11
+#sort -u STATIONS11 > STATIONS
+#
+#zgrep "TIMVEL" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/SLRF2008/DAILY/${ARC}.adj.Z > S0
+zgrep "TIMVE" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/${ARC}.adj.gz > S0
++ zgrep TIMVE /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/w30430.adj.gz
++ 1> S0
+cut -c13-20 S0> S1
++ cut -c13-20 S0
++ 1> S1
+grep -v "0000$" S1 > S2
++ grep -v '0000$' S1
++ 1> S2
+sort -u S2 > S3
++ sort -u S2
++ 1> S3
+#grep -vf S3 STATIONS   > S4
+#echo $( cat S4)> S4  
+#sed "s/ / -e /g" S4 > S5   
+#read line < S5   
+#grep -v -e $line STATIONS > STATIONS0
+#cp STATIONS0 STATIONS
+cp S3 STATIONS
++ cp S3 STATIONS
+#   fi
+#cp  ${dirlast1}/stat_2014-2016  STATIONS
+#info simulations 120 120 20 51 0 0 120
+cat  ${dirlast1}/info_$LVER > info
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/info_SIM_E20
++ 1> info
+$disk/EXECUTABLES/FILES_17_150205.x
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/FILES_17_150205.x
+ 230430230507   0 0
+#$disk/EXECUTABLES/FILE_17_120618.x
+cp ftn17 $disk/SIMULATIONS/SLR/${SAT}/schedules/${ARC}
++ cp ftn17 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/schedules/w30430
+# 
+#exit 2015
+#done < $INFILE1
+cd  ..
++ cd ..
+###\rm -r ${CASE}$$
+
+
+#rm *
+exit
+
+
+
+
+
+
++ exit
++ TYPE_SIM=DR_SIM
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E200 GISL2 2023 DR_SIM . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E200.DAILY..GISL2 2>& 1
++ TYPE_SIM=DR_SIM1
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E201 GISL2 2023 DR_SIM1 . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E201.DAILY..GISL2 2>& 1
++ read SAT SV
++ LVER=SIM_E20
++ echo SIM_E20
+SIM_E20
++ export SAT SV
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR/FILES_17_OPS_D_SIM_v180_P2 E1 ETA1 w30430 SIM_E20 ETA1
+set -xv
+
+
+
+
++ set -xv
+Date=`date +%y%m%d`
+date +%y%m%d
++ date +%y%m%d
++ Date=230621
+#DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+
+echo " # "
++ echo ' # '
+ # 
+echo " # $SCR_NAME $* "
++ echo ' #  E1 ETA1 w30430 SIM_E20 ETA1 '
+ #  E1 ETA1 w30430 SIM_E20 ETA1 
+echo " # "
++ echo ' # '
+ # 
+echo " # Version $SCR_VERS "
++ echo ' # Version  '
+ # Version  
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date  '
+ #  Run Date  
+echo " # "
++ echo ' # '
+ # 
+#NETW=$2
+SV=$1
++ SV=E1
+SAT=$2
++ SAT=ETA1
+ARC=$3
++ ARC=w30430
+LVER=$4
++ LVER=SIM_E20
+disk=/umbc/epavlis/data01/LOCAL/magdak
++ disk=/umbc/epavlis/data01/LOCAL/magdak
+mkdir -p /tmp/magda
++ mkdir -p /tmp/magda
+cd /tmp/magda
++ cd /tmp/magda
+mkdir ${CASE}$$
++ mkdir DAILY2508
+cd ${CASE}$$
+
++ cd DAILY2508
+TMPP=/tmp/magda/${CASE}$$
++ TMPP=/tmp/magda/DAILY2508
+## you do not need the next cmd, you are already there!
+#cd $TMPP
+export TMPP
+
++ export TMPP
+dirlast1=$disk/INFILES/SIM
+
++ dirlast1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM
+##This file must contain in one column all the arc names you want to process:
+
+#INFILE1=$disk/INFILES/SIM/ARC_2016_ALL
+INFILE1=$disk/INFILES/SIM/LIST_ND_OPS
+
+
+
++ INFILE1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/LIST_ND_OPS
+##while read ARC YR START STOP 
+#do
+# AT_L1: 7603901
+cat  ${dirlast1}/SAT_${SV} > SAT
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT_E1
++ 1> SAT
+# EPOCH              AAAAA   0 0.0000000 AAAAA01 0 0.0000000BBBBBB   000.0000000
+#cat  ${dirlast1}/data_OPS  > t0
+#sed -e "s/AAAAA/$START/g" t0 > t1
+#sed -e "s/BBBBBB/$STOP/g" t1 > t2
+grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/d_base/trnd/DR/DAILY/v${SNX_VER}/${ARC} > data
++ grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA1/d_base/trnd/DR/DAILY/v180/w30430
++ 1> data
+#cp t2 data 
+#STATIONS_L12_ITRF2008_2016 - station list (copy 2011) 
+#cut -c12-19  ${dirlast1}/STATIONS_L12_ITRF2008_2016 > STATIONS
+##
+#NEW
+#cp /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/output/DATACATS/DAILY/DR/${ARC}.w?3  t0
+##cut -c58-65 t0 > t1 
+#cut -c56-65 t0 > t1 
+#sort -u t1 > t2 
+#cp t2 STATIONS1
+#cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/stat_2014-2016 STATIONS2
+#cat STATIONS2 >> STATIONS1
+#sed -e "s/ //g" STATIONS1 > STATIONS11
+#sort -u STATIONS11 > STATIONS
+#
+#zgrep "TIMVEL" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/SLRF2008/DAILY/${ARC}.adj.Z > S0
+zgrep "TIMVE" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/${ARC}.adj.gz > S0
++ zgrep TIMVE /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/w30430.adj.gz
++ 1> S0
+cut -c13-20 S0> S1
++ cut -c13-20 S0
++ 1> S1
+grep -v "0000$" S1 > S2
++ grep -v '0000$' S1
++ 1> S2
+sort -u S2 > S3
++ sort -u S2
++ 1> S3
+#grep -vf S3 STATIONS   > S4
+#echo $( cat S4)> S4  
+#sed "s/ / -e /g" S4 > S5   
+#read line < S5   
+#grep -v -e $line STATIONS > STATIONS0
+#cp STATIONS0 STATIONS
+cp S3 STATIONS
++ cp S3 STATIONS
+#   fi
+#cp  ${dirlast1}/stat_2014-2016  STATIONS
+#info simulations 120 120 20 51 0 0 120
+cat  ${dirlast1}/info_$LVER > info
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/info_SIM_E20
++ 1> info
+$disk/EXECUTABLES/FILES_17_150205.x
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/FILES_17_150205.x
+ 230430230507   0 0
+#$disk/EXECUTABLES/FILE_17_120618.x
+cp ftn17 $disk/SIMULATIONS/SLR/${SAT}/schedules/${ARC}
++ cp ftn17 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/schedules/w30430
+# 
+#exit 2015
+#done < $INFILE1
+cd  ..
++ cd ..
+###\rm -r ${CASE}$$
+
+
+#rm *
+exit
+
+
+
+
+
+
++ exit
++ TYPE_SIM=DR_SIM
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E200 ETA1 2023 DR_SIM . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E200.DAILY..ETA1 2>& 1
++ TYPE_SIM=DR_SIM1
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E201 ETA1 2023 DR_SIM1 . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E201.DAILY..ETA1 2>& 1
++ read SAT SV
++ LVER=SIM_E20
++ echo SIM_E20
+SIM_E20
++ export SAT SV
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR/FILES_17_OPS_D_SIM_v180_P2 E2 ETA2 w30430 SIM_E20 ETA2
+set -xv
+
+
+
+
++ set -xv
+Date=`date +%y%m%d`
+date +%y%m%d
++ date +%y%m%d
++ Date=230621
+#DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+
+echo " # "
++ echo ' # '
+ # 
+echo " # $SCR_NAME $* "
++ echo ' #  E2 ETA2 w30430 SIM_E20 ETA2 '
+ #  E2 ETA2 w30430 SIM_E20 ETA2 
+echo " # "
++ echo ' # '
+ # 
+echo " # Version $SCR_VERS "
++ echo ' # Version  '
+ # Version  
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date  '
+ #  Run Date  
+echo " # "
++ echo ' # '
+ # 
+#NETW=$2
+SV=$1
++ SV=E2
+SAT=$2
++ SAT=ETA2
+ARC=$3
++ ARC=w30430
+LVER=$4
++ LVER=SIM_E20
+disk=/umbc/epavlis/data01/LOCAL/magdak
++ disk=/umbc/epavlis/data01/LOCAL/magdak
+mkdir -p /tmp/magda
++ mkdir -p /tmp/magda
+cd /tmp/magda
++ cd /tmp/magda
+mkdir ${CASE}$$
++ mkdir DAILY2846
+cd ${CASE}$$
+
++ cd DAILY2846
+TMPP=/tmp/magda/${CASE}$$
++ TMPP=/tmp/magda/DAILY2846
+## you do not need the next cmd, you are already there!
+#cd $TMPP
+export TMPP
+
++ export TMPP
+dirlast1=$disk/INFILES/SIM
+
++ dirlast1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM
+##This file must contain in one column all the arc names you want to process:
+
+#INFILE1=$disk/INFILES/SIM/ARC_2016_ALL
+INFILE1=$disk/INFILES/SIM/LIST_ND_OPS
+
+
+
++ INFILE1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/LIST_ND_OPS
+##while read ARC YR START STOP 
+#do
+# AT_L1: 7603901
+cat  ${dirlast1}/SAT_${SV} > SAT
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT_E2
++ 1> SAT
+# EPOCH              AAAAA   0 0.0000000 AAAAA01 0 0.0000000BBBBBB   000.0000000
+#cat  ${dirlast1}/data_OPS  > t0
+#sed -e "s/AAAAA/$START/g" t0 > t1
+#sed -e "s/BBBBBB/$STOP/g" t1 > t2
+grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/d_base/trnd/DR/DAILY/v${SNX_VER}/${ARC} > data
++ grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA2/d_base/trnd/DR/DAILY/v180/w30430
++ 1> data
+#cp t2 data 
+#STATIONS_L12_ITRF2008_2016 - station list (copy 2011) 
+#cut -c12-19  ${dirlast1}/STATIONS_L12_ITRF2008_2016 > STATIONS
+##
+#NEW
+#cp /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/output/DATACATS/DAILY/DR/${ARC}.w?3  t0
+##cut -c58-65 t0 > t1 
+#cut -c56-65 t0 > t1 
+#sort -u t1 > t2 
+#cp t2 STATIONS1
+#cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/stat_2014-2016 STATIONS2
+#cat STATIONS2 >> STATIONS1
+#sed -e "s/ //g" STATIONS1 > STATIONS11
+#sort -u STATIONS11 > STATIONS
+#
+#zgrep "TIMVEL" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/SLRF2008/DAILY/${ARC}.adj.Z > S0
+zgrep "TIMVE" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/${ARC}.adj.gz > S0
++ zgrep TIMVE /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/w30430.adj.gz
++ 1> S0
+cut -c13-20 S0> S1
++ cut -c13-20 S0
++ 1> S1
+grep -v "0000$" S1 > S2
++ grep -v '0000$' S1
++ 1> S2
+sort -u S2 > S3
++ sort -u S2
++ 1> S3
+#grep -vf S3 STATIONS   > S4
+#echo $( cat S4)> S4  
+#sed "s/ / -e /g" S4 > S5   
+#read line < S5   
+#grep -v -e $line STATIONS > STATIONS0
+#cp STATIONS0 STATIONS
+cp S3 STATIONS
++ cp S3 STATIONS
+#   fi
+#cp  ${dirlast1}/stat_2014-2016  STATIONS
+#info simulations 120 120 20 51 0 0 120
+cat  ${dirlast1}/info_$LVER > info
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/info_SIM_E20
++ 1> info
+$disk/EXECUTABLES/FILES_17_150205.x
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/FILES_17_150205.x
+ 230430230507   0 0
+#$disk/EXECUTABLES/FILE_17_120618.x
+cp ftn17 $disk/SIMULATIONS/SLR/${SAT}/schedules/${ARC}
++ cp ftn17 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/schedules/w30430
+# 
+#exit 2015
+#done < $INFILE1
+cd  ..
++ cd ..
+###\rm -r ${CASE}$$
+
+
+#rm *
+exit
+
+
+
+
+
+
++ exit
++ TYPE_SIM=DR_SIM
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E200 ETA2 2023 DR_SIM . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E200.DAILY..ETA2 2>& 1
++ TYPE_SIM=DR_SIM1
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E201 ETA2 2023 DR_SIM1 . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E201.DAILY..ETA2 2>& 1
++ read SAT SV
++ read ELCUT
++ 0< /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT
++ read SAT SV
++ LVER=SIM_E30
++ echo SIM_E30
+SIM_E30
++ export SAT SV
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR/FILES_17_OPS_D_SIM_v180_P2 L1 GISL1 w30430 SIM_E30 GISL1
+set -xv
+
+
+
+
++ set -xv
+Date=`date +%y%m%d`
+date +%y%m%d
++ date +%y%m%d
++ Date=230621
+#DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+
+echo " # "
++ echo ' # '
+ # 
+echo " # $SCR_NAME $* "
++ echo ' #  L1 GISL1 w30430 SIM_E30 GISL1 '
+ #  L1 GISL1 w30430 SIM_E30 GISL1 
+echo " # "
++ echo ' # '
+ # 
+echo " # Version $SCR_VERS "
++ echo ' # Version  '
+ # Version  
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date  '
+ #  Run Date  
+echo " # "
++ echo ' # '
+ # 
+#NETW=$2
+SV=$1
++ SV=L1
+SAT=$2
++ SAT=GISL1
+ARC=$3
++ ARC=w30430
+LVER=$4
++ LVER=SIM_E30
+disk=/umbc/epavlis/data01/LOCAL/magdak
++ disk=/umbc/epavlis/data01/LOCAL/magdak
+mkdir -p /tmp/magda
++ mkdir -p /tmp/magda
+cd /tmp/magda
++ cd /tmp/magda
+mkdir ${CASE}$$
++ mkdir DAILY3187
+cd ${CASE}$$
+
++ cd DAILY3187
+TMPP=/tmp/magda/${CASE}$$
++ TMPP=/tmp/magda/DAILY3187
+## you do not need the next cmd, you are already there!
+#cd $TMPP
+export TMPP
+
++ export TMPP
+dirlast1=$disk/INFILES/SIM
+
++ dirlast1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM
+##This file must contain in one column all the arc names you want to process:
+
+#INFILE1=$disk/INFILES/SIM/ARC_2016_ALL
+INFILE1=$disk/INFILES/SIM/LIST_ND_OPS
+
+
+
++ INFILE1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/LIST_ND_OPS
+##while read ARC YR START STOP 
+#do
+# AT_L1: 7603901
+cat  ${dirlast1}/SAT_${SV} > SAT
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT_L1
++ 1> SAT
+# EPOCH              AAAAA   0 0.0000000 AAAAA01 0 0.0000000BBBBBB   000.0000000
+#cat  ${dirlast1}/data_OPS  > t0
+#sed -e "s/AAAAA/$START/g" t0 > t1
+#sed -e "s/BBBBBB/$STOP/g" t1 > t2
+grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/d_base/trnd/DR/DAILY/v${SNX_VER}/${ARC} > data
++ grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL1/d_base/trnd/DR/DAILY/v180/w30430
++ 1> data
+#cp t2 data 
+#STATIONS_L12_ITRF2008_2016 - station list (copy 2011) 
+#cut -c12-19  ${dirlast1}/STATIONS_L12_ITRF2008_2016 > STATIONS
+##
+#NEW
+#cp /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/output/DATACATS/DAILY/DR/${ARC}.w?3  t0
+##cut -c58-65 t0 > t1 
+#cut -c56-65 t0 > t1 
+#sort -u t1 > t2 
+#cp t2 STATIONS1
+#cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/stat_2014-2016 STATIONS2
+#cat STATIONS2 >> STATIONS1
+#sed -e "s/ //g" STATIONS1 > STATIONS11
+#sort -u STATIONS11 > STATIONS
+#
+#zgrep "TIMVEL" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/SLRF2008/DAILY/${ARC}.adj.Z > S0
+zgrep "TIMVE" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/${ARC}.adj.gz > S0
++ zgrep TIMVE /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/w30430.adj.gz
++ 1> S0
+cut -c13-20 S0> S1
++ cut -c13-20 S0
++ 1> S1
+grep -v "0000$" S1 > S2
++ grep -v '0000$' S1
++ 1> S2
+sort -u S2 > S3
++ sort -u S2
++ 1> S3
+#grep -vf S3 STATIONS   > S4
+#echo $( cat S4)> S4  
+#sed "s/ / -e /g" S4 > S5   
+#read line < S5   
+#grep -v -e $line STATIONS > STATIONS0
+#cp STATIONS0 STATIONS
+cp S3 STATIONS
++ cp S3 STATIONS
+#   fi
+#cp  ${dirlast1}/stat_2014-2016  STATIONS
+#info simulations 120 120 20 51 0 0 120
+cat  ${dirlast1}/info_$LVER > info
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/info_SIM_E30
++ 1> info
+$disk/EXECUTABLES/FILES_17_150205.x
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/FILES_17_150205.x
+ 230430230507   0 0
+#$disk/EXECUTABLES/FILE_17_120618.x
+cp ftn17 $disk/SIMULATIONS/SLR/${SAT}/schedules/${ARC}
++ cp ftn17 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL1/schedules/w30430
+# 
+#exit 2015
+#done < $INFILE1
+cd  ..
++ cd ..
+###\rm -r ${CASE}$$
+
+
+#rm *
+exit
+
+
+
+
+
+
++ exit
++ TYPE_SIM=DR_SIM
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E300 GISL1 2023 DR_SIM . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E300.DAILY..GISL1 2>& 1
++ TYPE_SIM=DR_SIM1
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E301 GISL1 2023 DR_SIM1 . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E301.DAILY..GISL1 2>& 1
++ read SAT SV
++ LVER=SIM_E30
++ echo SIM_E30
+SIM_E30
++ export SAT SV
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR/FILES_17_OPS_D_SIM_v180_P2 L2 GISL2 w30430 SIM_E30 GISL2
+set -xv
+
+
+
+
++ set -xv
+Date=`date +%y%m%d`
+date +%y%m%d
++ date +%y%m%d
++ Date=230621
+#DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+
+echo " # "
++ echo ' # '
+ # 
+echo " # $SCR_NAME $* "
++ echo ' #  L2 GISL2 w30430 SIM_E30 GISL2 '
+ #  L2 GISL2 w30430 SIM_E30 GISL2 
+echo " # "
++ echo ' # '
+ # 
+echo " # Version $SCR_VERS "
++ echo ' # Version  '
+ # Version  
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date  '
+ #  Run Date  
+echo " # "
++ echo ' # '
+ # 
+#NETW=$2
+SV=$1
++ SV=L2
+SAT=$2
++ SAT=GISL2
+ARC=$3
++ ARC=w30430
+LVER=$4
++ LVER=SIM_E30
+disk=/umbc/epavlis/data01/LOCAL/magdak
++ disk=/umbc/epavlis/data01/LOCAL/magdak
+mkdir -p /tmp/magda
++ mkdir -p /tmp/magda
+cd /tmp/magda
++ cd /tmp/magda
+mkdir ${CASE}$$
++ mkdir DAILY3533
+cd ${CASE}$$
+
++ cd DAILY3533
+TMPP=/tmp/magda/${CASE}$$
++ TMPP=/tmp/magda/DAILY3533
+## you do not need the next cmd, you are already there!
+#cd $TMPP
+export TMPP
+
++ export TMPP
+dirlast1=$disk/INFILES/SIM
+
++ dirlast1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM
+##This file must contain in one column all the arc names you want to process:
+
+#INFILE1=$disk/INFILES/SIM/ARC_2016_ALL
+INFILE1=$disk/INFILES/SIM/LIST_ND_OPS
+
+
+
++ INFILE1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/LIST_ND_OPS
+##while read ARC YR START STOP 
+#do
+# AT_L1: 7603901
+cat  ${dirlast1}/SAT_${SV} > SAT
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT_L2
++ 1> SAT
+# EPOCH              AAAAA   0 0.0000000 AAAAA01 0 0.0000000BBBBBB   000.0000000
+#cat  ${dirlast1}/data_OPS  > t0
+#sed -e "s/AAAAA/$START/g" t0 > t1
+#sed -e "s/BBBBBB/$STOP/g" t1 > t2
+grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/d_base/trnd/DR/DAILY/v${SNX_VER}/${ARC} > data
++ grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/GISL2/d_base/trnd/DR/DAILY/v180/w30430
++ 1> data
+#cp t2 data 
+#STATIONS_L12_ITRF2008_2016 - station list (copy 2011) 
+#cut -c12-19  ${dirlast1}/STATIONS_L12_ITRF2008_2016 > STATIONS
+##
+#NEW
+#cp /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/output/DATACATS/DAILY/DR/${ARC}.w?3  t0
+##cut -c58-65 t0 > t1 
+#cut -c56-65 t0 > t1 
+#sort -u t1 > t2 
+#cp t2 STATIONS1
+#cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/stat_2014-2016 STATIONS2
+#cat STATIONS2 >> STATIONS1
+#sed -e "s/ //g" STATIONS1 > STATIONS11
+#sort -u STATIONS11 > STATIONS
+#
+#zgrep "TIMVEL" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/SLRF2008/DAILY/${ARC}.adj.Z > S0
+zgrep "TIMVE" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/${ARC}.adj.gz > S0
++ zgrep TIMVE /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/w30430.adj.gz
++ 1> S0
+cut -c13-20 S0> S1
++ cut -c13-20 S0
++ 1> S1
+grep -v "0000$" S1 > S2
++ grep -v '0000$' S1
++ 1> S2
+sort -u S2 > S3
++ sort -u S2
++ 1> S3
+#grep -vf S3 STATIONS   > S4
+#echo $( cat S4)> S4  
+#sed "s/ / -e /g" S4 > S5   
+#read line < S5   
+#grep -v -e $line STATIONS > STATIONS0
+#cp STATIONS0 STATIONS
+cp S3 STATIONS
++ cp S3 STATIONS
+#   fi
+#cp  ${dirlast1}/stat_2014-2016  STATIONS
+#info simulations 120 120 20 51 0 0 120
+cat  ${dirlast1}/info_$LVER > info
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/info_SIM_E30
++ 1> info
+$disk/EXECUTABLES/FILES_17_150205.x
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/FILES_17_150205.x
+ 230430230507   0 0
+#$disk/EXECUTABLES/FILE_17_120618.x
+cp ftn17 $disk/SIMULATIONS/SLR/${SAT}/schedules/${ARC}
++ cp ftn17 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/GISL2/schedules/w30430
+# 
+#exit 2015
+#done < $INFILE1
+cd  ..
++ cd ..
+###\rm -r ${CASE}$$
+
+
+#rm *
+exit
+
+
+
+
+
+
++ exit
++ TYPE_SIM=DR_SIM
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E300 GISL2 2023 DR_SIM . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E300.DAILY..GISL2 2>& 1
++ TYPE_SIM=DR_SIM1
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E301 GISL2 2023 DR_SIM1 . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E301.DAILY..GISL2 2>& 1
++ read SAT SV
++ LVER=SIM_E30
++ echo SIM_E30
+SIM_E30
++ export SAT SV
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR/FILES_17_OPS_D_SIM_v180_P2 E1 ETA1 w30430 SIM_E30 ETA1
+set -xv
+
+
+
+
++ set -xv
+Date=`date +%y%m%d`
+date +%y%m%d
++ date +%y%m%d
++ Date=230621
+#DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+
+echo " # "
++ echo ' # '
+ # 
+echo " # $SCR_NAME $* "
++ echo ' #  E1 ETA1 w30430 SIM_E30 ETA1 '
+ #  E1 ETA1 w30430 SIM_E30 ETA1 
+echo " # "
++ echo ' # '
+ # 
+echo " # Version $SCR_VERS "
++ echo ' # Version  '
+ # Version  
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date  '
+ #  Run Date  
+echo " # "
++ echo ' # '
+ # 
+#NETW=$2
+SV=$1
++ SV=E1
+SAT=$2
++ SAT=ETA1
+ARC=$3
++ ARC=w30430
+LVER=$4
++ LVER=SIM_E30
+disk=/umbc/epavlis/data01/LOCAL/magdak
++ disk=/umbc/epavlis/data01/LOCAL/magdak
+mkdir -p /tmp/magda
++ mkdir -p /tmp/magda
+cd /tmp/magda
++ cd /tmp/magda
+mkdir ${CASE}$$
++ mkdir DAILY3883
+cd ${CASE}$$
+
++ cd DAILY3883
+TMPP=/tmp/magda/${CASE}$$
++ TMPP=/tmp/magda/DAILY3883
+## you do not need the next cmd, you are already there!
+#cd $TMPP
+export TMPP
+
++ export TMPP
+dirlast1=$disk/INFILES/SIM
+
++ dirlast1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM
+##This file must contain in one column all the arc names you want to process:
+
+#INFILE1=$disk/INFILES/SIM/ARC_2016_ALL
+INFILE1=$disk/INFILES/SIM/LIST_ND_OPS
+
+
+
++ INFILE1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/LIST_ND_OPS
+##while read ARC YR START STOP 
+#do
+# AT_L1: 7603901
+cat  ${dirlast1}/SAT_${SV} > SAT
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT_E1
++ 1> SAT
+# EPOCH              AAAAA   0 0.0000000 AAAAA01 0 0.0000000BBBBBB   000.0000000
+#cat  ${dirlast1}/data_OPS  > t0
+#sed -e "s/AAAAA/$START/g" t0 > t1
+#sed -e "s/BBBBBB/$STOP/g" t1 > t2
+grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/d_base/trnd/DR/DAILY/v${SNX_VER}/${ARC} > data
++ grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA1/d_base/trnd/DR/DAILY/v180/w30430
++ 1> data
+#cp t2 data 
+#STATIONS_L12_ITRF2008_2016 - station list (copy 2011) 
+#cut -c12-19  ${dirlast1}/STATIONS_L12_ITRF2008_2016 > STATIONS
+##
+#NEW
+#cp /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/output/DATACATS/DAILY/DR/${ARC}.w?3  t0
+##cut -c58-65 t0 > t1 
+#cut -c56-65 t0 > t1 
+#sort -u t1 > t2 
+#cp t2 STATIONS1
+#cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/stat_2014-2016 STATIONS2
+#cat STATIONS2 >> STATIONS1
+#sed -e "s/ //g" STATIONS1 > STATIONS11
+#sort -u STATIONS11 > STATIONS
+#
+#zgrep "TIMVEL" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/SLRF2008/DAILY/${ARC}.adj.Z > S0
+zgrep "TIMVE" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/${ARC}.adj.gz > S0
++ zgrep TIMVE /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/w30430.adj.gz
++ 1> S0
+cut -c13-20 S0> S1
++ cut -c13-20 S0
++ 1> S1
+grep -v "0000$" S1 > S2
++ grep -v '0000$' S1
++ 1> S2
+sort -u S2 > S3
++ sort -u S2
++ 1> S3
+#grep -vf S3 STATIONS   > S4
+#echo $( cat S4)> S4  
+#sed "s/ / -e /g" S4 > S5   
+#read line < S5   
+#grep -v -e $line STATIONS > STATIONS0
+#cp STATIONS0 STATIONS
+cp S3 STATIONS
++ cp S3 STATIONS
+#   fi
+#cp  ${dirlast1}/stat_2014-2016  STATIONS
+#info simulations 120 120 20 51 0 0 120
+cat  ${dirlast1}/info_$LVER > info
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/info_SIM_E30
++ 1> info
+$disk/EXECUTABLES/FILES_17_150205.x
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/FILES_17_150205.x
+ 230430230507   0 0
+#$disk/EXECUTABLES/FILE_17_120618.x
+cp ftn17 $disk/SIMULATIONS/SLR/${SAT}/schedules/${ARC}
++ cp ftn17 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA1/schedules/w30430
+# 
+#exit 2015
+#done < $INFILE1
+cd  ..
++ cd ..
+###\rm -r ${CASE}$$
+
+
+#rm *
+exit
+
+
+
+
+
+
++ exit
++ TYPE_SIM=DR_SIM
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E300 ETA1 2023 DR_SIM . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E300.DAILY..ETA1 2>& 1
++ TYPE_SIM=DR_SIM1
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E301 ETA1 2023 DR_SIM1 . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E301.DAILY..ETA1 2>& 1
++ read SAT SV
++ LVER=SIM_E30
++ echo SIM_E30
+SIM_E30
++ export SAT SV
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/SIMULATIONS/SLR/FILES_17_OPS_D_SIM_v180_P2 E2 ETA2 w30430 SIM_E30 ETA2
+set -xv
+
+
+
+
++ set -xv
+Date=`date +%y%m%d`
+date +%y%m%d
++ date +%y%m%d
++ Date=230621
+#DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+
+echo " # "
++ echo ' # '
+ # 
+echo " # $SCR_NAME $* "
++ echo ' #  E2 ETA2 w30430 SIM_E30 ETA2 '
+ #  E2 ETA2 w30430 SIM_E30 ETA2 
+echo " # "
++ echo ' # '
+ # 
+echo " # Version $SCR_VERS "
++ echo ' # Version  '
+ # Version  
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date  '
+ #  Run Date  
+echo " # "
++ echo ' # '
+ # 
+#NETW=$2
+SV=$1
++ SV=E2
+SAT=$2
++ SAT=ETA2
+ARC=$3
++ ARC=w30430
+LVER=$4
++ LVER=SIM_E30
+disk=/umbc/epavlis/data01/LOCAL/magdak
++ disk=/umbc/epavlis/data01/LOCAL/magdak
+mkdir -p /tmp/magda
++ mkdir -p /tmp/magda
+cd /tmp/magda
++ cd /tmp/magda
+mkdir ${CASE}$$
++ mkdir DAILY4216
+cd ${CASE}$$
+
++ cd DAILY4216
+TMPP=/tmp/magda/${CASE}$$
++ TMPP=/tmp/magda/DAILY4216
+## you do not need the next cmd, you are already there!
+#cd $TMPP
+export TMPP
+
++ export TMPP
+dirlast1=$disk/INFILES/SIM
+
++ dirlast1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM
+##This file must contain in one column all the arc names you want to process:
+
+#INFILE1=$disk/INFILES/SIM/ARC_2016_ALL
+INFILE1=$disk/INFILES/SIM/LIST_ND_OPS
+
+
+
++ INFILE1=/umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/LIST_ND_OPS
+##while read ARC YR START STOP 
+#do
+# AT_L1: 7603901
+cat  ${dirlast1}/SAT_${SV} > SAT
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/SAT_E2
++ 1> SAT
+# EPOCH              AAAAA   0 0.0000000 AAAAA01 0 0.0000000BBBBBB   000.0000000
+#cat  ${dirlast1}/data_OPS  > t0
+#sed -e "s/AAAAA/$START/g" t0 > t1
+#sed -e "s/BBBBBB/$STOP/g" t1 > t2
+grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/d_base/trnd/DR/DAILY/v${SNX_VER}/${ARC} > data
++ grep EPOCH /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/ETA2/d_base/trnd/DR/DAILY/v180/w30430
++ 1> data
+#cp t2 data 
+#STATIONS_L12_ITRF2008_2016 - station list (copy 2011) 
+#cut -c12-19  ${dirlast1}/STATIONS_L12_ITRF2008_2016 > STATIONS
+##
+#NEW
+#cp /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/${SAT}/output/DATACATS/DAILY/DR/${ARC}.w?3  t0
+##cut -c58-65 t0 > t1 
+#cut -c56-65 t0 > t1 
+#sort -u t1 > t2 
+#cp t2 STATIONS1
+#cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/stat_2014-2016 STATIONS2
+#cat STATIONS2 >> STATIONS1
+#sed -e "s/ //g" STATIONS1 > STATIONS11
+#sort -u STATIONS11 > STATIONS
+#
+#zgrep "TIMVEL" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/SLRF2008/DAILY/${ARC}.adj.Z > S0
+zgrep "TIMVE" /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/${ARC}.adj.gz > S0
++ zgrep TIMVE /umbc/epavlis/data01/LOCAL/magdak/MISSIONS/d_base/site/DAILY/SLRF2020/EPOCH_2015.0/w30430.adj.gz
++ 1> S0
+cut -c13-20 S0> S1
++ cut -c13-20 S0
++ 1> S1
+grep -v "0000$" S1 > S2
++ grep -v '0000$' S1
++ 1> S2
+sort -u S2 > S3
++ sort -u S2
++ 1> S3
+#grep -vf S3 STATIONS   > S4
+#echo $( cat S4)> S4  
+#sed "s/ / -e /g" S4 > S5   
+#read line < S5   
+#grep -v -e $line STATIONS > STATIONS0
+#cp STATIONS0 STATIONS
+cp S3 STATIONS
++ cp S3 STATIONS
+#   fi
+#cp  ${dirlast1}/stat_2014-2016  STATIONS
+#info simulations 120 120 20 51 0 0 120
+cat  ${dirlast1}/info_$LVER > info
++ cat /umbc/epavlis/data01/LOCAL/magdak/INFILES/SIM/info_SIM_E30
++ 1> info
+$disk/EXECUTABLES/FILES_17_150205.x
++ /umbc/epavlis/data01/LOCAL/magdak/EXECUTABLES/FILES_17_150205.x
+ 230430230507   0 0
+#$disk/EXECUTABLES/FILE_17_120618.x
+cp ftn17 $disk/SIMULATIONS/SLR/${SAT}/schedules/${ARC}
++ cp ftn17 /umbc/epavlis/data01/LOCAL/magdak/SIMULATIONS/SLR/ETA2/schedules/w30430
+# 
+#exit 2015
+#done < $INFILE1
+cd  ..
++ cd ..
+###\rm -r ${CASE}$$
+
+
+#rm *
+exit
+
+
+
+
+
+
++ exit
++ TYPE_SIM=DR_SIM
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E300 ETA2 2023 DR_SIM . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E300.DAILY..ETA2 2>& 1
++ TYPE_SIM=DR_SIM1
++ /umbc/epavlis/data01/LOCAL/magdak/scripts/ITRF2020/OPS/RUN_GDN_SLR_2023 w30430 SIM_E301 ETA2 2023 DR_SIM1 . DAILY
++ 1> o.RUN_GDN_SLR_SIM_E301.DAILY..ETA2 2>& 1
++ read SAT SV
++ read ELCUT
+exit 0
+
++ exit 0

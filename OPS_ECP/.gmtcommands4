@@ -1,0 +1,16 @@
+# GMT common arguments shelf
+-B30g30/30g10:.ENTIRE WEEK:
+-JS180/90/1.8i
+-JW180/9i
+-R-180/180/0/90
+-x-1.1i
+-Y2.5i
+-y4.70i
+-jS180/90/1.8i
+EOF
+
+EOF
+EOF
+F
+EOF
+F

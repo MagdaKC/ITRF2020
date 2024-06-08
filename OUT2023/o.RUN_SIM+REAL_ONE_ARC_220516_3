@@ -1,0 +1,37 @@
+#
+
+echo "  #  "
++ echo '  #  '
+  #  
+echo "  #    Begin  'RUN_SIM+REAL_ONE_ARC'    "
++ echo $'  #    Begin  \'RUN_SIM+REAL_ONE_ARC\'    '
+  #    Begin  'RUN_SIM+REAL_ONE_ARC'    
+echo "  #  "
+
+
++ echo '  #  '
+  #  
+infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_D/
++ infile=/umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_D/
+infile2020=/umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_ITRF2020/
+
+
++ infile2020=/umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_ITRF2020/
+cp $infile2020/ARC_SETUP_END.${CASE}_v${SNX_VER} $infile/ARC_SETUP_END.DAILY_SIM
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_ITRF2020//ARC_SETUP_END.DAILY_v180 /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_D//ARC_SETUP_END.DAILY_SIM
+cp $infile2020/ARC_SETUP_FTR.${CASE}_v${SNX_VER} $infile/ARC_SETUP_FTR.DAILY_SIM
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_ITRF2020//ARC_SETUP_FTR.DAILY_v180 /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_D//ARC_SETUP_FTR.DAILY_SIM
+cp $infile2020/ARC_SETUP_NEW.${CASE}_v${SNX_VER} $infile/ARC_SETUP_NEW.DAILY_SIM
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_ITRF2020//ARC_SETUP_NEW.DAILY_v180 /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_D//ARC_SETUP_NEW.DAILY_SIM
+cp $infile2020/ARC_SETUP_NXT.${CASE}_v${SNX_VER} $infile/ARC_SETUP_NXT.DAILY_SIM
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_ITRF2020//ARC_SETUP_NXT.DAILY_v180 /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_D//ARC_SETUP_NXT.DAILY_SIM
+cp $infile2020/ARC_SETUP_OLD.${CASE}_v${SNX_VER} $infile/ARC_SETUP_OLD.DAILY_SIM
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_ITRF2020//ARC_SETUP_OLD.DAILY_v180 /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_D//ARC_SETUP_OLD.DAILY_SIM
+cp $infile2020/ARC_SETUP_NEW.${CASE}_v${SNX_VER} $infile/ARC_SETUP_NEW.DAILY_SIM
+
++ cp /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_ITRF2020//ARC_SETUP_NEW.DAILY_v180 /umbc/epavlis/data01/LOCAL/magdak/INFILES/INF_OPS_D//ARC_SETUP_NEW.DAILY_SIM
+exit 0
+
+
+
++ exit 0

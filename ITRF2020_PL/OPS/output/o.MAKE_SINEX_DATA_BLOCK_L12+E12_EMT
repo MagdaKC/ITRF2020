@@ -1,0 +1,147 @@
+/nobackup/mkuzmicz/scripts/ITRF2020/OPS/MAKE_SINEX_DATA_BLOCK[1]: !/bin/sh: not found [No such file or directory]
+/nobackup/mkuzmicz/scripts/ITRF2020/OPS/MAKE_SINEX_DATA_BLOCK[4]: #set: not found [No such file or directory]
+SCR_NAME=MAKE_SINEX_DATA_BLOCK
++ SCR_NAME=MAKE_SINEX_DATA_BLOCK
+SCR_PARM=8
++ SCR_PARM=8
+SCR_LIST="ARC [sat] [STAGE] [CASE] [PROJ] [VER] [SUBSFX] [disk]"
++ SCR_LIST='ARC [sat] [STAGE] [CASE] [PROJ] [VER] [SUBSFX] [disk]'
+SCR_VERS=040224.0
+
+
++ SCR_VERS=040224.0
+if [ `expr $#` -lt $SCR_PARM ]; then
+   echo "Usage: $SCR_NAME ${SCR_LIST}\007"
+   exit 101
+fi
+
+expr $#
++ expr 8
++ [ 8 -lt 8 ]
+DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ date '+DATE: %m/%d/%y  TIME: %H:%M:%S'
++ DateTime='DATE: 02/09/23  TIME: 14:06:27'
+echo " # "
++ echo ' # '
+ # 
+echo " #  $SCR_NAME $* "
++ echo ' #  MAKE_SINEX_DATA_BLOCK w30129 PPV WEEKLY EMT ILRS wv415e LE12 nobackup/mkuzmicz/MISSIONS '
+ #  MAKE_SINEX_DATA_BLOCK w30129 PPV WEEKLY EMT ILRS wv415e LE12 nobackup/mkuzmicz/MISSIONS 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Version $SCR_VERS "
++ echo ' #  Version 040224.0 '
+ #  Version 040224.0 
+echo " # "
++ echo ' # '
+ # 
+echo " #  Run Date $DateTime "
++ echo ' #  Run Date DATE: 02/09/23  TIME: 14:06:27 '
+ #  Run Date DATE: 02/09/23  TIME: 14:06:27 
+echo " # "
+
+
++ echo ' # '
+ # 
+ARC=$1
++ ARC=w30129
+sat=${2:-GISL1}
++ sat=PPV
+STAGE=${3:-WEEKLY}
++ STAGE=WEEKLY
+CASE=${4:-A}
++ CASE=EMT
+PROJ=${5:-ILRS}
++ PROJ=ILRS
+VER=$6
++ VER=wv415e
+SUBSFX=${7:-}
++ SUBSFX=LE12
+disk=${8:-raid2/REPRO}
+
++ disk=nobackup/mkuzmicz/MISSIONS
+WT=$WEIGHT
+
++ WT=''
+sol=output/DATACATS
+
++ sol=output/DATACATS
+if [ ! -d /${disk}/${sat}/${sol}/${STAGE}/$CASE/${ARC}_v${SNX_VER} ]; then
+   mkdir -p /${disk}/${sat}/${sol}/${STAGE}/$CASE/${ARC}_v${SNX_VER}
+fi
+
++ [ ! -d /nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415 ]
++ mkdir -p /nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415
+if [ ! -d /${disk}/${sat}/d_base/sldl/${STAGE}/$CASE ]; then
+   mkdir -p /${disk}/${sat}/d_base/sldl/${STAGE}/$CASE
+fi
+
++ [ ! -d /nobackup/mkuzmicz/MISSIONS/PPV/d_base/sldl/WEEKLY/EMT ]
+#
+# execute job
+#
+
+mkdir catlg_data$$
++ mkdir catlg_data39297
+cd catlg_data$$
+
++ cd catlg_data39297
+cat $MAIN_PATH/INFILES/catlg_data.$sat > ftn05
+
++ cat /nobackup/mkuzmicz/INFILES/catlg_data.PPV
++ 1> ftn05
+cat /$disk/$sat/${sol}/${STAGE}/$CASE/v${SNX_VER}/${ARC}.${VER} > ftn09a
++ cat /nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/v415/w30129.wv415e
++ 1> ftn09a
+cut -c3-200 ftn09a > ftn09
++ cut -c3-200 ftn09a
++ 1> ftn09
+sort -u -k 7,7 ftn09 -o ftn08
+
++ sort -u -k 7,7 ftn09 -o ftn08
+nice -0   /nobackup/mkuzmicz/EXECUTABLES/catlg_data.x < ftn05 > /$disk/$sat/${sol}/${STAGE}/$CASE/${ARC}_v${SNX_VER}/CTS.$ARC         
+
++ nice -0 /nobackup/mkuzmicz/EXECUTABLES/catlg_data.x
++ 0< ftn05 1> /nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415/CTS.w30129
+STOP  All Done ! 
+mv fort.10 /$disk/$sat/$sol/${STAGE}/$CASE/${ARC}_v${SNX_VER}/$sat.start_stop
++ mv fort.10 /nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415/PPV.start_stop
+mv fort.15 /$disk/$sat/$sol/${STAGE}/$CASE/${ARC}_v${SNX_VER}/$sat.HISTO_by_site
++ mv fort.15 /nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415/PPV.HISTO_by_site
+mv fort.25 /$disk/$sat/$sol/${STAGE}/$CASE/${ARC}_v${SNX_VER}/$sat.HISTO_by_day
+
++ mv fort.25 /nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415/PPV.HISTO_by_day
+cp fort.30 /$disk/$sat/$sol/${STAGE}/$CASE/v${SNX_VER}/${PROJ}_${ARC}.${VER}_${WT}_$SUBSFX
+
++ cp fort.30 /nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/v415/ILRS_w30129.wv415e__LE12
+mv fort.30 $MAIN_PATH/INFILES/INF_OPS_ITRF2020/EPOCH_BLK_${PROJ}/${STAGE}/v${SNX_VER}/${PROJ}_${ARC}.${VER}_${WT}_$SUBSFX
+
++ mv fort.30 /nobackup/mkuzmicz/INFILES/INF_OPS_ITRF2020/EPOCH_BLK_ILRS/WEEKLY/v415/ILRS_w30129.wv415e__LE12
+grep -v "DELETE       0 51" fort.40 > fort.40a
++ grep -v 'DELETE       0 51' fort.40
++ 1> fort.40a
+grep: fort.40: No such file or directory
+mv fort.40a /$disk/$sat/d_base/sldl/${STAGE}/$ARC.${VER}
+
++ mv fort.40a /nobackup/mkuzmicz/MISSIONS/PPV/d_base/sldl/WEEKLY/w30129.wv415e
+tar cvf /$disk/$sat/$sol/${STAGE}/$CASE/${ARC}_v${SNX_VER}.${VER}.tar  /$disk/$sat/$sol/${STAGE}/$CASE/${ARC}_v${SNX_VER}
++ tar cvf /nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415.wv415e.tar /nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415
+tar: Removing leading `/' from member names
+/nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415/
+/nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415/PPV.start_stop
+/nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415/PPV.HISTO_by_site
+/nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415/CTS.w30129
+/nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415/PPV.HISTO_by_day
+gzip -f /$disk/$sat/$sol/${STAGE}/$CASE/${ARC}_v${SNX_VER}.${VER}.tar
+
++ gzip -f /nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415.wv415e.tar
+\rm -r  /$disk/$sat/$sol/${STAGE}/$CASE/${ARC}_v${SNX_VER}
+
++ rm -r /nobackup/mkuzmicz/MISSIONS/PPV/output/DATACATS/WEEKLY/EMT/w30129_v415
+cd ..
++ cd ..
+\rm -r catlg_data$$
++ rm -r catlg_data39297

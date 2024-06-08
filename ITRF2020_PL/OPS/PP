@@ -1,0 +1,19 @@
+disk=raid2/MISSIONS
+where=/$disk/d_base/site
+#whereto=$where/$CASE/TEMP
+whereto=$where/$CASE
+
+mkdir stapropgt$$
+cd stapropgt$$
+
+cat $MAIN_PATH/INFILES/INF_OPS_ITRF2020/MID-ARC_INFO.${CASE}_v${SNX_VER} > ftn05
+
+#  post-Arequipa quake positions:
+
+   zcat $where/${ITRF_2_PROPAGATE}.adj.Z > ftn10
+
+
+/${diskC}/EXECUTABLES/stapropgt.x        < ftn05 > $whereto/PGT.$ARC
+
+/bin/grep -v SIGVEL ftn11 > $whereto/${ARC}.adj
+

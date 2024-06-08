@@ -1,0 +1,59 @@
+#!/bin/sh
+#                                                               
+
+${SCR_DBG}set -xv 
+set -vx
+
+SCR_NAME=PROPAGATE_SITES
+SCR_PARM=2
+SCR_LIST="CASE ARC"
+SCR_VERS=070330.0
+
+
+if [ `expr $#` -lt $SCR_PARM ]; then
+   echo "Usage: $SCR_NAME ${SCR_LIST}\007"
+   exit 101
+fi
+
+DateTime=`date '+DATE: %m/%d/%y  TIME: %H:%M:%S'`
+
+echo " # "
+echo " #  $SCR_NAME $* "
+echo " # "
+echo " #  Version $SCR_VERS "
+echo " # "
+echo " #  Run Date $DateTime "
+echo " # "
+
+
+CASE=$1
+ARC=$2
+
+disk=raid2/MISSIONS
+where=/$disk/d_base/site
+#whereto=$where/$CASE/TEMP
+whereto=$where/$CASE
+
+mkdir stapropgt$$
+cd stapropgt$$
+
+cat $MAIN_PATH/INFILES/INF_OPS_ITRF2020/MID-ARC_INFO.${CASE}_v${SNX_VER} > ftn05
+
+#  post-Arequipa quake positions:
+
+   zcat $where/${ITRF_2_PROPAGATE}.adj.Z > ftn10
+
+
+/${diskC}/EXECUTABLES/stapropgt.x        < ftn05 > $whereto/PGT.$ARC
+
+/bin/grep -v SIGVEL ftn11 > $whereto/${ARC}.adj
+
+/usr/bin/chmod 664 $whereto/${ARC}.adj
+
+compress -f $whereto/${ARC}.adj
+
+
+cd ..
+\rm -r stapropgt$$
+
+exit 0
